@@ -71,19 +71,19 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
 
-	_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
+	//_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
 
-	_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
+	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
 
-	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
+	//_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
 
-	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
-	_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
+	//_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
+	//_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
 		const auto updateGeneName = [this]() -> void
 	{
