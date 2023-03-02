@@ -29,9 +29,9 @@ var rightSpace = 1;
 var bottomSpace = 1;
 var leftSpace = 1;
 var middleTooltip = 20;
-var axisStart = 70;
-var species1BarStart = 90;
-var buffer = 15;
+var axisStart = 65;
+var species1BarStart = 75;
+var buffer = 10;
 var hTooltip;
 var hTooltip;
 var regionWidthTooltip;
@@ -272,7 +272,7 @@ const ParallelBarsVis = () => {
 
     wTooltip = (98 / 100) * window.innerWidth;
     hTooltip = containerHeight + topSpace + bottomSpace;
-    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart) / 5;
+    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart - 50) / 5;
     species2BarStart = species1BarStart + regionWidthTooltip + buffer;
     species3BarStart = species2BarStart + regionWidthTooltip + buffer;
     species4BarStart = species3BarStart + regionWidthTooltip + buffer;
