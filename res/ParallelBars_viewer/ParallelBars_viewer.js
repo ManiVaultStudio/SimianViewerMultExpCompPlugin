@@ -619,7 +619,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
         .attr("y", 32)
-        .text("gene")
+        .text("Gene")
         .attr("font-size", "10");
     svgAxis
         .append("text")
