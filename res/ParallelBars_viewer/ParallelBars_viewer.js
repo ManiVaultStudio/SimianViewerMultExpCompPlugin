@@ -1,30 +1,44 @@
-//global Variables
 var _data = null;
 var flag = false;
 var _dataQueue = new ParallelBarsViewerDataQueue(1, queueData);
 var _defaultValues = null;
-var yAxisRightTooltip;
+var yAxisrightSpace;
 window.onresize = doALoadOfStuff;
 var numOFBars;
-var maxValue;
-var screenHeight;
-var screenWidth;
 var svg;
 var tooltip;
-var barspace = 5;
-var chartHeight;
-var chartWidth;
 var containerHeight
-var yScaleTooltip;
-var pointATooltip;
-var pointBTooltip;
-var xScaleTooltip;
+var yScaleTooltipSpecies;
+var xScaleTooltipSpecies;
 var species1Name = "";
 var species2Name = "";
+var species3Name = "";
+var species4Name = "";
+var species5Name = "";
 var geneName = "";
 var selectedCrossspeciescluster = "";
 var ClusterStorage1 = {};
 var ClusterStorage2 = {};
+var ClusterStorage3 = {};
+var ClusterStorage4 = {};
+var ClusterStorage5 = {};
+
+
+var topSpace = 1;
+var rightSpace = 1;
+var bottomSpace = 1;
+var leftSpace = 1;
+var middleTooltip = 20;
+var axisStart = 70;
+var species1BarStart = 90;
+var buffer = 15;
+var hTooltip;
+var hTooltip;
+var regionWidthTooltip;
+var species2BarStart;
+var species3BarStart;
+var species4BarStart;
+var species5BarStart;
 const sortingCrossSpeciesClustersList = ["Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8", "Pax6_1", "Pax6_2","Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Chandelier_1","L2/3 IT_1", "L2/3 IT_2", "L2/3 IT_3", "L4 IT_1", "L4 IT_2", "L5 IT_1", "L5 IT_2", "L6 IT Car3_1", "L6 IT Car3_2", "L6 IT_1", "Astro_1", "Oligo_1", "VLMC_1", "Endo_1", "Micro-PVM_1", "OPC_1", "OPC_2", "L6 CT_1", "L6 CT_2", "L6b_1", "L6b_2", "L6b_3", "L5 ET_1", "L5 ET_2", "L5/6 NP_1", "L5/6 NP_2"];
 //Qt Connections
 try {
@@ -36,86 +50,18 @@ try {
     });
 } catch (error) { isQtAvailable = false; }
 
-/*function mouseclickSpecies1(d) {
-    //log("\Sending Species 1 cluster to QT from Javascript: " + d.clusterName);
-    //svg.select("#mouseclickSpecies2").remove();
-    svg.select("#mouseclickSpecies1").remove();
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies1")
-        .attr('x', pointATooltip - xScaleTooltip(d.species1ClusterCount))
-        .attr('y', yScaleTooltip(d.clusterName))
-        .attr('width', xScaleTooltip(d.species1ClusterCount))
-        .attr('height', yScaleTooltip.bandwidth())
-        .attr('stroke', "#de2d26")
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
 
-    if (isQtAvailable) {
-        QtBridge.js_passSelectionSpecies1ToQt(d.clusterName);
-    }
-}
-
-function mouseclickSpecies2(d) {
-    //log("\Sending Species 2 cluster to QT from Javascript: " + d.clusterName);
-    svg.select("#mouseclickSpecies2").remove();
-   // svg.select("#mouseclickSpecies1").remove();
-    svg.append('rect')
-        .attr("id","mouseclickSpecies2")
-        .attr('x', pointBTooltip)
-        .attr('y', yScaleTooltip(d.clusterName))
-        .attr('width', xScaleTooltip(d.species2ClusterCount))
-        .attr('height', yScaleTooltip.bandwidth())
-        .attr('stroke', "#de2d26")
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
-
-
-
-    if (isQtAvailable) {
-        QtBridge.js_passSelectionSpecies2ToQt(d.clusterName);
-    }
-}
-
-//mouseclickBoth
-
-function mouseclickBoth(d) {
-    //log("\Sending both species clusters to QT from Javascript: " + d);
-    svg.select("#mouseclickSpecies2").remove();
-    svg.select("#mouseclickSpecies1").remove();
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies1")
-        .attr('x', pointATooltip - xScaleTooltip(ClusterStorage1[d]))
-        .attr('y', yScaleTooltip(d))
-        .attr('width', xScaleTooltip(ClusterStorage1[d]))
-        .attr('height', yScaleTooltip.bandwidth())
-        .attr('stroke', "#de2d26")
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
-
-
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies2")
-        .attr('x', pointBTooltip)
-        .attr('y', yScaleTooltip(d))
-        .attr('width', xScaleTooltip(ClusterStorage2[d]))
-        .attr('height', yScaleTooltip.bandwidth())
-        .attr('stroke', "#de2d26")
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
-
-    if (isQtAvailable) {
-        QtBridge.js_passSelectionSpecies1ToQt(d);
-        QtBridge.js_passSelectionSpecies2ToQt(d);
-    }
-}*/
 function clickMiddleLabel(d) {
 
     if (selectedCrossspeciescluster == d) {
         selectedCrossspeciescluster = "";
-        svg.select("#mouseclickSpecies2").remove();
         svg.select("#mouseclickSpecies1").remove();
+        svg.select("#mouseclickSpecies2").remove();
+        svg.select("#mouseclickSpecies3").remove();
+        svg.select("#mouseclickSpecies4").remove();
+        svg.select("#mouseclickSpecies5").remove();
         svg
-            .call(yAxisRightTooltip)
+            .call(yAxisrightSpace)
             .selectAll("text")
             .style("fill", "black");
         if (isQtAvailable) {
@@ -133,10 +79,13 @@ function clickBar(d) {
 
     if (selectedCrossspeciescluster == d.clusterName) {
         selectedCrossspeciescluster = "";
-        svg.select("#mouseclickSpecies2").remove();
         svg.select("#mouseclickSpecies1").remove();
+        svg.select("#mouseclickSpecies2").remove();
+        svg.select("#mouseclickSpecies3").remove();
+        svg.select("#mouseclickSpecies4").remove();
+        svg.select("#mouseclickSpecies5").remove();
         svg
-            .call(yAxisRightTooltip)
+            .call(yAxisrightSpace)
             .selectAll("text")
             .style("fill", "black");
         if (isQtAvailable) {
@@ -151,19 +100,22 @@ function clickBar(d) {
 }
 
 function selectBars(d) {
-    svg.select("#mouseclickSpecies2").remove();
     svg.select("#mouseclickSpecies1").remove();
+    svg.select("#mouseclickSpecies2").remove();
+    svg.select("#mouseclickSpecies3").remove();
+    svg.select("#mouseclickSpecies4").remove();
+    svg.select("#mouseclickSpecies5").remove();
     svg
-        .call(yAxisRightTooltip)
+        .call(yAxisrightSpace)
         .selectAll("text")
         .style("fill", "black");
 
     svg.append('rect')
         .attr("id", "mouseclickSpecies1")
-        .attr('x', pointATooltip - xScaleTooltip(ClusterStorage1[d]))
-        .attr('y', yScaleTooltip(d))
-        .attr('width', xScaleTooltip(ClusterStorage1[d]))
-        .attr('height', yScaleTooltip.bandwidth())
+        .attr('x', species1BarStart)
+        .attr('y', yScaleTooltipSpecies(d))
+        .attr('width', xScaleTooltipSpecies(ClusterStorage1[d]))
+        .attr('height', yScaleTooltipSpecies.bandwidth())
         .attr('stroke', "#de2d26")
         .attr("stroke-width", 2)
         .attr('fill', 'none');
@@ -171,16 +123,46 @@ function selectBars(d) {
 
     svg.append('rect')
         .attr("id", "mouseclickSpecies2")
-        .attr('x', pointBTooltip)
-        .attr('y', yScaleTooltip(d))
-        .attr('width', xScaleTooltip(ClusterStorage2[d]))
-        .attr('height', yScaleTooltip.bandwidth())
+        .attr('x', species2BarStart)
+        .attr('y', yScaleTooltipSpecies(d))
+        .attr('width', xScaleTooltipSpecies(ClusterStorage2[d]))
+        .attr('height', yScaleTooltipSpecies.bandwidth())
+        .attr('stroke', "#de2d26")
+        .attr("stroke-width", 2)
+        .attr('fill', 'none');
+
+    svg.append('rect')
+        .attr("id", "mouseclickSpecies3")
+        .attr('x', species3BarStart)
+        .attr('y', yScaleTooltipSpecies(d))
+        .attr('width', xScaleTooltipSpecies(ClusterStorage3[d]))
+        .attr('height', yScaleTooltipSpecies.bandwidth())
+        .attr('stroke', "#de2d26")
+        .attr("stroke-width", 2)
+        .attr('fill', 'none');
+
+    svg.append('rect')
+        .attr("id", "mouseclickSpecies4")
+        .attr('x', species4BarStart)
+        .attr('y', yScaleTooltipSpecies(d))
+        .attr('width', xScaleTooltipSpecies(ClusterStorage4[d]))
+        .attr('height', yScaleTooltipSpecies.bandwidth())
+        .attr('stroke', "#de2d26")
+        .attr("stroke-width", 2)
+        .attr('fill', 'none');
+
+    svg.append('rect')
+        .attr("id", "mouseclickSpecies5")
+        .attr('x', species5BarStart)
+        .attr('y', yScaleTooltipSpecies(d))
+        .attr('width', xScaleTooltipSpecies(ClusterStorage5[d]))
+        .attr('height', yScaleTooltipSpecies.bandwidth())
         .attr('stroke', "#de2d26")
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
     svg
-        .call(yAxisRightTooltip)
+        .call(yAxisrightSpace)
         .selectAll("text")
         .style("fill", function (m) {
             if (m == d) {
@@ -193,18 +175,14 @@ function selectBars(d) {
 
 
 
-    if (yScaleTooltip(d) > 1) {
-        window.scrollTo(0, yScaleTooltip(d) - 1);
+    if (yScaleTooltipSpecies(d) > 1) {
+        window.scrollTo(0, yScaleTooltipSpecies(d) - 1);
         }
         else {
-        window.scrollTo(0, yScaleTooltip(d));
+        window.scrollTo(0, yScaleTooltipSpecies(d));
         }
 }
 
-
-/*function mouseenterSpecies(d) {
-
-}*/
 function mouseleaveSpecies(d) {
     tooltip
         .style("opacity", 0)
@@ -238,9 +216,7 @@ function mousemoveSpecies(d) {
     }
 
 }
-/*function mouseoutSpecies(d) {
 
-}*/
 function mouseoverSpecies1(d) {
     tooltip
         .html("<div><b>" + d.species1ClusterCount+"</b></div>")
@@ -280,39 +256,27 @@ const ParallelBarsVis = () => {
     svg_Axes = d3.select("#my_dataviz_axes");
     svg_Axes.selectAll("*").remove();
 
-    //var exampleDataTooltip = [
-    //    { clusterName: "L5 IT/3", species1ClusterCount: 10, species2ClusterCount: 20, clusterColor: "red"},
-    //    { clusterName: "2", species1ClusterCount: 30, species2ClusterCount: 40 ,clusterColor:"red"},
-    //    { clusterName: "3", species1ClusterCount: 50, species2ClusterCount: 60, clusterColor: "blue"},
-    //    { clusterName: "4", species1ClusterCount: 70, species2ClusterCount: 90, clusterColor: "green"},
-    //    { clusterName: "5", species1ClusterCount: 80, species2ClusterCount: 70, clusterColor: "yellow" },
-    //    { clusterName: "6", species1ClusterCount: 60, species2ClusterCount: 50, clusterColor: "purple" },
-    //    { clusterName: "7", species1ClusterCount: 10, species2ClusterCount: 20, clusterColor: "pink" },
-    //    { clusterName: "8", species1ClusterCount: 30, species2ClusterCount: 40, clusterColor: "green"},
-    //    { clusterName: "9", species1ClusterCount: 50, species2ClusterCount: 60, clusterColor: "violet" },
-    //    { clusterName: "10", species1ClusterCount: 70, species2ClusterCount: 90, clusterColor: "black" },
-    //    { clusterName: "11", species1ClusterCount: 80, species2ClusterCount: 70, clusterColor: "orange"},
-    //    { clusterName: "12", species1ClusterCount: 60, species2ClusterCount: 50, clusterColor: "red"},
-    //    { clusterName: "0", species1ClusterCount: 60, species2ClusterCount: 50, clusterColor: "red"},
+    //var _data = [
+    //    { clusterName: "L5 IT/3", species1ClusterCount: 10, species2ClusterCount: 20, species3ClusterCount: 30, species4ClusterCount: 40, species5ClusterCount: 50, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "2", species1ClusterCount: 70, species2ClusterCount: 40, species3ClusterCount: 26, species4ClusterCount: 47, species5ClusterCount: 520, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "3", species1ClusterCount: 90, species2ClusterCount: 24, species3ClusterCount: 36, species4ClusterCount: 90, species5ClusterCount: 204, clusterColor: "blue", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "4", species1ClusterCount: 100, species2ClusterCount: 55, species3ClusterCount: 10, species4ClusterCount: 120, species5ClusterCount: 220, clusterColor: "green", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
     //];
-    var numOFBars = _data.length;
+     numOFBars = _data.length;
 
     containerHeight = numOFBars * 20;
-    var topSpace = 1;
-    var rightSpace = 1;
-    var bottomSpace = 1;
-    var leftSpace = 1;
-    var middleTooltip = 20;
-    var wTooltip = (98 / 100) * window.innerWidth;
-    var hTooltip = containerHeight + topSpace + bottomSpace;
-    var axisStart = 70;
-    var species1BarStart = 90;
-    var buffer = 15;
-    var regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart) / 5;
-    var species2BarStart = species1BarStart + regionWidthTooltip + buffer;
-    var species3BarStart = species2BarStart + regionWidthTooltip + buffer;
-    var species4BarStart = species3BarStart + regionWidthTooltip + buffer;
-    var species5BarStart = species4BarStart + regionWidthTooltip + buffer;
+
+    wTooltip = (98 / 100) * window.innerWidth;
+    hTooltip = containerHeight + topSpace + bottomSpace;
+     regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart) / 5;
+     species2BarStart = species1BarStart + regionWidthTooltip + buffer;
+     species3BarStart = species2BarStart + regionWidthTooltip + buffer;
+     species4BarStart = species3BarStart + regionWidthTooltip + buffer;
+     species5BarStart = species4BarStart + regionWidthTooltip + buffer;
+
+
+
+
     svg = d3
         .select("#my_dataviz")
         .append("svg")
@@ -360,7 +324,7 @@ const ParallelBarsVis = () => {
         .range([0, regionWidthTooltip])
         .nice();
 
-    yScaleTooltip = d3
+    yScaleTooltipSpecies = d3
         .scaleBand()
         .domain(
             _data.map(function (d) {
@@ -386,7 +350,7 @@ const ParallelBarsVis = () => {
         .attr("transform", translation(species5BarStart, 0));
     var yAxisrightSpace = d3
         .axisLeft()
-        .scale(yScaleTooltip)
+        .scale(yScaleTooltipSpecies)
         .tickSize(1, 0)
         .tickFormat("")
         .tickPadding(1);
@@ -407,7 +371,7 @@ const ParallelBarsVis = () => {
         .attr("class", "bar right")
         .attr("x", 0)
         .attr("y", function (d) {
-            return yScaleTooltip(d.clusterName);
+            return yScaleTooltipSpecies(d.clusterName);
         })
         .attr("width", function (d) {
             return xScaleTooltipSpecies(d.species1ClusterCount);
@@ -415,7 +379,7 @@ const ParallelBarsVis = () => {
         .attr("fill", function (d) {
             return d.clusterColor;
         })
-        .attr("height", yScaleTooltip.bandwidth())
+        .attr("height", yScaleTooltipSpecies.bandwidth())
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies1)
@@ -431,7 +395,7 @@ const ParallelBarsVis = () => {
         .attr("class", "bar right")
         .attr("x", 0)
         .attr("y", function (d) {
-            return yScaleTooltip(d.clusterName);
+            return yScaleTooltipSpecies(d.clusterName);
         })
         .attr("width", function (d) {
             return xScaleTooltipSpecies(d.species2ClusterCount);
@@ -439,7 +403,7 @@ const ParallelBarsVis = () => {
         .attr("fill", function (d) {
             return d.clusterColor;
         })
-        .attr("height", yScaleTooltip.bandwidth())
+        .attr("height", yScaleTooltipSpecies.bandwidth())
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies2)
@@ -455,7 +419,7 @@ const ParallelBarsVis = () => {
         .attr("class", "bar right")
         .attr("x", 0)
         .attr("y", function (d) {
-            return yScaleTooltip(d.clusterName);
+            return yScaleTooltipSpecies(d.clusterName);
         })
         .attr("width", function (d) {
             return xScaleTooltipSpecies(d.species3ClusterCount);
@@ -463,7 +427,7 @@ const ParallelBarsVis = () => {
         .attr("fill", function (d) {
             return d.clusterColor;
         })
-        .attr("height", yScaleTooltip.bandwidth())
+        .attr("height", yScaleTooltipSpecies.bandwidth())
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies3)
@@ -479,7 +443,7 @@ const ParallelBarsVis = () => {
         .attr("class", "bar right")
         .attr("x", 0)
         .attr("y", function (d) {
-            return yScaleTooltip(d.clusterName);
+            return yScaleTooltipSpecies(d.clusterName);
         })
         .attr("width", function (d) {
             return xScaleTooltipSpecies(d.species4ClusterCount);
@@ -487,7 +451,7 @@ const ParallelBarsVis = () => {
         .attr("fill", function (d) {
             return d.clusterColor;
         })
-        .attr("height", yScaleTooltip.bandwidth())
+        .attr("height", yScaleTooltipSpecies.bandwidth())
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies4)
@@ -503,7 +467,7 @@ const ParallelBarsVis = () => {
         .attr("class", "bar right")
         .attr("x", 0)
         .attr("y", function (d) {
-            return yScaleTooltip(d.clusterName);
+            return yScaleTooltipSpecies(d.clusterName);
         })
         .attr("width", function (d) {
             return xScaleTooltipSpecies(d.species5ClusterCount);
@@ -511,7 +475,7 @@ const ParallelBarsVis = () => {
         .attr("fill", function (d) {
             return d.clusterColor;
         })
-        .attr("height", yScaleTooltip.bandwidth())
+        .attr("height", yScaleTooltipSpecies.bandwidth())
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies5)
@@ -572,7 +536,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", species1BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
-        .text("human")
+        .text(species1Name)
         .attr("font-size", "10");
 
     svgAxis
@@ -589,7 +553,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", species2BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
-        .text("chimp")
+        .text(species2Name)
         .attr("font-size", "10");
 
     svgAxis
@@ -606,7 +570,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", species3BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
-        .text("gorilla")
+        .text(species3Name)
         .attr("font-size", "10");
 
     svgAxis
@@ -623,7 +587,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", species4BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
-        .text("rhesus")
+        .text(species4Name)
         .attr("font-size", "10");
 
     svgAxis
@@ -640,7 +604,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", species5BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
-        .text("marmoset")
+        .text(species5Name)
         .attr("font-size", "10");
 
 
@@ -656,7 +620,7 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
         .attr("y", 20)
-        .text("Gene")
+        .text(geneName)
         .attr("font-size", "10");
     svgAxis.selectAll(".tick").each(function (d) {
         if (d === 0.0 || d === 0) {
@@ -672,56 +636,8 @@ const ParallelBarsVis = () => {
 
 };
 
-
-/*function setBarhighlight(d) {
-
-
-
-
-    if (d !== "" || d != null || d != undefined) {
-        if (d in ClusterStorage1 && d in ClusterStorage2) {
-
-        svg.select("#mouseclickSpecies2").remove();
-        svg.select("#mouseclickSpecies1").remove();
-
-
-        svg.append('rect')
-            .attr("id", "mouseclickSpecies1")
-            .attr('x', pointATooltip - xScaleTooltip(ClusterStorage1[d]))
-            .attr('y', yScaleTooltip(d))
-            .attr('width', xScaleTooltip(ClusterStorage1[d]))
-            .attr('height', yScaleTooltip.bandwidth())
-            .attr('stroke', "#de2d26")
-            .attr("stroke-width", 2)
-            .attr('fill', 'none');
-
-
-        svg.append('rect')
-            .attr("id", "mouseclickSpecies2")
-            .attr('x', pointBTooltip)
-            .attr('y', yScaleTooltip(d))
-            .attr('width', xScaleTooltip(ClusterStorage2[d]))
-            .attr('height', yScaleTooltip.bandwidth())
-            .attr('stroke', "#de2d26")
-            .attr("stroke-width", 2)
-                .attr('fill', 'none');
-
-            if (yScaleTooltip(d) > 1) {
-                window.scrollTo(0, yScaleTooltip(d) - 1);
-            }
-            else {
-                window.scrollTo(0, yScaleTooltip(d));
-            }
-    }
-
-    }
-}*/
-
-
-//Data Options
 function setData(d) {
     _dataQueue.addData(d);
-    //log("\nReceived from QT to Javascript\n");
 }
 
 function setSelectedCrossspeciescluster(d) {
@@ -731,10 +647,13 @@ function setSelectedCrossspeciescluster(d) {
     }
     else {
         selectedCrossspeciescluster = "";
-        svg.select("#mouseclickSpecies2").remove();
         svg.select("#mouseclickSpecies1").remove();
+        svg.select("#mouseclickSpecies2").remove();
+        svg.select("#mouseclickSpecies3").remove();
+        svg.select("#mouseclickSpecies4").remove();
+        svg.select("#mouseclickSpecies5").remove();
         svg
-            .call(yAxisRightTooltip)
+            .call(yAxisrightSpace)
             .selectAll("text")
             .style("fill", "black");
     }
@@ -742,11 +661,12 @@ function setSelectedCrossspeciescluster(d) {
 
 function queueData(d) {
     _data = JSON.parse(d);
-    //_data.sort(function (a, b) { var keyA = new Date(a.value), keyB = new Date(b.value); if (keyA > keyB) return -1; if (keyA < keyB) return 1; return 0; });
-    //numOFBars = Object.keys(_data).length;
     for (var i = 0; i < _data.length; i++) {
         ClusterStorage1[_data[i].clusterName] = _data[i].species1ClusterCount;
         ClusterStorage2[_data[i].clusterName] = _data[i].species2ClusterCount;
+        ClusterStorage3[_data[i].clusterName] = _data[i].species3ClusterCount;
+        ClusterStorage4[_data[i].clusterName] = _data[i].species4ClusterCount;
+        ClusterStorage5[_data[i].clusterName] = _data[i].species5ClusterCount;
     }
 
     _data.sort(function (a, b) {
@@ -755,9 +675,10 @@ function queueData(d) {
 
     species1Name = _data[0].species1Name;
     species2Name = _data[0].species2Name;
+    species3Name = _data[0].species3Name;
+    species4Name = _data[0].species4Name;
+    species5Name = _data[0].species5Name;
     geneName = _data[0].geneName;
-    //maxValue = Object.keys(_data).reduce((acc, curr) => acc.value ? (_data[curr].value > acc.value ? _data[curr] : acc) : _data[curr], {});
-    /*_data.sort(function (a, b) { return b.value - a.value; });*/
     ParallelBarsVis();
     flag = true;
 }
