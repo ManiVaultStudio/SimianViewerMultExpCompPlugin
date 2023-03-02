@@ -31,6 +31,10 @@ ParallelBarsViewerPlugin::ParallelBarsViewerPlugin(const PluginFactory* factory)
 {
 	setSerializationName("ParallelBarsViewer");
 	//_ParallelBars_viewer = new ParallelBarsViewerWidget();
+
+
+	getVisibleAction().setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	getVisibleAction().publish("ParallelBars::PluginVisibility");
 }
 
 ParallelBarsViewerPlugin::~ParallelBarsViewerPlugin()

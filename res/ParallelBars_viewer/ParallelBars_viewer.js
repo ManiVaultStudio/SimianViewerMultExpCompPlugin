@@ -2,7 +2,7 @@ var _data = null;
 var flag = false;
 var _dataQueue = new ParallelBarsViewerDataQueue(1, queueData);
 var _defaultValues = null;
-var yAxisrightSpace;
+var yAxisLabelsLeft;
 window.onresize = doALoadOfStuff;
 var numOFBars;
 var svg;
@@ -61,7 +61,7 @@ function clickMiddleLabel(d) {
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
         //svg
-        //    .call(yAxisrightSpace)
+        //    .call(yAxisLabelsLeft)
         //    .selectAll("text")
         //    .style("fill", "black");
         if (isQtAvailable) {
@@ -87,7 +87,7 @@ function clickBar(d) {
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
         //svg
-        //    .call(yAxisrightSpace)
+        //    .call(yAxisLabelsLeft)
         //    .selectAll("text")
         //    .style("fill", "black");
         if (isQtAvailable) {
@@ -110,7 +110,7 @@ function selectBars(d) {
     svg.select("#mouseclickSpecies4").remove();
     svg.select("#mouseclickSpecies5").remove();
     //svg
-    //    .call(yAxisrightSpace)
+    //    .call(yAxisLabelsLeft)
     //    .selectAll("text")
     //    .style("fill", "black");
 
@@ -166,7 +166,7 @@ function selectBars(d) {
         .attr('fill', 'none');
 
     //svg
-    //    .call(yAxisrightSpace)
+    //    .call(yAxisLabelsLeft)
     //    .selectAll("text")
     //    .style("fill", function (m) {
     //        if (m == d) {
@@ -352,7 +352,7 @@ const ParallelBarsVis = () => {
     var species5BarGroup = svg
         .append("g")
         .attr("transform", translation(species5BarStart, 0));
-    var yAxisrightSpace = d3
+    var yAxisLabelsLeft = d3
         .axisLeft()
         .scale(yScaleTooltipSpecies)
         .tickSize(1, 0)
@@ -360,9 +360,9 @@ const ParallelBarsVis = () => {
         .tickPadding(1);
     svg
         .append("g")
-        .attr("class", "axis y right")
+        .attr("class", "axis y labels left")
         .attr("transform", translation(axisStart, 0))  // start the axis from the extreme left
-        .call(yAxisrightSpace)
+        .call(yAxisLabelsLeft)
         .selectAll("text")
         .attr("x", leftSpace - 10)  // move the labels to the right side of the axis
         .attr("dy", "0.32em")
@@ -370,11 +370,11 @@ const ParallelBarsVis = () => {
         .on("click", clickMiddleLabel)
         .text(function (d) { return d; });  // add the clusterName text to the labels
     species1BarGroup
-        .selectAll(".bar.right")
+        .selectAll(".bar.right.species1")
         .data(_data)
         .enter()
         .append("rect")
-        .attr("class", "bar right")
+        .attr("class", "bar right species1")
         .attr("x", 0)
         .attr("y", function (d) {
             return yScaleTooltipSpecies(d.clusterName);
@@ -394,11 +394,11 @@ const ParallelBarsVis = () => {
         ;
 
     species2BarGroup
-        .selectAll(".bar.right")
+        .selectAll(".bar.right.species2")
         .data(_data)
         .enter()
         .append("rect")
-        .attr("class", "bar right")
+        .attr("class", "bar right species2")
         .attr("x", 0)
         .attr("y", function (d) {
             return yScaleTooltipSpecies(d.clusterName);
@@ -418,11 +418,11 @@ const ParallelBarsVis = () => {
         ;
 
     species3BarGroup
-        .selectAll(".bar.right")
+        .selectAll(".bar.right.species3")
         .data(_data)
         .enter()
         .append("rect")
-        .attr("class", "bar right")
+        .attr("class", "bar right species3")
         .attr("x", 0)
         .attr("y", function (d) {
             return yScaleTooltipSpecies(d.clusterName);
@@ -442,11 +442,11 @@ const ParallelBarsVis = () => {
         ;
 
     species4BarGroup
-        .selectAll(".bar.right")
+        .selectAll(".bar.right.species4")
         .data(_data)
         .enter()
         .append("rect")
-        .attr("class", "bar right")
+        .attr("class", "bar right species4")
         .attr("x", 0)
         .attr("y", function (d) {
             return yScaleTooltipSpecies(d.clusterName);
@@ -466,11 +466,11 @@ const ParallelBarsVis = () => {
         ;
 
     species5BarGroup
-        .selectAll(".bar.right")
+        .selectAll(".bar.right.species5")
         .data(_data)
         .enter()
         .append("rect")
-        .attr("class", "bar right")
+        .attr("class", "bar right species5")
         .attr("x", 0)
         .attr("y", function (d) {
             return yScaleTooltipSpecies(d.clusterName);
@@ -530,7 +530,7 @@ const ParallelBarsVis = () => {
     var species5XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
     svgAxis
         .append("g")
-        .attr("class", "axis x right")
+        .attr("class", "axis x right species1")
         .attr("transform", translationAxes(species1BarStart, 20))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
@@ -547,7 +547,7 @@ const ParallelBarsVis = () => {
 
     svgAxis
         .append("g")
-        .attr("class", "axis x right")
+        .attr("class", "axis x right species2")
         .attr("transform", translationAxes(species2BarStart, 20))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
@@ -564,7 +564,7 @@ const ParallelBarsVis = () => {
 
     svgAxis
         .append("g")
-        .attr("class", "axis x right")
+        .attr("class", "axis x right species3")
         .attr("transform", translationAxes(species3BarStart, 20))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
@@ -581,7 +581,7 @@ const ParallelBarsVis = () => {
 
     svgAxis
         .append("g")
-        .attr("class", "axis x right")
+        .attr("class", "axis x right species4")
         .attr("transform", translationAxes(species4BarStart, 20))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
@@ -598,7 +598,7 @@ const ParallelBarsVis = () => {
 
     svgAxis
         .append("g")
-        .attr("class", "axis x right")
+        .attr("class", "axis x right species5")
         .attr("transform", translationAxes(species5BarStart, 20))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
@@ -659,7 +659,7 @@ function setSelectedCrossspeciescluster(d) {
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
         //svg
-        //    .call(yAxisrightSpace)
+        //    .call(yAxisLabelsLeft)
         //    .selectAll("text")
         //    .style("fill", "black");
     }
