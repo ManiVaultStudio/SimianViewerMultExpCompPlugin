@@ -551,18 +551,6 @@ const ParallelBarsVis = () => {
         .text(species1Name)
         .attr("font-size", "10")
         .style("fill", function (d) {
-            log("************1************");
-            log(selectedSpecies1);
-            log("************************");
-
-            log("***********2*************");
-            log(selectedSpecies2);
-            log("************************");
-
-
-            log("***********main*************");
-            log(species1Name);
-            log("************************");
 
             if (species1Name == selectedSpecies2 ) {
                 return "#de2d26";
@@ -593,18 +581,7 @@ const ParallelBarsVis = () => {
         .text(species2Name)
         .attr("font-size", "10")
         .style("fill", function (d) {
-            log("************1************");
-            log(selectedSpecies1);
-            log("************************");
 
-            log("***********2*************");
-            log(selectedSpecies2);
-            log("************************");
-
-
-            log("***********main*************");
-            log(species2Name);
-            log("************************");
 
             if (species2Name == selectedSpecies2) {
                 return "#de2d26";
@@ -635,18 +612,7 @@ const ParallelBarsVis = () => {
         .attr("font-size", "10")
         .style("fill", function (d) {
 
-            log("************1************");
-            log(selectedSpecies1);
-            log("************************");
 
-            log("***********2*************");
-            log(selectedSpecies2);
-            log("************************");
-
-
-            log("***********main*************");
-            log(species3Name);
-            log("************************");
             if (species3Name == selectedSpecies2) {
                 return "#de2d26";
             }
@@ -675,18 +641,7 @@ const ParallelBarsVis = () => {
         .text(species4Name)
         .attr("font-size", "10")
         .style("fill", function (d) {
-            log("************1************");
-            log(selectedSpecies1);
-            log("************************");
 
-            log("***********2*************");
-            log(selectedSpecies2);
-            log("************************");
-
-
-            log("***********main*************");
-            log(species4Name);
-            log("************************");
             if (species4Name == selectedSpecies2) {
                 return "#de2d26";
             }
@@ -715,18 +670,7 @@ const ParallelBarsVis = () => {
         .text(species5Name)
         .attr("font-size", "10")
         .style("fill", function (d) {
-            log("************1************");
-            log(selectedSpecies1);
-            log("************************");
 
-            log("***********2*************");
-            log(selectedSpecies2);
-            log("************************");
-
-
-            log("***********main*************");
-            log(species5Name);
-            log("************************");
             if (species5Name == selectedSpecies2) {
                 return "#de2d26";
             }
