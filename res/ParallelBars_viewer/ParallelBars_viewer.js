@@ -356,7 +356,7 @@ const ParallelBarsVis = () => {
     var species5BarGroup = svg
         .append("g")
         .attr("transform", translation(species5BarStart, 0));
-    var yAxisLabelsLeft = d3
+     yAxisLabelsLeft = d3
         .axisLeft()
         .scale(yScaleTooltipSpecies)
         .tickSize(1, 0)
