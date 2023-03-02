@@ -722,6 +722,8 @@ void ParallelBarsOptionsAction::initLoader()
 {
 
 		updateData();
+		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 
 }
 
