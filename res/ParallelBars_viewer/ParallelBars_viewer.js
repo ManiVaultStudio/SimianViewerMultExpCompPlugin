@@ -64,10 +64,9 @@ function clickMiddleLabel(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        //svg
-        //    .call(yAxisLabelsLeft)
-        //    .selectAll("text")
-        //    .style("fill", "black");
+        svg.select(".axis.y.labels.left")
+            .selectAll("text")
+            .style("fill", "black");
         if (isQtAvailable) {
             QtBridge.js_crossspeciesclusterSelection("");
         }
@@ -90,10 +89,9 @@ function clickBar(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        //svg
-        //    .call(yAxisLabelsLeft)
-        //    .selectAll("text")
-        //    .style("fill", "black");
+        svg.select(".axis.y.labels.left")
+            .selectAll("text")
+            .style("fill", "black");
         if (isQtAvailable) {
             QtBridge.js_crossspeciesclusterSelection("");
         }
@@ -113,10 +111,9 @@ function selectBars(d) {
     svg.select("#mouseclickSpecies3").remove();
     svg.select("#mouseclickSpecies4").remove();
     svg.select("#mouseclickSpecies5").remove();
-    //svg
-    //    .call(yAxisLabelsLeft)
-    //    .selectAll("text")
-    //    .style("fill", "black");
+    svg.select(".axis.y.labels.left")
+        .selectAll("text")
+        .style("fill", "black");
 
     svg.append('rect')
         .attr("id", "mouseclickSpecies1")
@@ -169,19 +166,16 @@ function selectBars(d) {
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
-    //svg
-    //    .call(yAxisLabelsLeft)
-    //    .selectAll("text")
-    //    .style("fill", function (m) {
-    //        if (m == d) {
-    //            return "#de2d26";
-    //        }
-    //        else {
-    //            return "black";
-    //        }
-    //    });
-
-
+    svg.select(".axis.y.labels.left")
+        .selectAll("text")
+        .style("fill", function (m) {
+            if (m == d) {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
     if (yScaleTooltipSpecies(d) > 1) {
         window.scrollTo(0, yScaleTooltipSpecies(d) - 1);
@@ -372,7 +366,8 @@ const ParallelBarsVis = () => {
         .attr("dy", "0.32em")
         .style("cursor", "pointer")
         .on("click", clickMiddleLabel)
-        .text(function (d) { return d; }); // add the clusterName text to the labels
+        .text(function (d) { return d; }) // add the clusterName text to the labels
+        .style("fill", "black"); // set the fill color to black
 
 
     species1BarGroup
@@ -746,10 +741,10 @@ function setSelectedCrossspeciescluster(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        //svg
-        //    .call(yAxisLabelsLeft)
-        //    .selectAll("text")
-        //    .style("fill", "black");
+        svg.attr("class", "axis y labels left")
+            .call(yAxisLabelsLeft)
+            .selectAll("text")
+            .style("fill", "black");
     }
 }
 
