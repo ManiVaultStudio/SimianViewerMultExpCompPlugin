@@ -688,14 +688,14 @@ const ParallelBarsVis = () => {
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
         .attr("y", 32)
-        .text("Gene")
+        .text(geneName)
         .attr("font-size", "10");
     svgAxis
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
         .attr("y", 20)
-        .text(geneName)
+        .text("Gene")
         .attr("font-size", "10");
     svgAxis.selectAll(".tick").each(function (d) {
         if (d === 0.0 || d === 0) {
