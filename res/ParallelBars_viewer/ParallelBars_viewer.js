@@ -25,7 +25,7 @@ var ClusterStorage5 = {};
 
 
 var topSpace = 1;
-var rightSpace = 2;
+var rightSpace = 1;
 var bottomSpace = 1;
 var leftSpace = 1;
 var middleTooltip = 20;
@@ -60,10 +60,10 @@ function clickMiddleLabel(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        svg
-            .call(yAxisrightSpace)
-            .selectAll("text")
-            .style("fill", "black");
+        //svg
+        //    .call(yAxisrightSpace)
+        //    .selectAll("text")
+        //    .style("fill", "black");
         if (isQtAvailable) {
             QtBridge.js_crossspeciesclusterSelection("");
         }
@@ -86,10 +86,10 @@ function clickBar(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        svg
-            .call(yAxisrightSpace)
-            .selectAll("text")
-            .style("fill", "black");
+        //svg
+        //    .call(yAxisrightSpace)
+        //    .selectAll("text")
+        //    .style("fill", "black");
         if (isQtAvailable) {
             QtBridge.js_crossspeciesclusterSelection("");
         }
@@ -109,10 +109,10 @@ function selectBars(d) {
     svg.select("#mouseclickSpecies3").remove();
     svg.select("#mouseclickSpecies4").remove();
     svg.select("#mouseclickSpecies5").remove();
-    svg
-        .call(yAxisrightSpace)
-        .selectAll("text")
-        .style("fill", "black");
+    //svg
+    //    .call(yAxisrightSpace)
+    //    .selectAll("text")
+    //    .style("fill", "black");
 
     svg.append('rect')
         .attr("id", "mouseclickSpecies1")
@@ -165,17 +165,17 @@ function selectBars(d) {
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
-    svg
-        .call(yAxisrightSpace)
-        .selectAll("text")
-        .style("fill", function (m) {
-            if (m == d) {
-                return "#de2d26";
-            }
-            else {
-                return "black";
-            }
-        });
+    //svg
+    //    .call(yAxisrightSpace)
+    //    .selectAll("text")
+    //    .style("fill", function (m) {
+    //        if (m == d) {
+    //            return "#de2d26";
+    //        }
+    //        else {
+    //            return "black";
+    //        }
+    //    });
 
 
 
@@ -272,11 +272,11 @@ const ParallelBarsVis = () => {
 
     wTooltip = (98 / 100) * window.innerWidth;
     hTooltip = containerHeight + topSpace + bottomSpace;
-     regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart) / 5;
-     species2BarStart = species1BarStart + regionWidthTooltip + buffer;
-     species3BarStart = species2BarStart + regionWidthTooltip + buffer;
-     species4BarStart = species3BarStart + regionWidthTooltip + buffer;
-     species5BarStart = species4BarStart + regionWidthTooltip + buffer;
+    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart) / 5;
+    species2BarStart = species1BarStart + regionWidthTooltip + buffer;
+    species3BarStart = species2BarStart + regionWidthTooltip + buffer;
+    species4BarStart = species3BarStart + regionWidthTooltip + buffer;
+    species5BarStart = species4BarStart + regionWidthTooltip + buffer;
 
 
 
@@ -366,6 +366,8 @@ const ParallelBarsVis = () => {
         .selectAll("text")
         .attr("x", leftSpace - 10)  // move the labels to the right side of the axis
         .attr("dy", "0.32em")
+        .style("cursor", "pointer")
+        .on("click", clickMiddleLabel)
         .text(function (d) { return d; });  // add the clusterName text to the labels
     species1BarGroup
         .selectAll(".bar.right")
@@ -656,10 +658,10 @@ function setSelectedCrossspeciescluster(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        svg
-            .call(yAxisrightSpace)
-            .selectAll("text")
-            .style("fill", "black");
+        //svg
+        //    .call(yAxisrightSpace)
+        //    .selectAll("text")
+        //    .style("fill", "black");
     }
 }
 
