@@ -178,7 +178,7 @@ function selectBars(d) {
         });
 
     if (yScaleTooltipSpecies(d) > 1) {
-        window.scrollTo(0, yScaleTooltipSpecies(d) - 1);
+        window.scrollTo(0, yScaleTooltipSpecies(d) - 2);
         }
         else {
         window.scrollTo(0, yScaleTooltipSpecies(d));

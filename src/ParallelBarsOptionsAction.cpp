@@ -26,9 +26,11 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
 {
 	setSerializationName("PopPyramidSettings");
+	_species1Name.setSerializationName("Species1Name");
+	_species2Name.setSerializationName("Species2Name");
+	//_geneNameAction.setSerializationName("Gene");
 	//_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
 	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
-	//_geneNameAction.setSerializationName("Gene");
 	//_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
 	//_neighborhoodAction.setSerializationName("Neighborhood");
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
@@ -736,7 +738,8 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 	//_geneNameAction.fromParentVariantMap(variantMap);
 	//_neighborhoodAction.fromParentVariantMap(variantMap);
 	//_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
-
+	_species1Name.fromParentVariantMap(variantMap);
+	_species2Name.fromParentVariantMap(variantMap);
 
 }
 
@@ -749,5 +752,7 @@ QVariantMap ParallelBarsOptionsAction::toVariantMap() const
 	//_neighborhoodAction.insertIntoVariantMap(variantMap);
 	//_geneNameAction.insertIntoVariantMap(variantMap);
 	//_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
+	_species1Name.insertIntoVariantMap(variantMap);
+	_species2Name.insertIntoVariantMap(variantMap);
 	return variantMap;
 }
