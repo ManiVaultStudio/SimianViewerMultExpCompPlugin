@@ -18,7 +18,9 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_screenshotAction(this, "Screenshot"),
 	_deStatsDataset1SelectionAction(*this),
 	_selectedCrossspeciescluster(this, "Selected CrossSpecies Cluster"),
-	_neighborhoodAction(this, "Neighborhood")
+	_neighborhoodAction(this, "Neighborhood"),
+	_species1Name(this, "Species1Name"),
+	_species2Name(this, "Species2Name")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
@@ -39,6 +41,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
 	_geneNameAction.initialize("A1BG","");
+	_species1Name.initialize("Species1");
+	_species2Name.initialize("Species2");
 	_selectedCrossspeciesclusterFlag = true;
 	_selectedCrossspeciescluster.initialize("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
@@ -76,7 +80,10 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
-
+	_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
+	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
 	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
 
@@ -267,8 +274,22 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 		{
 
 		};
-
-
+		const auto updateSpecies1Name = [this]() -> void
+		{
+			if (_species1Name.getString()!="")
+			{
+				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+			}
+		};
+		const auto updateSpecies2Name = [this]() -> void
+		{
+			if (_species2Name.getString() != "")
+			{
+				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+			}
+		};
+		connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
+		connect(&_species2Name, &StringAction::stringChanged, this, updateSpecies2Name);
 		connect(&_deStatsDataset1Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset1);
 
 		connect(&_deStatsDataset2Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset2);
@@ -641,6 +662,9 @@ ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidge
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._neighborhoodAction.createLabelWidget(this), ParallelBarsOptionsAction._neighborhoodAction.createWidget(this));
 
+	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species1Name.createLabelWidget(this), ParallelBarsOptionsAction._species1Name.createWidget(this));
+
+	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species2Name.createLabelWidget(this), ParallelBarsOptionsAction._species2Name.createWidget(this));
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._selectedCrossspeciescluster.createLabelWidget(this), ParallelBarsOptionsAction._selectedCrossspeciescluster.createWidget(this));
 

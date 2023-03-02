@@ -39,6 +39,8 @@ var species2BarStart;
 var species3BarStart;
 var species4BarStart;
 var species5BarStart;
+var selectedSpecies1 = "";
+var selectedSpecies2 = "";
 const sortingCrossSpeciesClustersList = ["Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8", "Pax6_1", "Pax6_2","Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Chandelier_1","L2/3 IT_1", "L2/3 IT_2", "L2/3 IT_3", "L4 IT_1", "L4 IT_2", "L5 IT_1", "L5 IT_2", "L6 IT Car3_1", "L6 IT Car3_2", "L6 IT_1", "Astro_1", "Oligo_1", "VLMC_1", "Endo_1", "Micro-PVM_1", "OPC_1", "OPC_2", "L6 CT_1", "L6 CT_2", "L6b_1", "L6b_2", "L6b_3", "L5 ET_1", "L5 ET_2", "L5/6 NP_1", "L5/6 NP_2"];
 //Qt Connections
 try {
@@ -46,6 +48,8 @@ try {
         QtBridge = channel.objects.QtBridge;
         QtBridge.qt_setData.connect(function () { setData(arguments[0]); });
         QtBridge.qt_setSelectedCrossspeciescluster.connect(function () { setSelectedCrossspeciescluster(arguments[0]); });
+        QtBridge.qt_setSpecies1.connect(function () { setSpecies1(arguments[0]); });
+        QtBridge.qt_setSpecies2.connect(function () { setSpecies2(arguments[0]); });
         notifyBridgeAvailable();
     });
 } catch (error) { isQtAvailable = false; }
@@ -368,7 +372,9 @@ const ParallelBarsVis = () => {
         .attr("dy", "0.32em")
         .style("cursor", "pointer")
         .on("click", clickMiddleLabel)
-        .text(function (d) { return d; });  // add the clusterName text to the labels
+        .text(function (d) { return d; }); // add the clusterName text to the labels
+
+
     species1BarGroup
         .selectAll(".bar.right.species1")
         .data(_data)
@@ -543,7 +549,32 @@ const ParallelBarsVis = () => {
         .attr("x", species1BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species1Name)
-        .attr("font-size", "10");
+        .attr("font-size", "10")
+        .style("fill", function (d) {
+            log("************1************");
+            log(selectedSpecies1);
+            log("************************");
+
+            log("***********2*************");
+            log(selectedSpecies2);
+            log("************************");
+
+
+            log("***********main*************");
+            log(species1Name);
+            log("************************");
+
+            if (species1Name == selectedSpecies2 ) {
+                return "#de2d26";
+            }
+            else if (species1Name == selectedSpecies1)
+            {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
     svgAxis
         .append("g")
@@ -560,7 +591,31 @@ const ParallelBarsVis = () => {
         .attr("x", species2BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species2Name)
-        .attr("font-size", "10");
+        .attr("font-size", "10")
+        .style("fill", function (d) {
+            log("************1************");
+            log(selectedSpecies1);
+            log("************************");
+
+            log("***********2*************");
+            log(selectedSpecies2);
+            log("************************");
+
+
+            log("***********main*************");
+            log(species2Name);
+            log("************************");
+
+            if (species2Name == selectedSpecies2) {
+                return "#de2d26";
+            }
+            else if (species2Name == selectedSpecies1) {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
     svgAxis
         .append("g")
@@ -577,7 +632,31 @@ const ParallelBarsVis = () => {
         .attr("x", species3BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species3Name)
-        .attr("font-size", "10");
+        .attr("font-size", "10")
+        .style("fill", function (d) {
+
+            log("************1************");
+            log(selectedSpecies1);
+            log("************************");
+
+            log("***********2*************");
+            log(selectedSpecies2);
+            log("************************");
+
+
+            log("***********main*************");
+            log(species3Name);
+            log("************************");
+            if (species3Name == selectedSpecies2) {
+                return "#de2d26";
+            }
+            else if (species3Name == selectedSpecies1) {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
     svgAxis
         .append("g")
@@ -594,7 +673,30 @@ const ParallelBarsVis = () => {
         .attr("x", species4BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species4Name)
-        .attr("font-size", "10");
+        .attr("font-size", "10")
+        .style("fill", function (d) {
+            log("************1************");
+            log(selectedSpecies1);
+            log("************************");
+
+            log("***********2*************");
+            log(selectedSpecies2);
+            log("************************");
+
+
+            log("***********main*************");
+            log(species4Name);
+            log("************************");
+            if (species4Name == selectedSpecies2) {
+                return "#de2d26";
+            }
+            else if (species4Name == selectedSpecies1) {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
     svgAxis
         .append("g")
@@ -611,7 +713,30 @@ const ParallelBarsVis = () => {
         .attr("x", species5BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species5Name)
-        .attr("font-size", "10");
+        .attr("font-size", "10")
+        .style("fill", function (d) {
+            log("************1************");
+            log(selectedSpecies1);
+            log("************************");
+
+            log("***********2*************");
+            log(selectedSpecies2);
+            log("************************");
+
+
+            log("***********main*************");
+            log(species5Name);
+            log("************************");
+            if (species5Name == selectedSpecies2) {
+                return "#de2d26";
+            }
+            else if (species5Name == selectedSpecies1) {
+                return "#de2d26";
+            }
+            else {
+                return "black";
+            }
+        });
 
 
     svgAxis
@@ -645,6 +770,25 @@ const ParallelBarsVis = () => {
 function setData(d) {
     _dataQueue.addData(d);
 }
+
+function setSpecies1(d) {
+    //if (d !== "") 
+    {
+        selectedSpecies1 = d;
+        ParallelBarsVis();
+    }
+
+}
+
+function setSpecies2(d) {
+    //if (d !== "")
+    {
+        selectedSpecies2 = d;
+        ParallelBarsVis();
+    }
+
+}
+
 
 function setSelectedCrossspeciescluster(d) {
     if (d !== "") {

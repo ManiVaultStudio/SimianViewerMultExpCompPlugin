@@ -56,6 +56,19 @@ void ParallelBarsViewerWidget::setData(std::string visDataContent)
 	emit _communicationObject->qt_setData(QString((visDataContent).c_str()));
 }
 
+
+void ParallelBarsViewerWidget::setSpecies1(QString species1)
+{
+
+	emit _communicationObject->qt_setSpecies1(species1);
+}
+
+void ParallelBarsViewerWidget::setSpecies2(QString species2)
+{
+
+	emit _communicationObject->qt_setSpecies2(species2);
+}
+
 void ParallelBarsViewerWidget::setSelectedCrossspeciescluster(QString visDataContent)
 {
 
