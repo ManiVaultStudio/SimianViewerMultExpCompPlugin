@@ -25,7 +25,7 @@ var ClusterStorage5 = {};
 
 
 var topSpace = 1;
-var rightSpace = 1;
+var rightSpace = 2;
 var bottomSpace = 1;
 var leftSpace = 1;
 var middleTooltip = 20;
@@ -71,7 +71,9 @@ function clickMiddleLabel(d) {
     else {
         selectedCrossspeciescluster = d;
         selectBars(selectedCrossspeciescluster);
-        QtBridge.js_crossspeciesclusterSelection(selectedCrossspeciescluster);
+        if (isQtAvailable) {
+            QtBridge.js_crossspeciesclusterSelection(selectedCrossspeciescluster);
+        }
     }
 }
 
@@ -95,7 +97,9 @@ function clickBar(d) {
     else {
         selectedCrossspeciescluster = d.clusterName;
         selectBars(selectedCrossspeciescluster);
-        QtBridge.js_crossspeciesclusterSelection(selectedCrossspeciescluster);
+        if (isQtAvailable) {
+            QtBridge.js_crossspeciesclusterSelection(selectedCrossspeciescluster);
+        }
     }
 }
 
@@ -241,7 +245,7 @@ function mouseoverSpecies4(d) {
         .style("opacity", 1)
 }
 
-function mouseoverSpecie5(d) {
+function mouseoverSpecies5(d) {
     tooltip
         .html("<div><b>" + d.species5ClusterCount + "</b></div>")
         .style("opacity", 1)
