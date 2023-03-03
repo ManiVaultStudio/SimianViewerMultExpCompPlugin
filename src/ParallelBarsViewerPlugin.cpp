@@ -35,6 +35,10 @@ ParallelBarsViewerPlugin::ParallelBarsViewerPlugin(const PluginFactory* factory)
 
 	getVisibleAction().setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	getVisibleAction().publish("ParallelBars::PluginVisibility");
+
+	//connect(&getVisibleAction(), &ToggleAction::toggled, this, [](bool toggled) -> void {
+	//	qDebug() << __FUNCTION__ << "toggled changed to" << toggled;
+	//	});
 }
 
 ParallelBarsViewerPlugin::~ParallelBarsViewerPlugin()
