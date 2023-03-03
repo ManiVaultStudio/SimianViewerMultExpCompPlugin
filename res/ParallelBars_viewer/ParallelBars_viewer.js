@@ -544,7 +544,7 @@ const ParallelBarsVis = () => {
         .attr("x", species1BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species1Name)
-        .attr("font-size", "10")
+        .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
             if (species1Name == selectedSpecies2 ) {
@@ -574,7 +574,7 @@ const ParallelBarsVis = () => {
         .attr("x", species2BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species2Name)
-        .attr("font-size", "10")
+        .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
 
@@ -604,7 +604,7 @@ const ParallelBarsVis = () => {
         .attr("x", species3BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species3Name)
-        .attr("font-size", "10")
+        .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
 
@@ -634,7 +634,7 @@ const ParallelBarsVis = () => {
         .attr("x", species4BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species4Name)
-        .attr("font-size", "10")
+        .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
             if (species4Name == selectedSpecies2) {
@@ -663,7 +663,7 @@ const ParallelBarsVis = () => {
         .attr("x", species5BarStart + regionWidthTooltip / 2)
         .attr("y", 30)
         .text(species5Name)
-        .attr("font-size", "10")
+        .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
             if (species5Name == selectedSpecies2) {
@@ -684,14 +684,14 @@ const ParallelBarsVis = () => {
         .attr("x", axisStart - 20)
         .attr("y", 32)
         .text(geneName)
-        .attr("font-size", "10");
+        .attr("font-size", "10").style("font-family", "Arial");
     svgAxis
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
         .attr("y", 20)
         .text("Gene")
-        .attr("font-size", "10");
+        .attr("font-size", "10").style("font-family", "Arial");
     svgAxis.selectAll(".tick").each(function (d) {
         if (d === 0.0 || d === 0) {
             this.remove();

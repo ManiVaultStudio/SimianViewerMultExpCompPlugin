@@ -740,6 +740,7 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 	//_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
 	_species1Name.fromParentVariantMap(variantMap);
 	_species2Name.fromParentVariantMap(variantMap);
+	initLoader();
 
 }
 

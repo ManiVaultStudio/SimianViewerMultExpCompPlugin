@@ -43,7 +43,7 @@ ParallelBarsViewerWidget::ParallelBarsViewerWidget() :
 	Q_INIT_RESOURCE(ParallelBars_viewer_resources);
 	_communicationObject = new ParallelBarsViewerCommunicationObject(this);
 	init(_communicationObject);
-	setMinimumHeight(180);
+	setMinimumHeight(140);
 }
 
 ParallelBarsViewerWidget::~ParallelBarsViewerWidget()
