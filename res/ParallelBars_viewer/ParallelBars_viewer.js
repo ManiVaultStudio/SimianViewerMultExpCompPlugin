@@ -741,8 +741,7 @@ function setSelectedCrossspeciescluster(d) {
         svg.select("#mouseclickSpecies3").remove();
         svg.select("#mouseclickSpecies4").remove();
         svg.select("#mouseclickSpecies5").remove();
-        svg.attr("class", "axis y labels left")
-            .call(yAxisLabelsLeft)
+        svg.select(".axis.y.labels.left")
             .selectAll("text")
             .style("fill", "black");
     }
