@@ -22,7 +22,7 @@ var ClusterStorage2 = {};
 var ClusterStorage3 = {};
 var ClusterStorage4 = {};
 var ClusterStorage5 = {};
-
+var selectioncolor = "#257afd";
 
 var topSpace = 1;
 var rightSpace = 1;
@@ -50,6 +50,7 @@ try {
         QtBridge.qt_setSelectedCrossspeciescluster.connect(function () { setSelectedCrossspeciescluster(arguments[0]); });
         QtBridge.qt_setSpecies1.connect(function () { setSpecies1(arguments[0]); });
         QtBridge.qt_setSpecies2.connect(function () { setSpecies2(arguments[0]); });
+        QtBridge.qt_updateSelectionColor.connect(function () { updateSelectionColor(arguments[0]); });
         notifyBridgeAvailable();
     });
 } catch (error) { isQtAvailable = false; }
@@ -121,7 +122,7 @@ function selectBars(d) {
         .attr('y', yScaleTooltipSpecies(d))
         .attr('width', xScaleTooltipSpecies(ClusterStorage1[d]))
         .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', "#de2d26")
+        .attr('stroke', selectioncolor)
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
@@ -132,7 +133,7 @@ function selectBars(d) {
         .attr('y', yScaleTooltipSpecies(d))
         .attr('width', xScaleTooltipSpecies(ClusterStorage2[d]))
         .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', "#de2d26")
+        .attr('stroke', selectioncolor)
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
@@ -142,7 +143,7 @@ function selectBars(d) {
         .attr('y', yScaleTooltipSpecies(d))
         .attr('width', xScaleTooltipSpecies(ClusterStorage3[d]))
         .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', "#de2d26")
+        .attr('stroke', selectioncolor)
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
@@ -152,7 +153,7 @@ function selectBars(d) {
         .attr('y', yScaleTooltipSpecies(d))
         .attr('width', xScaleTooltipSpecies(ClusterStorage4[d]))
         .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', "#de2d26")
+        .attr('stroke', selectioncolor)
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
@@ -162,7 +163,7 @@ function selectBars(d) {
         .attr('y', yScaleTooltipSpecies(d))
         .attr('width', xScaleTooltipSpecies(ClusterStorage5[d]))
         .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', "#de2d26")
+        .attr('stroke', selectioncolor)
         .attr("stroke-width", 2)
         .attr('fill', 'none');
 
@@ -170,7 +171,7 @@ function selectBars(d) {
         .selectAll("text")
         .style("fill", function (m) {
             if (m == d) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -548,11 +549,11 @@ const ParallelBarsVis = () => {
         .style("fill", function (d) {
 
             if (species1Name == selectedSpecies2 ) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else if (species1Name == selectedSpecies1)
             {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -579,10 +580,10 @@ const ParallelBarsVis = () => {
 
 
             if (species2Name == selectedSpecies2) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else if (species2Name == selectedSpecies1) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -609,10 +610,10 @@ const ParallelBarsVis = () => {
 
 
             if (species3Name == selectedSpecies2) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else if (species3Name == selectedSpecies1) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -638,10 +639,10 @@ const ParallelBarsVis = () => {
         .style("fill", function (d) {
 
             if (species4Name == selectedSpecies2) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else if (species4Name == selectedSpecies1) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -667,10 +668,10 @@ const ParallelBarsVis = () => {
         .style("fill", function (d) {
 
             if (species5Name == selectedSpecies2) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else if (species5Name == selectedSpecies1) {
-                return "#de2d26";
+                return selectioncolor;
             }
             else {
                 return "black";
@@ -771,6 +772,14 @@ function queueData(d) {
     flag = true;
 }
 
+function updateSelectionColor(d) {
+    var regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    if (regex.test(d)) {
+        selectioncolor = d;
+        ParallelBarsVis();
+    }
+
+}
 
 //Resize on window dimension change
 function doALoadOfStuff() {

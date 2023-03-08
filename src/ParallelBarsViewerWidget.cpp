@@ -57,6 +57,10 @@ void ParallelBarsViewerWidget::setData(std::string visDataContent)
 	emit _communicationObject->qt_setData(QString((visDataContent).c_str()));
 }
 
+void ParallelBarsViewerWidget::updateSelectionColor(QString visColorContent)
+{
+	emit _communicationObject->qt_updateSelectionColor(visColorContent);
+}
 
 void ParallelBarsViewerWidget::setSpecies1(QString species1)
 {

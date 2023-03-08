@@ -20,7 +20,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_selectedCrossspeciescluster(this, "Selected CrossSpecies Cluster"),
 	_neighborhoodAction(this, "Neighborhood"),
 	_species1Name(this, "Species1Name"),
-	_species2Name(this, "Species2Name")
+	_species2Name(this, "Species2Name"),
+	_selectionColorAction(this, "Selection color")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
@@ -94,6 +95,9 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
+	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
+	_selectionColorAction.connectToPublicActionByName("Global Selection Color");
+
 		const auto updateGeneName = [this]() -> void
 	{
 			updateData();
@@ -101,7 +105,23 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 			
 	};
 
+		const auto updateSelectionColor = [this]() -> void
+		{
+			if (_selectionColorAction.getColor().isValid())
+			{
+				QColor color = _selectionColorAction.getColor();
+				QString hexValueColor = "#" + QString::number(color.red(), 16).rightJustified(2, '0')
+					+ QString::number(color.green(), 16).rightJustified(2, '0')
+					+ QString::number(color.blue(), 16).rightJustified(2, '0');
 
+
+				_ParallelBarsViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
+
+			}
+
+		};
+
+		connect(&_selectionColorAction, &ColorAction::colorChanged, this, updateSelectionColor);
 
 
 		const auto updateSelectedCrossspeciescluster = [this]() -> void

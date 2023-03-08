@@ -27,6 +27,7 @@ signals:
 	void qt_setSpecies2(QString species2);
 	void qt_setSelectedCrossspeciescluster(QString data);
 	void qt_addAvailableData(QString name);
+	void qt_updateSelectionColor(QString data);
 	//void qt_setBarhighlight(QString clusterName);
 
 
@@ -50,6 +51,7 @@ public:
 	void setSpecies1(QString species1);
 	void setSpecies2(QString species2);
 	void setSelectedCrossspeciescluster(QString visDataContent);
+	void updateSelectionColor(QString visColorContent);
 	//void setBarhighlight(QString clusterName);
 
 protected:
