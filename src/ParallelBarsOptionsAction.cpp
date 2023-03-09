@@ -96,8 +96,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
 	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
-	_selectionColorAction.connectToPublicActionByName("Global Selection Color");
-
+	_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
 		const auto updateGeneName = [this]() -> void
 	{
 			updateData();
