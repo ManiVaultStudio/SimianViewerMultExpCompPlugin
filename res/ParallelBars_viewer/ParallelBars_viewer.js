@@ -15,6 +15,7 @@ var species2Name = "";
 var species3Name = "";
 var species4Name = "";
 var species5Name = "";
+var humanComparisonflag = "hide";
 var geneName = "";
 var selectedCrossspeciescluster = "";
 var ClusterStorage1 = {};
@@ -774,6 +775,8 @@ function queueData(d) {
     species4Name = _info[0].species4Name;
     species5Name = _info[0].species5Name;
     geneName = _info[0].geneName;
+    humanComparisonflag = _info[0].humanComparisonflag;
+    log("\nhumanComparisonflag" + humanComparisonflag+"\n");
     ParallelBarsVis();
     flag = true;
 }

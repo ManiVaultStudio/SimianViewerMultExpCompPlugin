@@ -629,6 +629,14 @@ void ParallelBarsOptionsAction::updateData()
 			jsonData += '"';
 			jsonData += _geneNameAction.getString().toStdString();
 			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "humanComparisonflag";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += humanComparisonflag;
+			jsonData += '"';
 			jsonData += "}";
 			jsonData += "]}]";
 			_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
