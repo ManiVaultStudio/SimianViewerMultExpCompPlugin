@@ -540,31 +540,68 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += "species1ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.humandeStatsCount;
+				if (humanComparisonflag=="show")
+				{
+					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount));
+				}
+				else {
+					jsonData += ittr->second.humandeStatsCount;
+				}
+
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "species2ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.chimpdeStatsCount;
+				if (humanComparisonflag == "show")
+				{
+					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount));
+				}
+				else {
+					jsonData += ittr->second.chimpdeStatsCount;
+				}
+				
+
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "species3ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.gorilladeStatsCount;
+				if (humanComparisonflag == "show")
+				{
+					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount));
+				}
+				else {
+					jsonData += ittr->second.gorilladeStatsCount;
+				}
+				
+
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "species4ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.rhesusdeStatsCount;
+				if (humanComparisonflag == "show")
+				{
+					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount));
+				}
+				else {
+					jsonData += ittr->second.rhesusdeStatsCount;
+				}
+				
+
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "species5ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.marmosetdeStatsCount;
+				if (humanComparisonflag == "show")
+				{
+					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount));
+				}
+				else {
+					jsonData += ittr->second.marmosetdeStatsCount;
+				}
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "clusterColor";
