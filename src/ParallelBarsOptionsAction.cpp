@@ -22,7 +22,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
 	_selectionColorAction(this, "Selection color"),
-	_humancomparisonAction(this, "Human comparison")
+	_humancomparisonAction(this, "Human vs all species differential expression comparison")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")

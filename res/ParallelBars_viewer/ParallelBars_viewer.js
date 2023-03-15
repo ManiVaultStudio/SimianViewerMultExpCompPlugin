@@ -127,48 +127,89 @@ function selectBars(d) {
             .attr('stroke', selectioncolor)
             .attr("stroke-width", 2)
             .attr('fill', 'none');
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies2")
+            .attr('x', species2BarStart)
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', xScaleTooltipSpecies(ClusterStorage2[d]))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
+
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies3")
+            .attr('x', species3BarStart)
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', xScaleTooltipSpecies(ClusterStorage3[d]))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
+
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies4")
+            .attr('x', species4BarStart)
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', xScaleTooltipSpecies(ClusterStorage4[d]))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
+
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies5")
+            .attr('x', species5BarStart)
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', xScaleTooltipSpecies(ClusterStorage5[d]))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
+
 
     }
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies2")
-        .attr('x', species2BarStart)
-        .attr('y', yScaleTooltipSpecies(d))
-        .attr('width', xScaleTooltipSpecies(ClusterStorage2[d]))
-        .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', selectioncolor)
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
+    else {
+/*        svg.append('rect')
+            .attr("id", "mouseclickSpecies2")
+            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage2[d])))
+            .attr("y", yScaleTooltipSpecies(d))
+            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage2[d]) - xScaleTooltipSpecies(0)))
+            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
 
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies3")
-        .attr('x', species3BarStart)
-        .attr('y', yScaleTooltipSpecies(d))
-        .attr('width', xScaleTooltipSpecies(ClusterStorage3[d]))
-        .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', selectioncolor)
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies3")
+            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage3[d])))
+            .attr("y", yScaleTooltipSpecies(d))
+            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage3[d]) - xScaleTooltipSpecies(0)))
+            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
 
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies4")
-        .attr('x', species4BarStart)
-        .attr('y', yScaleTooltipSpecies(d))
-        .attr('width', xScaleTooltipSpecies(ClusterStorage4[d]))
-        .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', selectioncolor)
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies4")
+            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage4[d])))
+            .attr("y", yScaleTooltipSpecies(d))
+            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage4[d]) - xScaleTooltipSpecies(0)))
+            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
 
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies5")
-        .attr('x', species5BarStart)
-        .attr('y', yScaleTooltipSpecies(d))
-        .attr('width', xScaleTooltipSpecies(ClusterStorage5[d]))
-        .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', selectioncolor)
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
-
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies5")
+            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage5[d])))
+            .attr("y", yScaleTooltipSpecies(d))
+            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage5[d]) - xScaleTooltipSpecies(0)))
+            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');*/
+    }
     svg.select(".axis.y.labels.left")
         .selectAll("text")
         .style("fill", function (m) {
@@ -179,9 +220,8 @@ function selectBars(d) {
                 return "black";
             }
         });
-
     if (yScaleTooltipSpecies(d) > 1) {
-        window.scrollTo(0, yScaleTooltipSpecies(d) - 2);
+        window.scrollTo(0, yScaleTooltipSpecies(d) + 2);
         }
         else {
         window.scrollTo(0, yScaleTooltipSpecies(d));
