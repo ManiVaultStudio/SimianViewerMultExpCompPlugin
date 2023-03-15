@@ -749,7 +749,13 @@ function setSelectedCrossspeciescluster(d) {
 }
 
 function queueData(d) {
-    _data = JSON.parse(d);
+    //log("\nd::::" + d);
+    const jsonData = JSON.parse(d);
+    //log("\jsonData::::" + jsonData);
+    const _info  = jsonData[0].info;
+    _data = jsonData[0].data;
+    //log("\n_info::::" + _info);
+    //log("\n_data::::" + _data);
     for (var i = 0; i < _data.length; i++) {
         ClusterStorage1[_data[i].clusterName] = _data[i].species1ClusterCount;
         ClusterStorage2[_data[i].clusterName] = _data[i].species2ClusterCount;
@@ -762,12 +768,12 @@ function queueData(d) {
         return sortingCrossSpeciesClustersList.indexOf(b.clusterName) - sortingCrossSpeciesClustersList.indexOf(a.clusterName)
     });
 
-    species1Name = _data[0].species1Name;
-    species2Name = _data[0].species2Name;
-    species3Name = _data[0].species3Name;
-    species4Name = _data[0].species4Name;
-    species5Name = _data[0].species5Name;
-    geneName = _data[0].geneName;
+    species1Name = _info[0].species1Name;
+    species2Name = _info[0].species2Name;
+    species3Name = _info[0].species3Name;
+    species4Name = _info[0].species4Name;
+    species5Name = _info[0].species5Name;
+    geneName = _info[0].geneName;
     ParallelBarsVis();
     flag = true;
 }
