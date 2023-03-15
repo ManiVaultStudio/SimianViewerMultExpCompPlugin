@@ -221,7 +221,7 @@ function selectBars(d) {
             }
         });
     if (yScaleTooltipSpecies(d) > 1) {
-        window.scrollTo(0, yScaleTooltipSpecies(d) + 2);
+        window.scrollTo(0, yScaleTooltipSpecies(d) -1);
         }
         else {
         window.scrollTo(0, yScaleTooltipSpecies(d));
@@ -1120,14 +1120,14 @@ const VisHumanComparison = () => {
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
-        .attr("y", 20)
+        .attr("y", 25)
         .text(geneName)
         .attr("font-size", "10").style("font-family", "Arial");
     svgAxis
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
-        .attr("y", 10)
+        .attr("y", 15)
         .text("Gene")
         .attr("font-size", "10").style("font-family", "Arial");
     svgAxis.selectAll(".tick").each(function (d) {
