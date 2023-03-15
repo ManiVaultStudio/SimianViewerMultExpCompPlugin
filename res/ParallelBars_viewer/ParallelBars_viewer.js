@@ -937,7 +937,9 @@ const VisHumanComparison = () => {
         .attr("transform", translation(xScaleTooltipSpecies(0) + species5BarStart, 0))
         .call(yAxisLabelsLeft);
 
-
+    function translation(x, y) {
+        return "translate(" + x + "," + y + ")";
+    }
     ///for axes
     var svgAxis = d3
         .select("#my_dataviz_axes")
