@@ -21,7 +21,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_neighborhoodAction(this, "Neighborhood"),
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
-	_selectionColorAction(this, "Selection color")
+	_selectionColorAction(this, "Selection color"),
+	_humancomparisonAction(this, "Human comparison")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
@@ -50,6 +51,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_selectedCrossspeciescluster.initialize("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
+	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
+	_humancomparisonAction.initialize(false, false);
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
@@ -317,6 +320,18 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	connect(&_neighborhoodAction, &OptionAction::currentIndexChanged, this, updateNeighborhood);
 	connect(&_geneNameAction, &StringAction::stringChanged, this, updateGeneName);
 	connect(&_selectedCrossspeciescluster, &StringAction::stringChanged, this, updateSelectedCrossspeciescluster);
+
+	const auto updateHumancomparisonAction = [this]() -> void
+	{
+
+		updateData();
+	};
+
+	connect(&_humancomparisonAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAction](const bool& toggled)
+		{
+			updateHumancomparisonAction();
+		});
+
 	updateDatasetPickerAction();
 }
 
@@ -487,6 +502,15 @@ void ParallelBarsOptionsAction::updateData()
 				}
 
 			}
+			std::string humanComparisonflag = "hide";
+			if (_humancomparisonAction.isChecked())
+			{
+				humanComparisonflag = "show";
+			}
+			else
+			{
+				humanComparisonflag = "hide";
+			}
 			std::string jsonData = "[";
 			for (auto ittr = _deStatsDataStorage.rbegin(); ittr != _deStatsDataStorage.rend(); ++ittr)
 			{
@@ -600,8 +624,6 @@ void ParallelBarsOptionsAction::updateData()
 			_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
 
 		}
-
-
 }
 
 
