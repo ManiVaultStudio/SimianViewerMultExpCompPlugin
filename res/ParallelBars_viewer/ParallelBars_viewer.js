@@ -116,18 +116,19 @@ function selectBars(d) {
     svg.select(".axis.y.labels.left")
         .selectAll("text")
         .style("fill", "black");
+    if (humanComparisonflag == "hide") {
 
-    svg.append('rect')
-        .attr("id", "mouseclickSpecies1")
-        .attr('x', species1BarStart)
-        .attr('y', yScaleTooltipSpecies(d))
-        .attr('width', xScaleTooltipSpecies(ClusterStorage1[d]))
-        .attr('height', yScaleTooltipSpecies.bandwidth())
-        .attr('stroke', selectioncolor)
-        .attr("stroke-width", 2)
-        .attr('fill', 'none');
+        svg.append('rect')
+            .attr("id", "mouseclickSpecies1")
+            .attr('x', species1BarStart)
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', xScaleTooltipSpecies(ClusterStorage1[d]))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
+            .attr('stroke', selectioncolor)
+            .attr("stroke-width", 2)
+            .attr('fill', 'none');
 
-
+    }
     svg.append('rect')
         .attr("id", "mouseclickSpecies2")
         .attr('x', species2BarStart)
@@ -708,6 +709,401 @@ const ParallelBarsVis = () => {
 
 };
 
+
+const VisHumanComparison = () => {
+    d3.select("g").remove();
+    d3.select("svg").remove();
+    svg = d3.select("#my_dataviz");
+    svg.selectAll("*").remove();
+    svg_Axes = d3.select("#my_dataviz_axes");
+    svg_Axes.selectAll("*").remove();
+
+    //var _data = [
+    //    { clusterName: "L5 IT/3", species1ClusterCount: 10, species2ClusterCount: 20, species3ClusterCount: 30, species4ClusterCount: 40, species5ClusterCount: 50, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "2", species1ClusterCount: 70, species2ClusterCount: 40, species3ClusterCount: 26, species4ClusterCount: 47, species5ClusterCount: 520, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "3", species1ClusterCount: 90, species2ClusterCount: 24, species3ClusterCount: 36, species4ClusterCount: 90, species5ClusterCount: 204, clusterColor: "blue", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //    { clusterName: "4", species1ClusterCount: 100, species2ClusterCount: 55, species3ClusterCount: 10, species4ClusterCount: 120, species5ClusterCount: 220, clusterColor: "green", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
+    //];
+    numOFBars = _data.length;
+
+    containerHeight = numOFBars * 20;
+
+    wTooltip = (98 / 100) * window.innerWidth;
+    hTooltip = containerHeight + topSpace + bottomSpace;
+    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart - 40) / 4;
+    species2BarStart = species1BarStart;
+    species3BarStart = species2BarStart + regionWidthTooltip + buffer;
+    species4BarStart = species3BarStart + regionWidthTooltip + buffer;
+    species5BarStart = species4BarStart + regionWidthTooltip + buffer;
+
+
+
+
+    svg = d3
+        .select("#my_dataviz")
+        .append("svg")
+        .attr(
+            "width",
+            leftSpace + wTooltip + rightSpace
+        )
+        .attr(
+            "height",
+            topSpace + hTooltip + bottomSpace
+        )
+        .append("g")
+        .attr(
+            "transform",
+            translation(leftSpace, topSpace)
+        );
+    tooltip = d3.select("#my_dataviz")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px");
+    var maxValueTooltip = Math.max(
+        d3.max(_data, function (d) {
+            return d.species2ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species3ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species4ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species5ClusterCount;
+        })
+    );
+    xScaleTooltipSpecies = d3
+        .scaleLinear()
+        .domain([0, maxValueTooltip])
+        .range([0, regionWidthTooltip])
+        .nice();
+
+    yScaleTooltipSpecies = d3
+        .scaleBand()
+        .domain(
+            _data.map(function (d) {
+                return d.clusterName;
+            })
+        )
+        .rangeRound([hTooltip, 0])
+        .padding(0.1);
+    var species2BarGroup = svg
+        .append("g")
+        .attr("transform", translation(species2BarStart, 0));
+    var species3BarGroup = svg
+        .append("g")
+        .attr("transform", translation(species3BarStart, 0));
+    var species4BarGroup = svg
+        .append("g")
+        .attr("transform", translation(species4BarStart, 0));
+    var species5BarGroup = svg
+        .append("g")
+        .attr("transform", translation(species5BarStart, 0));
+    yAxisLabelsLeft = d3
+        .axisLeft()
+        .scale(yScaleTooltipSpecies)
+        .tickSize(1, 0)
+        .tickFormat("")
+        .tickPadding(1);
+    svg
+        .append("g")
+        .attr("class", "axis y labels left")
+        .attr("transform", translation(axisStart, 0))  // start the axis from the extreme left
+        .call(yAxisLabelsLeft)
+        .selectAll("text")
+        .attr("x", leftSpace - 10)  // move the labels to the right side of the axis
+        .attr("dy", "0.32em")
+        .style("cursor", "pointer")
+        .on("click", clickMiddleLabel)
+        .text(function (d) { return d; }) // add the clusterName text to the labels
+        .style("fill", "black"); // set the fill color to black
+
+
+    species2BarGroup
+        .selectAll(".bar.right.species2")
+        .data(_data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar right species2")
+        .attr("x", 0)
+        .attr("y", function (d) {
+            return yScaleTooltipSpecies(d.clusterName);
+        })
+        .attr("width", function (d) {
+            return xScaleTooltipSpecies(d.species2ClusterCount);
+        })
+        .attr("fill", function (d) {
+            return d.clusterColor;
+        })
+        .attr("height", yScaleTooltipSpecies.bandwidth())
+        .style("cursor", "pointer")
+        .on("click", clickBar)
+        .on("mouseover", mouseoverSpecies2)
+        .on("mousemove", mousemoveSpecies)
+        .on("mouseleave", mouseleaveSpecies)
+        ;
+
+    species3BarGroup
+        .selectAll(".bar.right.species3")
+        .data(_data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar right species3")
+        .attr("x", 0)
+        .attr("y", function (d) {
+            return yScaleTooltipSpecies(d.clusterName);
+        })
+        .attr("width", function (d) {
+            return xScaleTooltipSpecies(d.species3ClusterCount);
+        })
+        .attr("fill", function (d) {
+            return d.clusterColor;
+        })
+        .attr("height", yScaleTooltipSpecies.bandwidth())
+        .style("cursor", "pointer")
+        .on("click", clickBar)
+        .on("mouseover", mouseoverSpecies3)
+        .on("mousemove", mousemoveSpecies)
+        .on("mouseleave", mouseleaveSpecies)
+        ;
+
+    species4BarGroup
+        .selectAll(".bar.right.species4")
+        .data(_data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar right species4")
+        .attr("x", 0)
+        .attr("y", function (d) {
+            return yScaleTooltipSpecies(d.clusterName);
+        })
+        .attr("width", function (d) {
+            return xScaleTooltipSpecies(d.species4ClusterCount);
+        })
+        .attr("fill", function (d) {
+            return d.clusterColor;
+        })
+        .attr("height", yScaleTooltipSpecies.bandwidth())
+        .style("cursor", "pointer")
+        .on("click", clickBar)
+        .on("mouseover", mouseoverSpecies4)
+        .on("mousemove", mousemoveSpecies)
+        .on("mouseleave", mouseleaveSpecies)
+        ;
+
+    species5BarGroup
+        .selectAll(".bar.right.species5")
+        .data(_data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar right species5")
+        .attr("x", 0)
+        .attr("y", function (d) {
+            return yScaleTooltipSpecies(d.clusterName);
+        })
+        .attr("width", function (d) {
+            return xScaleTooltipSpecies(d.species5ClusterCount);
+        })
+        .attr("fill", function (d) {
+            return d.clusterColor;
+        })
+        .attr("height", yScaleTooltipSpecies.bandwidth())
+        .style("cursor", "pointer")
+        .on("click", clickBar)
+        .on("mouseover", mouseoverSpecies5)
+        .on("mousemove", mousemoveSpecies)
+        .on("mouseleave", mouseleaveSpecies)
+        ;
+
+
+    function translation(x, y) {
+        return "translate(" + x + "," + y + ")";
+    }
+    var svgAxis = d3
+        .select("#my_dataviz_axes")
+        .append("svg")
+        .attr(
+            "width",
+            leftSpace + wTooltip + rightSpace
+        )
+        .attr("height", 50)
+        .append("g")
+        .attr(
+            "transform",
+            translation(leftSpace, topSpace)
+        );
+    var maxValueTooltip = Math.max(
+        d3.max(_data, function (d) {
+            return d.species2ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species3ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species4ClusterCount;
+        }),
+        d3.max(_data, function (d) {
+            return d.species5ClusterCount;
+        })
+    );
+    var species2XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
+    var species3XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
+    var species4XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
+    var species5XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
+
+    svgAxis
+        .append("g")
+        .attr("class", "axis x right species2")
+        .attr("transform", translationAxes(species2BarStart, 20))
+        .attr("shape-rendering", "crispEdges")
+        .attr("fill", "black")
+        .call(species2XAxisSpace)
+        .selectAll("text")
+        .attr("dy", ".21em");
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", species2BarStart + regionWidthTooltip / 2)
+        .attr("y", 30)
+        .text(species2Name)
+        .attr("font-size", "10").style("font-family", "Arial")
+        .style("fill", function (d) {
+
+
+            if (species2Name == selectedSpecies2) {
+                return selectioncolor;
+            }
+            else if (species2Name == selectedSpecies1) {
+                return selectioncolor;
+            }
+            else {
+                return "black";
+            }
+        });
+
+    svgAxis
+        .append("g")
+        .attr("class", "axis x right species3")
+        .attr("transform", translationAxes(species3BarStart, 20))
+        .attr("shape-rendering", "crispEdges")
+        .attr("fill", "black")
+        .call(species3XAxisSpace)
+        .selectAll("text")
+        .attr("dy", ".21em");
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", species3BarStart + regionWidthTooltip / 2)
+        .attr("y", 30)
+        .text(species3Name)
+        .attr("font-size", "10").style("font-family", "Arial")
+        .style("fill", function (d) {
+
+
+            if (species3Name == selectedSpecies2) {
+                return selectioncolor;
+            }
+            else if (species3Name == selectedSpecies1) {
+                return selectioncolor;
+            }
+            else {
+                return "black";
+            }
+        });
+
+    svgAxis
+        .append("g")
+        .attr("class", "axis x right species4")
+        .attr("transform", translationAxes(species4BarStart, 20))
+        .attr("shape-rendering", "crispEdges")
+        .attr("fill", "black")
+        .call(species4XAxisSpace)
+        .selectAll("text")
+        .attr("dy", ".21em");
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", species4BarStart + regionWidthTooltip / 2)
+        .attr("y", 30)
+        .text(species4Name)
+        .attr("font-size", "10").style("font-family", "Arial")
+        .style("fill", function (d) {
+
+            if (species4Name == selectedSpecies2) {
+                return selectioncolor;
+            }
+            else if (species4Name == selectedSpecies1) {
+                return selectioncolor;
+            }
+            else {
+                return "black";
+            }
+        });
+
+    svgAxis
+        .append("g")
+        .attr("class", "axis x right species5")
+        .attr("transform", translationAxes(species5BarStart, 20))
+        .attr("shape-rendering", "crispEdges")
+        .attr("fill", "black")
+        .call(species5XAxisSpace)
+        .selectAll("text")
+        .attr("dy", ".21em");
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", species5BarStart + regionWidthTooltip / 2)
+        .attr("y", 30)
+        .text(species5Name)
+        .attr("font-size", "10").style("font-family", "Arial")
+        .style("fill", function (d) {
+
+            if (species5Name == selectedSpecies2) {
+                return selectioncolor;
+            }
+            else if (species5Name == selectedSpecies1) {
+                return selectioncolor;
+            }
+            else {
+                return "black";
+            }
+        });
+
+
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", axisStart - 20)
+        .attr("y", 32)
+        .text(geneName)
+        .attr("font-size", "10").style("font-family", "Arial");
+    svgAxis
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", axisStart - 20)
+        .attr("y", 20)
+        .text("Gene")
+        .attr("font-size", "10").style("font-family", "Arial");
+    svgAxis.selectAll(".tick").each(function (d) {
+        if (d === 0.0 || d === 0) {
+            this.remove();
+        }
+    });
+    function translationAxes(x, y) {
+        return "translate(" + x + "," + y + ")";
+    }
+    if (selectedCrossspeciescluster !== "") {
+        selectBars(selectedCrossspeciescluster);
+    }
+
+};
+
+
 function setData(d) {
     _dataQueue.addData(d);
 }
@@ -716,7 +1112,14 @@ function setSpecies1(d) {
     //if (d !== "") 
     {
         selectedSpecies1 = d;
-        ParallelBarsVis();
+        if (humanComparisonflag=="show") {
+            VisHumanComparison();
+        }
+        else {
+           
+            ParallelBarsVis();
+        }
+
     }
 
 }
@@ -725,7 +1128,13 @@ function setSpecies2(d) {
     //if (d !== "")
     {
         selectedSpecies2 = d;
-        ParallelBarsVis();
+        if (humanComparisonflag == "show") {
+            VisHumanComparison();
+        }
+        else {
+
+            ParallelBarsVis();
+        }
     }
 
 }
@@ -776,8 +1185,14 @@ function queueData(d) {
     species5Name = _info[0].species5Name;
     geneName = _info[0].geneName;
     humanComparisonflag = _info[0].humanComparisonflag;
-    log("\nhumanComparisonflag" + humanComparisonflag+"\n");
-    ParallelBarsVis();
+    //log("\nhumanComparisonflag" + humanComparisonflag+"\n");
+    if (humanComparisonflag == "show") {
+        VisHumanComparison();
+    }
+    else {
+
+        ParallelBarsVis();
+    }
     flag = true;
 }
 
@@ -785,14 +1200,28 @@ function updateSelectionColor(d) {
     var regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
     if (regex.test(d)) {
         selectioncolor = d;
-        ParallelBarsVis();
+        if (humanComparisonflag == "show") {
+            VisHumanComparison();
+        }
+        else {
+
+            ParallelBarsVis();
+        }
     }
 
 }
 
 //Resize on window dimension change
 function doALoadOfStuff() {
-    if (flag) { ParallelBarsVis(); }
+    if (flag) {
+        if (humanComparisonflag == "show") {
+            VisHumanComparison();
+        }
+        else {
+
+            ParallelBarsVis();
+        }
+    }
 }
 
 
