@@ -718,25 +718,29 @@ const VisHumanComparison = () => {
     svg_Axes = d3.select("#my_dataviz_axes");
     svg_Axes.selectAll("*").remove();
 
-    //var _data = [
-    //    { clusterName: "L5 IT/3", species1ClusterCount: 10, species2ClusterCount: 20, species3ClusterCount: 30, species4ClusterCount: 40, species5ClusterCount: 50, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
-    //    { clusterName: "2", species1ClusterCount: 70, species2ClusterCount: 40, species3ClusterCount: 26, species4ClusterCount: 47, species5ClusterCount: 520, clusterColor: "red", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
-    //    { clusterName: "3", species1ClusterCount: 90, species2ClusterCount: 24, species3ClusterCount: 36, species4ClusterCount: 90, species5ClusterCount: 204, clusterColor: "blue", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
-    //    { clusterName: "4", species1ClusterCount: 100, species2ClusterCount: 55, species3ClusterCount: 10, species4ClusterCount: 120, species5ClusterCount: 220, clusterColor: "green", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
-    //];
+/*    _data = [
+        { "clusterName": "L6 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.072219, "species3ClusterCount": 0.112293, "species4ClusterCount": -0.233640, "species5ClusterCount": 0.470568, "clusterColor": "#beb867" },
+        { "clusterName": "L6 IT Car3_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.644334, "species3ClusterCount": 0.375326, "species4ClusterCount": -0.533344, "species5ClusterCount": 1.394913, "clusterColor": "#8054f7" },
+        { "clusterName": "L6 IT Car3_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -2.434991, "species3ClusterCount": 1.002196, "species4ClusterCount": -3.507725, "species5ClusterCount": -1.525061, "clusterColor": "#b29ff7" },
+        { "clusterName": "L5 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.185092, "species3ClusterCount": -0.050166, "species4ClusterCount": -0.572320, "species5ClusterCount": -0.187763, "clusterColor": "#2a5e5a" },
+        { "clusterName": "L5 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.903219, "species3ClusterCount": -0.801962, "species4ClusterCount": -1.472404, "species5ClusterCount": -0.588094, "clusterColor": "#a0cec9" },
+        { "clusterName": "L4 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.973635, "species3ClusterCount": -0.380511, "species4ClusterCount": -1.448495, "species5ClusterCount": -1.013599, "clusterColor": "#00e5e5" },
+        { "clusterName": "L4 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.594532, "species3ClusterCount": -0.587652, "species4ClusterCount": -2.237726, "species5ClusterCount": -2.590230, "clusterColor": "#c1f4f1" },
+        { "clusterName": "L2/3 IT_3", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.162868, "species3ClusterCount": 0.487906, "species4ClusterCount": 0.692046, "species5ClusterCount": 0.255947, "clusterColor": "#596d0f" },
+        { "clusterName": "L2/3 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.615590, "species3ClusterCount": -2.407256, "species4ClusterCount": -3.340774, "species5ClusterCount": -3.128695, "clusterColor": "#99b348" },
+        { "clusterName": "L2/3 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.242511, "species3ClusterCount": 0.627553, "species4ClusterCount": 0.632282, "species5ClusterCount": 1.169403, "clusterColor": "#d9f982" }
+    ];*/
     numOFBars = _data.length;
 
     containerHeight = numOFBars * 20;
 
     wTooltip = (98 / 100) * window.innerWidth;
     hTooltip = containerHeight + topSpace + bottomSpace;
-    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart - 40) / 4;
     species2BarStart = species1BarStart;
+    regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species2BarStart - 40) / 4;
     species3BarStart = species2BarStart + regionWidthTooltip + buffer;
     species4BarStart = species3BarStart + regionWidthTooltip + buffer;
     species5BarStart = species4BarStart + regionWidthTooltip + buffer;
-
-
 
 
     svg = d3
@@ -763,6 +767,7 @@ const VisHumanComparison = () => {
         .style("border", "solid")
         .style("border-width", "1px")
         .style("border-radius", "5px");
+
     var maxValueTooltip = Math.max(
         d3.max(_data, function (d) {
             return d.species2ClusterCount;
@@ -777,9 +782,26 @@ const VisHumanComparison = () => {
             return d.species5ClusterCount;
         })
     );
+
+    var minValueTooltip = Math.min(
+        d3.min(_data, function (d) {
+            return d.species2ClusterCount;
+        }),
+        d3.min(_data, function (d) {
+            return d.species3ClusterCount;
+        }),
+        d3.min(_data, function (d) {
+            return d.species4ClusterCount;
+        }),
+        d3.min(_data, function (d) {
+            return d.species5ClusterCount;
+        })
+    );
+
     xScaleTooltipSpecies = d3
         .scaleLinear()
-        .domain([0, maxValueTooltip])
+        .domain([minValueTooltip, maxValueTooltip])
+        //.domain([d3.min(_data, function(d) { return d.species2ClusterCount; }), d3.max(_data, function(d) { return d.species2ClusterCount; })])
         .range([0, regionWidthTooltip])
         .nice();
 
@@ -792,6 +814,7 @@ const VisHumanComparison = () => {
         )
         .rangeRound([hTooltip, 0])
         .padding(0.1);
+
     var species2BarGroup = svg
         .append("g")
         .attr("transform", translation(species2BarStart, 0));
@@ -804,12 +827,14 @@ const VisHumanComparison = () => {
     var species5BarGroup = svg
         .append("g")
         .attr("transform", translation(species5BarStart, 0));
+
     yAxisLabelsLeft = d3
         .axisLeft()
         .scale(yScaleTooltipSpecies)
         .tickSize(1, 0)
         .tickFormat("")
         .tickPadding(1);
+
     svg
         .append("g")
         .attr("class", "axis y labels left")
@@ -830,23 +855,21 @@ const VisHumanComparison = () => {
         .enter()
         .append("rect")
         .attr("class", "bar right species2")
-        .attr("x", 0)
-        .attr("y", function (d) {
-            return yScaleTooltipSpecies(d.clusterName);
-        })
-        .attr("width", function (d) {
-            return xScaleTooltipSpecies(d.species2ClusterCount);
-        })
-        .attr("fill", function (d) {
-            return d.clusterColor;
-        })
+        .attr("x", function (d) { return xScaleTooltipSpecies(Math.min(0, d.species2ClusterCount)); })
+        .attr("y", function (d) { return yScaleTooltipSpecies(d.clusterName); })
+        .attr("width", function (d) { return Math.abs(xScaleTooltipSpecies(d.species2ClusterCount) - xScaleTooltipSpecies(0)); })
         .attr("height", yScaleTooltipSpecies.bandwidth())
+        .attr("fill", function (d) { return d.clusterColor; })
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies2)
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
+    svg.append("g")
+        .attr("class", "y axis species2")
+        .attr("transform", translation(xScaleTooltipSpecies(0) + species1BarStart, 0))
+        .call(yAxisLabelsLeft);
 
     species3BarGroup
         .selectAll(".bar.right.species3")
@@ -854,23 +877,21 @@ const VisHumanComparison = () => {
         .enter()
         .append("rect")
         .attr("class", "bar right species3")
-        .attr("x", 0)
-        .attr("y", function (d) {
-            return yScaleTooltipSpecies(d.clusterName);
-        })
-        .attr("width", function (d) {
-            return xScaleTooltipSpecies(d.species3ClusterCount);
-        })
-        .attr("fill", function (d) {
-            return d.clusterColor;
-        })
+        .attr("x", function (d) { return xScaleTooltipSpecies(Math.min(0, d.species3ClusterCount)); })
+        .attr("y", function (d) { return yScaleTooltipSpecies(d.clusterName); })
+        .attr("width", function (d) { return Math.abs(xScaleTooltipSpecies(d.species3ClusterCount) - xScaleTooltipSpecies(0)); })
         .attr("height", yScaleTooltipSpecies.bandwidth())
+        .attr("fill", function (d) { return d.clusterColor; })
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies3)
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
+    svg.append("g")
+        .attr("class", "y axis species3")
+        .attr("transform", translation(xScaleTooltipSpecies(0) + species3BarStart, 0))
+        .call(yAxisLabelsLeft);
 
     species4BarGroup
         .selectAll(".bar.right.species4")
@@ -878,23 +899,21 @@ const VisHumanComparison = () => {
         .enter()
         .append("rect")
         .attr("class", "bar right species4")
-        .attr("x", 0)
-        .attr("y", function (d) {
-            return yScaleTooltipSpecies(d.clusterName);
-        })
-        .attr("width", function (d) {
-            return xScaleTooltipSpecies(d.species4ClusterCount);
-        })
-        .attr("fill", function (d) {
-            return d.clusterColor;
-        })
+        .attr("x", function (d) { return xScaleTooltipSpecies(Math.min(0, d.species4ClusterCount)); })
+        .attr("y", function (d) { return yScaleTooltipSpecies(d.clusterName); })
+        .attr("width", function (d) { return Math.abs(xScaleTooltipSpecies(d.species4ClusterCount) - xScaleTooltipSpecies(0)); })
         .attr("height", yScaleTooltipSpecies.bandwidth())
+        .attr("fill", function (d) { return d.clusterColor; })
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies4)
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
+    svg.append("g")
+        .attr("class", "y axis species4")
+        .attr("transform", translation(xScaleTooltipSpecies(0) + species4BarStart, 0))
+        .call(yAxisLabelsLeft);
 
     species5BarGroup
         .selectAll(".bar.right.species5")
@@ -902,28 +921,24 @@ const VisHumanComparison = () => {
         .enter()
         .append("rect")
         .attr("class", "bar right species5")
-        .attr("x", 0)
-        .attr("y", function (d) {
-            return yScaleTooltipSpecies(d.clusterName);
-        })
-        .attr("width", function (d) {
-            return xScaleTooltipSpecies(d.species5ClusterCount);
-        })
-        .attr("fill", function (d) {
-            return d.clusterColor;
-        })
+        .attr("x", function (d) { return xScaleTooltipSpecies(Math.min(0, d.species5ClusterCount)); })
+        .attr("y", function (d) { return yScaleTooltipSpecies(d.clusterName); })
+        .attr("width", function (d) { return Math.abs(xScaleTooltipSpecies(d.species5ClusterCount) - xScaleTooltipSpecies(0)); })
         .attr("height", yScaleTooltipSpecies.bandwidth())
+        .attr("fill", function (d) { return d.clusterColor; })
         .style("cursor", "pointer")
         .on("click", clickBar)
         .on("mouseover", mouseoverSpecies5)
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
+    svg.append("g")
+        .attr("class", "y axis species4")
+        .attr("transform", translation(xScaleTooltipSpecies(0) + species5BarStart, 0))
+        .call(yAxisLabelsLeft);
 
 
-    function translation(x, y) {
-        return "translate(" + x + "," + y + ")";
-    }
+    ///for axes
     var svgAxis = d3
         .select("#my_dataviz_axes")
         .append("svg")
@@ -937,29 +952,17 @@ const VisHumanComparison = () => {
             "transform",
             translation(leftSpace, topSpace)
         );
-    var maxValueTooltip = Math.max(
-        d3.max(_data, function (d) {
-            return d.species2ClusterCount;
-        }),
-        d3.max(_data, function (d) {
-            return d.species3ClusterCount;
-        }),
-        d3.max(_data, function (d) {
-            return d.species4ClusterCount;
-        }),
-        d3.max(_data, function (d) {
-            return d.species5ClusterCount;
-        })
-    );
-    var species2XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
-    var species3XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
-    var species4XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
-    var species5XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(2);
+
+
+    var species2XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(3);
+    var species3XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(3);
+    var species4XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(3);
+    var species5XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(3);
 
     svgAxis
         .append("g")
         .attr("class", "axis x right species2")
-        .attr("transform", translationAxes(species2BarStart, 20))
+        .attr("transform", translationAxes(species2BarStart, 15))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species2XAxisSpace)
@@ -989,7 +992,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species3")
-        .attr("transform", translationAxes(species3BarStart, 20))
+        .attr("transform", translationAxes(species3BarStart, 15))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species3XAxisSpace)
@@ -1003,8 +1006,6 @@ const VisHumanComparison = () => {
         .text(species3Name)
         .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
-
-
             if (species3Name == selectedSpecies2) {
                 return selectioncolor;
             }
@@ -1019,7 +1020,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species4")
-        .attr("transform", translationAxes(species4BarStart, 20))
+        .attr("transform", translationAxes(species4BarStart, 15))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species4XAxisSpace)
@@ -1033,7 +1034,6 @@ const VisHumanComparison = () => {
         .text(species4Name)
         .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
-
             if (species4Name == selectedSpecies2) {
                 return selectioncolor;
             }
@@ -1048,7 +1048,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species5")
-        .attr("transform", translationAxes(species5BarStart, 20))
+        .attr("transform", translationAxes(species5BarStart, 15))
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species5XAxisSpace)
@@ -1062,7 +1062,6 @@ const VisHumanComparison = () => {
         .text(species5Name)
         .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
-
             if (species5Name == selectedSpecies2) {
                 return selectioncolor;
             }
@@ -1079,14 +1078,14 @@ const VisHumanComparison = () => {
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
-        .attr("y", 32)
+        .attr("y", 20)
         .text(geneName)
         .attr("font-size", "10").style("font-family", "Arial");
     svgAxis
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", axisStart - 20)
-        .attr("y", 20)
+        .attr("y", 10)
         .text("Gene")
         .attr("font-size", "10").style("font-family", "Arial");
     svgAxis.selectAll(".tick").each(function (d) {
@@ -1097,6 +1096,7 @@ const VisHumanComparison = () => {
     function translationAxes(x, y) {
         return "translate(" + x + "," + y + ")";
     }
+
     if (selectedCrossspeciescluster !== "") {
         selectBars(selectedCrossspeciescluster);
     }
