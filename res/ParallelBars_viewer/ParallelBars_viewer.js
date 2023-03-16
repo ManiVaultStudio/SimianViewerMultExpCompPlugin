@@ -170,45 +170,49 @@ function selectBars(d) {
 
     }
     else {
-/*        svg.append('rect')
+        svg.append('rect')
             .attr("id", "mouseclickSpecies2")
-            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage2[d])))
-            .attr("y", yScaleTooltipSpecies(d))
-            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage2[d]) - xScaleTooltipSpecies(0)))
-            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('x', xScaleTooltipSpecies(Math.min(0, ClusterStorage2[d])))
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', Math.abs(xScaleTooltipSpecies(ClusterStorage2[d]) - xScaleTooltipSpecies(0)))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
             .attr('stroke', selectioncolor)
+            .attr("transform", "translate(" + species2BarStart + "," + 0 + ")")
             .attr("stroke-width", 2)
             .attr('fill', 'none');
 
         svg.append('rect')
             .attr("id", "mouseclickSpecies3")
-            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage3[d])))
-            .attr("y", yScaleTooltipSpecies(d))
-            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage3[d]) - xScaleTooltipSpecies(0)))
-            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('x', xScaleTooltipSpecies(Math.min(0, ClusterStorage3[d])))
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', Math.abs(xScaleTooltipSpecies(ClusterStorage3[d]) - xScaleTooltipSpecies(0)))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
             .attr('stroke', selectioncolor)
+            .attr("transform", "translate(" + species3BarStart + "," + 0 + ")")
             .attr("stroke-width", 2)
             .attr('fill', 'none');
 
         svg.append('rect')
             .attr("id", "mouseclickSpecies4")
-            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage4[d])))
-            .attr("y", yScaleTooltipSpecies(d))
-            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage4[d]) - xScaleTooltipSpecies(0)))
-            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('x', xScaleTooltipSpecies(Math.min(0, ClusterStorage4[d])))
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', Math.abs(xScaleTooltipSpecies(ClusterStorage4[d]) - xScaleTooltipSpecies(0)))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
             .attr('stroke', selectioncolor)
+            .attr("transform", "translate(" + species4BarStart + "," + 0 + ")")
             .attr("stroke-width", 2)
             .attr('fill', 'none');
 
         svg.append('rect')
             .attr("id", "mouseclickSpecies5")
-            .attr("x", xScaleTooltipSpecies(Math.min(0, ClusterStorage5[d])))
-            .attr("y", yScaleTooltipSpecies(d))
-            .attr("width", Math.abs(xScaleTooltipSpecies(ClusterStorage5[d]) - xScaleTooltipSpecies(0)))
-            .attr("height", yScaleTooltipSpecies.bandwidth())
+            .attr('x', xScaleTooltipSpecies(Math.min(0, ClusterStorage5[d])))
+            .attr('y', yScaleTooltipSpecies(d))
+            .attr('width', Math.abs(xScaleTooltipSpecies(ClusterStorage5[d]) - xScaleTooltipSpecies(0)))
+            .attr('height', yScaleTooltipSpecies.bandwidth())
             .attr('stroke', selectioncolor)
+            .attr("transform", "translate(" + species5BarStart + "," + 0 + ")")
             .attr("stroke-width", 2)
-            .attr('fill', 'none');*/
+            .attr('fill', 'none');
     }
     svg.select(".axis.y.labels.left")
         .selectAll("text")
@@ -334,10 +338,7 @@ const ParallelBarsVis = () => {
             topSpace + hTooltip + bottomSpace
         )
         .append("g")
-        .attr(
-            "transform",
-            translation(leftSpace, topSpace)
-        );
+        .attr("transform", "translate(" + leftSpace + "," + topSpace + ")");
     tooltip = d3.select("#my_dataviz")
         .append("div")
         .style("opacity", 0)
@@ -380,19 +381,19 @@ const ParallelBarsVis = () => {
         .padding(0.1);
     var species1BarGroup = svg
         .append("g")
-        .attr("transform", translation(species1BarStart, 0));
+        .attr("transform", "translate(" + species1BarStart + "," + 0 + ")");
     var species2BarGroup = svg
         .append("g")
-        .attr("transform", translation(species2BarStart, 0));
+        .attr("transform", "translate(" + species2BarStart + "," + 0 + ")");
     var species3BarGroup = svg
         .append("g")
-        .attr("transform", translation(species3BarStart, 0));
+        .attr("transform", "translate(" + species3BarStart + "," + 0 + ")");
     var species4BarGroup = svg
         .append("g")
-        .attr("transform", translation(species4BarStart, 0));
+        .attr("transform", "translate(" + species4BarStart + "," + 0 + ")");
     var species5BarGroup = svg
         .append("g")
-        .attr("transform", translation(species5BarStart, 0));
+        .attr("transform", "translate(" + species5BarStart + "," + 0 + ")");
      yAxisLabelsLeft = d3
         .axisLeft()
         .scale(yScaleTooltipSpecies)
@@ -402,7 +403,7 @@ const ParallelBarsVis = () => {
     svg
         .append("g")
         .attr("class", "axis y labels left")
-        .attr("transform", translation(axisStart, 0))  // start the axis from the extreme left
+        .attr("transform", "translate(" + axisStart + "," + 0 + ")")// start the axis from the extreme left
         .call(yAxisLabelsLeft)
         .selectAll("text")
         .attr("x", leftSpace - 10)  // move the labels to the right side of the axis
@@ -532,11 +533,6 @@ const ParallelBarsVis = () => {
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
-
-
-    function translation(x, y) {
-        return "translate(" + x + "," + y + ")";
-    }
     var svgAxis = d3
         .select("#my_dataviz_axes")
         .append("svg")
@@ -546,10 +542,7 @@ const ParallelBarsVis = () => {
         )
         .attr("height", 50)
         .append("g")
-        .attr(
-            "transform",
-            translation(leftSpace, topSpace)
-        );
+        .attr("transform", "translate(" + leftSpace + "," + topSpace + ")");
     var maxValueTooltip = Math.max(
         d3.max(_data, function (d) {
             return d.species1ClusterCount;
@@ -575,7 +568,7 @@ const ParallelBarsVis = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species1")
-        .attr("transform", translationAxes(species1BarStart, 20))
+        .attr("transform", "translate(" + species1BarStart + "," + 20 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species1XAxisSpace)
@@ -605,7 +598,7 @@ const ParallelBarsVis = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species2")
-        .attr("transform", translationAxes(species2BarStart, 20))
+        .attr("transform", "translate(" + species2BarStart + "," + 20 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species2XAxisSpace)
@@ -635,7 +628,7 @@ const ParallelBarsVis = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species3")
-        .attr("transform", translationAxes(species3BarStart, 20))
+        .attr("transform", "translate(" + species3BarStart + "," + 20 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species3XAxisSpace)
@@ -665,7 +658,7 @@ const ParallelBarsVis = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species4")
-        .attr("transform", translationAxes(species4BarStart, 20))
+        .attr("transform", "translate(" + species4BarStart + "," + 20 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species4XAxisSpace)
@@ -694,7 +687,7 @@ const ParallelBarsVis = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species5")
-        .attr("transform", translationAxes(species5BarStart, 20))
+        .attr("transform", "translate(" + species5BarStart + "," + 20 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species5XAxisSpace)
@@ -740,9 +733,7 @@ const ParallelBarsVis = () => {
             this.remove();
         }
     });
-    function translationAxes(x, y) {
-        return "translate(" + x + "," + y + ")";
-    }
+
     if (selectedCrossspeciescluster !== "") {
         selectBars(selectedCrossspeciescluster);
     }
@@ -795,10 +786,7 @@ const VisHumanComparison = () => {
             topSpace + hTooltip + bottomSpace
         )
         .append("g")
-        .attr(
-            "transform",
-            translation(leftSpace, topSpace)
-        );
+        .attr("transform", "translate(" + leftSpace + "," + topSpace + ")");
     tooltip = d3.select("#my_dataviz")
         .append("div")
         .style("opacity", 0)
@@ -857,16 +845,16 @@ const VisHumanComparison = () => {
 
     var species2BarGroup = svg
         .append("g")
-        .attr("transform", translation(species2BarStart, 0));
+        .attr("transform", "translate(" + species2BarStart + "," + 0 + ")");
     var species3BarGroup = svg
         .append("g")
-        .attr("transform", translation(species3BarStart, 0));
+        .attr("transform", "translate(" + species3BarStart + "," + 0 + ")");
     var species4BarGroup = svg
         .append("g")
-        .attr("transform", translation(species4BarStart, 0));
+        .attr("transform", "translate(" + species4BarStart + "," + 0 + ")");
     var species5BarGroup = svg
         .append("g")
-        .attr("transform", translation(species5BarStart, 0));
+        .attr("transform", "translate(" + species5BarStart + "," + 0 + ")");
 
     yAxisLabelsLeft = d3
         .axisLeft()
@@ -878,7 +866,7 @@ const VisHumanComparison = () => {
     svg
         .append("g")
         .attr("class", "axis y labels left")
-        .attr("transform", translation(axisStart, 0))  // start the axis from the extreme left
+        .attr("transform", "translate(" + axisStart + "," + 0 + ")") // start the axis from the extreme left
         .call(yAxisLabelsLeft)
         .selectAll("text")
         .attr("x", leftSpace - 10)  // move the labels to the right side of the axis
@@ -908,7 +896,7 @@ const VisHumanComparison = () => {
         ;
     svg.append("g")
         .attr("class", "y axis species2")
-        .attr("transform", translation(xScaleTooltipSpecies(0) + species1BarStart, 0))
+        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species2BarStart) + "," + 0 + ")")
         .call(yAxisLabelsLeft);
 
     species3BarGroup
@@ -930,7 +918,7 @@ const VisHumanComparison = () => {
         ;
     svg.append("g")
         .attr("class", "y axis species3")
-        .attr("transform", translation(xScaleTooltipSpecies(0) + species3BarStart, 0))
+        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species3BarStart) + "," + 0 + ")")
         .call(yAxisLabelsLeft);
 
     species4BarGroup
@@ -952,7 +940,7 @@ const VisHumanComparison = () => {
         ;
     svg.append("g")
         .attr("class", "y axis species4")
-        .attr("transform", translation(xScaleTooltipSpecies(0) + species4BarStart, 0))
+        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species4BarStart) + "," + 0 + ")")
         .call(yAxisLabelsLeft);
 
     species5BarGroup
@@ -974,12 +962,10 @@ const VisHumanComparison = () => {
         ;
     svg.append("g")
         .attr("class", "y axis species4")
-        .attr("transform", translation(xScaleTooltipSpecies(0) + species5BarStart, 0))
+        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species5BarStart) + "," + 0 + ")")
         .call(yAxisLabelsLeft);
 
-    function translation(x, y) {
-        return "translate(" + x + "," + y + ")";
-    }
+
     ///for axes
     var svgAxis = d3
         .select("#my_dataviz_axes")
@@ -990,10 +976,7 @@ const VisHumanComparison = () => {
         )
         .attr("height", 50)
         .append("g")
-        .attr(
-            "transform",
-            translation(leftSpace, topSpace)
-        );
+        .attr("transform", "translate(" + leftSpace + "," + topSpace + ")");
 
 
     var species2XAxisSpace = d3.axisTop().scale(xScaleTooltipSpecies).ticks(3);
@@ -1004,7 +987,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species2")
-        .attr("transform", translationAxes(species2BarStart, 15))
+        .attr("transform", "translate(" + species2BarStart + "," + 15 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species2XAxisSpace)
@@ -1034,7 +1017,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species3")
-        .attr("transform", translationAxes(species3BarStart, 15))
+        .attr("transform", "translate(" + species3BarStart + "," + 15 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species3XAxisSpace)
@@ -1062,7 +1045,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species4")
-        .attr("transform", translationAxes(species4BarStart, 15))
+        .attr("transform", "translate(" + species4BarStart + "," + 15 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species4XAxisSpace)
@@ -1090,7 +1073,7 @@ const VisHumanComparison = () => {
     svgAxis
         .append("g")
         .attr("class", "axis x right species5")
-        .attr("transform", translationAxes(species5BarStart, 15))
+        .attr("transform", "translate(" + species5BarStart + "," + 15 + ")")
         .attr("shape-rendering", "crispEdges")
         .attr("fill", "black")
         .call(species5XAxisSpace)
@@ -1135,9 +1118,7 @@ const VisHumanComparison = () => {
             this.remove();
         }
     });
-    function translationAxes(x, y) {
-        return "translate(" + x + "," + y + ")";
-    }
+
 
     if (selectedCrossspeciescluster !== "") {
         selectBars(selectedCrossspeciescluster);
