@@ -22,7 +22,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
 	_selectionColorAction(this, "Selection color"),
-	_humancomparisonAction(this, "Differential expression comparison: human vs other species ")
+	_humancomparisonAction(this, "Differential expression comparison: human vs other species "),
+	_humancomparisonAbsoluteValuesAction(this, "Absolute values ")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
@@ -53,6 +54,9 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
 	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
 	_humancomparisonAction.initialize(false, false);
+	_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
+	_humancomparisonAbsoluteValuesAction.initialize(false, false);
+	_humancomparisonAbsoluteValuesAction.setVisible(false);
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
@@ -323,13 +327,29 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	const auto updateHumancomparisonAction = [this]() -> void
 	{
-
 		updateData();
 	};
 
 	connect(&_humancomparisonAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAction](const bool& toggled)
 		{
+			if (_humancomparisonAction.isChecked())
+			{
+				_humancomparisonAbsoluteValuesAction.setVisible(true);
+			}
+			else
+			{
+				_humancomparisonAbsoluteValuesAction.setVisible(false);
+			}
 			updateHumancomparisonAction();
+		});
+		const auto updateHumancomparisonAbsoluteValuesAction = [this]() -> void
+	{
+		updateData();
+	};
+
+	connect(&_humancomparisonAbsoluteValuesAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAbsoluteValuesAction](const bool& toggled)
+		{
+			updateHumancomparisonAbsoluteValuesAction();
 		});
 
 	updateDatasetPickerAction();
@@ -542,7 +562,17 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += ":";
 				if (humanComparisonflag=="show")
 				{
-					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount));
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount);
+
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+
 				}
 				else {
 					jsonData += ittr->second.humandeStatsCount;
@@ -555,7 +585,15 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += ":";
 				if (humanComparisonflag == "show")
 				{
-					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount));
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
 				}
 				else {
 					jsonData += ittr->second.chimpdeStatsCount;
@@ -569,7 +607,15 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += ":";
 				if (humanComparisonflag == "show")
 				{
-					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount));
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
 				}
 				else {
 					jsonData += ittr->second.gorilladeStatsCount;
@@ -583,7 +629,15 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += ":";
 				if (humanComparisonflag == "show")
 				{
-					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount));
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
 				}
 				else {
 					jsonData += ittr->second.rhesusdeStatsCount;
@@ -597,7 +651,15 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += ":";
 				if (humanComparisonflag == "show")
 				{
-					jsonData += std::to_string(std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount));
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
 				}
 				else {
 					jsonData += ittr->second.marmosetdeStatsCount;

@@ -71,6 +71,7 @@ void ParallelBarsViewerPlugin::init()
 	//topToolbarLayout->addWidget(ClusterDataset1SelectionWidget);
 
 	topToolbarLayout->addWidget(_ParallelBarsOptionsAction.getHumancomparisonAction().createWidget(&getWidget()));
+	topToolbarLayout->addWidget(_ParallelBarsOptionsAction.getHumancomparisonAbsoluteValuesAction().createWidget(&getWidget()));
 	//auto ClusterDataset2SelectionWidget = _ParallelBarsOptionsAction.getdeStatsDataset2SelectionAction().createCollapsedWidget(&getWidget());
 	////ClusterDataset2SelectionWidget->setMaximumWidth(280);
 	//topToolbarLayout->addWidget(ClusterDataset2SelectionWidget);

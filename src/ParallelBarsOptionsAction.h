@@ -121,6 +121,7 @@ public: // Action getters
 	OptionAction& getNeighborhoodAction() { return _neighborhoodAction; }
 	ColorAction& getSelectionColorAction() { return _selectionColorAction; }
 	ToggleAction& getHumancomparisonAction() { return _humancomparisonAction; };
+	ToggleAction& getHumancomparisonAbsoluteValuesAction() { return _humancomparisonAbsoluteValuesAction; };
 public:
 		void initLoader();
 
@@ -176,6 +177,7 @@ protected:
 	//std::vector<std::string> sst_sst_chodl_pvalb_Neighborhood = { "Chandelier_1", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9" };
 	StringAction _geneNameAction;
 	ToggleAction _humancomparisonAction;
+	ToggleAction _humancomparisonAbsoluteValuesAction;
 	hdps::EventListener     _eventListener;
 	friend class ChannelAction;
 };
