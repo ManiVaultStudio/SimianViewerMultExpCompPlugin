@@ -826,13 +826,27 @@ const VisHumanComparison = () => {
             return d.species5ClusterCount;
         })
     );
+    if (humanComparisonAbsoluteValuesflag == "show") {
 
-    xScaleTooltipSpecies = d3
-        .scaleLinear()
-        .domain([minValueTooltip, maxValueTooltip])
-        //.domain([d3.min(_data, function(d) { return d.species2ClusterCount; }), d3.max(_data, function(d) { return d.species2ClusterCount; })])
-        .range([0, regionWidthTooltip])
-        .nice();
+        xScaleTooltipSpecies = d3
+            .scaleLinear()
+            .domain([0, maxValueTooltip])
+            //.domain([d3.min(_data, function(d) { return d.species2ClusterCount; }), d3.max(_data, function(d) { return d.species2ClusterCount; })])
+            .range([0, regionWidthTooltip])
+            .nice();
+    }
+    else {
+        let max = Math.max(Math.abs(minValueTooltip), maxValueTooltip);
+        xScaleTooltipSpecies = d3
+            .scaleLinear()
+            .domain([-max, max])
+            //.domain([d3.min(_data, function(d) { return d.species2ClusterCount; }), d3.max(_data, function(d) { return d.species2ClusterCount; })])
+            .range([0, regionWidthTooltip])
+            .nice();
+    }
+
+
+
 
     yScaleTooltipSpecies = d3
         .scaleBand()
