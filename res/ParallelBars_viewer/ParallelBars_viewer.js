@@ -16,6 +16,7 @@ var species3Name = "";
 var species4Name = "";
 var species5Name = "";
 var humanComparisonflag = "hide";
+var humanComparisonAbsoluteValuesflag = "hide";
 var geneName = "";
 var selectedCrossspeciescluster = "";
 var ClusterStorage1 = {};
@@ -749,18 +750,18 @@ const VisHumanComparison = () => {
     svg_Axes = d3.select("#my_dataviz_axes");
     svg_Axes.selectAll("*").remove();
 
-/*    _data = [
-        { "clusterName": "L6 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.072219, "species3ClusterCount": 0.112293, "species4ClusterCount": -0.233640, "species5ClusterCount": 0.470568, "clusterColor": "#beb867" },
-        { "clusterName": "L6 IT Car3_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.644334, "species3ClusterCount": 0.375326, "species4ClusterCount": -0.533344, "species5ClusterCount": 1.394913, "clusterColor": "#8054f7" },
-        { "clusterName": "L6 IT Car3_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -2.434991, "species3ClusterCount": 1.002196, "species4ClusterCount": -3.507725, "species5ClusterCount": -1.525061, "clusterColor": "#b29ff7" },
-        { "clusterName": "L5 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.185092, "species3ClusterCount": -0.050166, "species4ClusterCount": -0.572320, "species5ClusterCount": -0.187763, "clusterColor": "#2a5e5a" },
-        { "clusterName": "L5 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.903219, "species3ClusterCount": -0.801962, "species4ClusterCount": -1.472404, "species5ClusterCount": -0.588094, "clusterColor": "#a0cec9" },
-        { "clusterName": "L4 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.973635, "species3ClusterCount": -0.380511, "species4ClusterCount": -1.448495, "species5ClusterCount": -1.013599, "clusterColor": "#00e5e5" },
-        { "clusterName": "L4 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.594532, "species3ClusterCount": -0.587652, "species4ClusterCount": -2.237726, "species5ClusterCount": -2.590230, "clusterColor": "#c1f4f1" },
-        { "clusterName": "L2/3 IT_3", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.162868, "species3ClusterCount": 0.487906, "species4ClusterCount": 0.692046, "species5ClusterCount": 0.255947, "clusterColor": "#596d0f" },
-        { "clusterName": "L2/3 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.615590, "species3ClusterCount": -2.407256, "species4ClusterCount": -3.340774, "species5ClusterCount": -3.128695, "clusterColor": "#99b348" },
-        { "clusterName": "L2/3 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.242511, "species3ClusterCount": 0.627553, "species4ClusterCount": 0.632282, "species5ClusterCount": 1.169403, "clusterColor": "#d9f982" }
-    ];*/
+    /*    _data = [
+            { "clusterName": "L6 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.072219, "species3ClusterCount": 0.112293, "species4ClusterCount": -0.233640, "species5ClusterCount": 0.470568, "clusterColor": "#beb867" },
+            { "clusterName": "L6 IT Car3_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.644334, "species3ClusterCount": 0.375326, "species4ClusterCount": -0.533344, "species5ClusterCount": 1.394913, "clusterColor": "#8054f7" },
+            { "clusterName": "L6 IT Car3_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -2.434991, "species3ClusterCount": 1.002196, "species4ClusterCount": -3.507725, "species5ClusterCount": -1.525061, "clusterColor": "#b29ff7" },
+            { "clusterName": "L5 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.185092, "species3ClusterCount": -0.050166, "species4ClusterCount": -0.572320, "species5ClusterCount": -0.187763, "clusterColor": "#2a5e5a" },
+            { "clusterName": "L5 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.903219, "species3ClusterCount": -0.801962, "species4ClusterCount": -1.472404, "species5ClusterCount": -0.588094, "clusterColor": "#a0cec9" },
+            { "clusterName": "L4 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -0.973635, "species3ClusterCount": -0.380511, "species4ClusterCount": -1.448495, "species5ClusterCount": -1.013599, "clusterColor": "#00e5e5" },
+            { "clusterName": "L4 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.594532, "species3ClusterCount": -0.587652, "species4ClusterCount": -2.237726, "species5ClusterCount": -2.590230, "clusterColor": "#c1f4f1" },
+            { "clusterName": "L2/3 IT_3", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.162868, "species3ClusterCount": 0.487906, "species4ClusterCount": 0.692046, "species5ClusterCount": 0.255947, "clusterColor": "#596d0f" },
+            { "clusterName": "L2/3 IT_2", "species1ClusterCount": 0.000000, "species2ClusterCount": -1.615590, "species3ClusterCount": -2.407256, "species4ClusterCount": -3.340774, "species5ClusterCount": -3.128695, "clusterColor": "#99b348" },
+            { "clusterName": "L2/3 IT_1", "species1ClusterCount": 0.000000, "species2ClusterCount": 0.242511, "species3ClusterCount": 0.627553, "species4ClusterCount": 0.632282, "species5ClusterCount": 1.169403, "clusterColor": "#d9f982" }
+        ];*/
     numOFBars = _data.length;
 
     containerHeight = numOFBars * 20;
@@ -894,11 +895,12 @@ const VisHumanComparison = () => {
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
-    svg.append("g")
-        .attr("class", "y axis species2")
-        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species2BarStart) + "," + 0 + ")")
-        .call(yAxisLabelsLeft);
-
+    if (humanComparisonAbsoluteValuesflag == "hide") {
+        svg.append("g")
+            .attr("class", "y axis species2")
+            .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species2BarStart) + "," + 0 + ")")
+            .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');;
+    }
     species3BarGroup
         .selectAll(".bar.right.species3")
         .data(_data)
@@ -916,11 +918,12 @@ const VisHumanComparison = () => {
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
-    svg.append("g")
-        .attr("class", "y axis species3")
-        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species3BarStart) + "," + 0 + ")")
-        .call(yAxisLabelsLeft);
-
+    if (humanComparisonAbsoluteValuesflag == "hide") {
+        svg.append("g")
+            .attr("class", "y axis species3")
+            .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species3BarStart) + "," + 0 + ")")
+            .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');;
+    }
     species4BarGroup
         .selectAll(".bar.right.species4")
         .data(_data)
@@ -938,11 +941,12 @@ const VisHumanComparison = () => {
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
+    if (humanComparisonAbsoluteValuesflag == "hide") {
     svg.append("g")
         .attr("class", "y axis species4")
         .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species4BarStart) + "," + 0 + ")")
-        .call(yAxisLabelsLeft);
-
+        .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');;
+}
     species5BarGroup
         .selectAll(".bar.right.species5")
         .data(_data)
@@ -960,11 +964,12 @@ const VisHumanComparison = () => {
         .on("mousemove", mousemoveSpecies)
         .on("mouseleave", mouseleaveSpecies)
         ;
-    svg.append("g")
-        .attr("class", "y axis species4")
-        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species5BarStart) + "," + 0 + ")")
-        .call(yAxisLabelsLeft);
-
+    if (humanComparisonAbsoluteValuesflag == "hide") {
+        svg.append("g")
+            .attr("class", "y axis species5")
+            .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species5BarStart) + "," + 0 + ")")
+            .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');
+    }
 
     ///for axes
     var svgAxis = d3
@@ -1208,6 +1213,7 @@ function queueData(d) {
     species5Name = _info[0].species5Name;
     geneName = _info[0].geneName;
     humanComparisonflag = _info[0].humanComparisonflag;
+    humanComparisonAbsoluteValuesflag = _info[0].humanComparisonAbsoluteValuesflag;
     //log("\nhumanComparisonflag" + humanComparisonflag+"\n");
     if (humanComparisonflag == "show") {
         VisHumanComparison();

@@ -531,6 +531,17 @@ void ParallelBarsOptionsAction::updateData()
 			{
 				humanComparisonflag = "hide";
 			}
+			
+			std::string humanComparisonAbsoluteValuesflag = "hide";
+			if (_humancomparisonAbsoluteValuesAction.isChecked())
+			{
+				humanComparisonAbsoluteValuesflag = "show";
+			}
+			else
+			{
+				humanComparisonAbsoluteValuesflag = "hide";
+			}
+
 			std::string jsonData = "[{";
 			jsonData += '"';
 			jsonData += "data";
@@ -735,6 +746,14 @@ void ParallelBarsOptionsAction::updateData()
 			jsonData += ":";
 			jsonData += '"';
 			jsonData += humanComparisonflag;
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "humanComparisonAbsoluteValuesflag";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += humanComparisonAbsoluteValuesflag;
 			jsonData += '"';
 			jsonData += "}";
 			jsonData += "]}]";
