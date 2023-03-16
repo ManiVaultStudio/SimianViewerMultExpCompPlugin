@@ -33,7 +33,7 @@ var leftSpace = 1;
 var middleTooltip = 20;
 var axisStart = 80;
 var species1BarStart = 90;
-var buffer = 10;
+var buffer = 15;
 var hTooltip;
 var hTooltip;
 var regionWidthTooltip;
@@ -316,7 +316,7 @@ const ParallelBarsVis = () => {
 
     containerHeight = numOFBars * 20;
 
-    wTooltip = (98 / 100) * window.innerWidth;
+    wTooltip = (97 / 100) * window.innerWidth;
     hTooltip = containerHeight + topSpace + bottomSpace;
     regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species1BarStart - 40) / 5;
     species2BarStart = species1BarStart + regionWidthTooltip + buffer;
@@ -766,7 +766,7 @@ const VisHumanComparison = () => {
 
     containerHeight = numOFBars * 20;
 
-    wTooltip = (98 / 100) * window.innerWidth;
+    wTooltip = (97 / 100) * window.innerWidth;
     hTooltip = containerHeight + topSpace + bottomSpace;
     species2BarStart = species1BarStart;
     regionWidthTooltip = (wTooltip - rightSpace - leftSpace - middleTooltip - species2BarStart - 40) / 4;
