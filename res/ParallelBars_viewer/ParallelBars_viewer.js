@@ -242,11 +242,11 @@ function mousemoveSpecies(d) {
 
     if (d3.event.pageX > window.innerWidth / 2) {
         tooltip
-            .style('left', (d3.event.pageX - 30) + 'px')
+            .style('left', (d3.event.pageX - 130) + 'px')
     }
     else {
         tooltip
-            .style('left', (d3.event.pageX + 30) + 'px')
+            .style('left', (d3.event.pageX + 130) + 'px')
     }
     var temp;
     if (containerHeight / 2 > window.innerHeight / 2) {
@@ -256,13 +256,13 @@ function mousemoveSpecies(d) {
         temp = window.innerHeight / 2;
     }
     
-    if (d3.event.pageY >= temp / 2) {
+    if (d3.event.pageY > temp / 2) {
         tooltip
-            .style('top', (d3.event.pageY - 30) + 'px')
+            .style('top', (d3.event.pageY - 10) + 'px')
     }
     else {
         tooltip
-            .style('top', (d3.event.pageY + 30) + 'px')
+            .style('top', (d3.event.pageY + 1) + 'px')
     }
 
 }

@@ -55,7 +55,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
 	_humancomparisonAction.initialize(false, false);
 	_humancomparisonAction.setText("Gene expression: all species");
-	_humancomparisonAction.setHighlighted(false);
+	//_humancomparisonAction.setHighlighted(false);
 	_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
 	_humancomparisonAbsoluteValuesAction.initialize(false, false);
 	_humancomparisonAbsoluteValuesAction.setVisible(false);
@@ -338,13 +338,13 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 			{
 				_humancomparisonAbsoluteValuesAction.setVisible(true);
 				_humancomparisonAction.setText("Differential expression: human vs other species");
-				_humancomparisonAction.setHighlighted(false);
+				//_humancomparisonAction.setHighlighted(false);
 			}
 			else
 			{
 				_humancomparisonAbsoluteValuesAction.setVisible(false);
 				_humancomparisonAction.setText("Gene expression: all species");
-				_humancomparisonAction.setHighlighted(false);
+				//_humancomparisonAction.setHighlighted(false);
 			}
 			
 			updateHumancomparisonAction();
