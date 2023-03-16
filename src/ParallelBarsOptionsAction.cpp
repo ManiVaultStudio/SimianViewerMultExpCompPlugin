@@ -22,7 +22,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
 	_selectionColorAction(this, "Selection color"),
-	_humancomparisonAction(this, "Differential expression comparison: human vs other species "),
+	_humancomparisonAction(this, "Gene expression: all species"),
 	_humancomparisonAbsoluteValuesAction(this, "Absolute values ")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
@@ -52,8 +52,10 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_selectedCrossspeciescluster.initialize("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
-	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
+	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
 	_humancomparisonAction.initialize(false, false);
+	_humancomparisonAction.setText("Gene expression: all species");
+	_humancomparisonAction.setHighlighted(true);
 	_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
 	_humancomparisonAbsoluteValuesAction.initialize(false, false);
 	_humancomparisonAbsoluteValuesAction.setVisible(false);
@@ -335,11 +337,16 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 			if (_humancomparisonAction.isChecked())
 			{
 				_humancomparisonAbsoluteValuesAction.setVisible(true);
+				_humancomparisonAction.setText("Differential expression: human vs other species");
+				_humancomparisonAction.setHighlighted(true);
 			}
 			else
 			{
 				_humancomparisonAbsoluteValuesAction.setVisible(false);
+				_humancomparisonAction.setText("Gene expression: all species");
+				_humancomparisonAction.setHighlighted(true);
 			}
+			
 			updateHumancomparisonAction();
 		});
 		const auto updateHumancomparisonAbsoluteValuesAction = [this]() -> void
