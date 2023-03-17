@@ -18,15 +18,22 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_screenshotAction(this, "Screenshot"),
 	_deStatsDataset1SelectionAction(*this),
 	_selectedCrossspeciescluster(this, "Selected CrossSpecies Cluster"),
-	_neighborhoodAction(this, "Neighborhood")
+	_neighborhoodAction(this, "Neighborhood"),
+	_species1Name(this, "Species1Name"),
+	_species2Name(this, "Species2Name"),
+	_selectionColorAction(this, "Selection color"),
+	_humancomparisonAction(this, "Gene expression: all species"),
+	_humancomparisonAbsoluteValuesAction(this, "Absolute values ")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
 {
 	setSerializationName("PopPyramidSettings");
+	_species1Name.setSerializationName("Species1Name");
+	_species2Name.setSerializationName("Species2Name");
+	//_geneNameAction.setSerializationName("Gene");
 	//_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
 	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
-	//_geneNameAction.setSerializationName("Gene");
 	//_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
 	//_neighborhoodAction.setSerializationName("Neighborhood");
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
@@ -39,10 +46,19 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
 	_geneNameAction.initialize("A1BG","");
+	_species1Name.initialize("Species1");
+	_species2Name.initialize("Species2");
 	_selectedCrossspeciesclusterFlag = true;
 	_selectedCrossspeciescluster.initialize("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
+	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
+	_humancomparisonAction.initialize(false, false);
+	_humancomparisonAction.setText("Gene expression: all species");
+	//_humancomparisonAction.setHighlighted(false);
+	_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
+	_humancomparisonAbsoluteValuesAction.initialize(false, false);
+	_humancomparisonAbsoluteValuesAction.setVisible(false);
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
@@ -71,20 +87,25 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
 
-	//_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
+	_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
 
-	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
+	_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
+	_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
+	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
+	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
 
-	//_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
+	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
+	_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
-	//_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
-	//_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
-
+	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
+	_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
 		const auto updateGeneName = [this]() -> void
 	{
 			updateData();
@@ -92,7 +113,23 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 			
 	};
 
+		const auto updateSelectionColor = [this]() -> void
+		{
+			if (_selectionColorAction.getColor().isValid())
+			{
+				QColor color = _selectionColorAction.getColor();
+				QString hexValueColor = "#" + QString::number(color.red(), 16).rightJustified(2, '0')
+					+ QString::number(color.green(), 16).rightJustified(2, '0')
+					+ QString::number(color.blue(), 16).rightJustified(2, '0');
 
+
+				_ParallelBarsViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
+
+			}
+
+		};
+
+		connect(&_selectionColorAction, &ColorAction::colorChanged, this, updateSelectionColor);
 
 
 		const auto updateSelectedCrossspeciescluster = [this]() -> void
@@ -267,14 +304,61 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 		{
 
 		};
-
-
+		const auto updateSpecies1Name = [this]() -> void
+		{
+			if (_species1Name.getString()!="")
+			{
+				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+			}
+		};
+		const auto updateSpecies2Name = [this]() -> void
+		{
+			if (_species2Name.getString() != "")
+			{
+				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+			}
+		};
+		connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
+		connect(&_species2Name, &StringAction::stringChanged, this, updateSpecies2Name);
 		connect(&_deStatsDataset1Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset1);
 
 		connect(&_deStatsDataset2Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset2);
 	connect(&_neighborhoodAction, &OptionAction::currentIndexChanged, this, updateNeighborhood);
 	connect(&_geneNameAction, &StringAction::stringChanged, this, updateGeneName);
 	connect(&_selectedCrossspeciescluster, &StringAction::stringChanged, this, updateSelectedCrossspeciescluster);
+
+	const auto updateHumancomparisonAction = [this]() -> void
+	{
+		updateData();
+	};
+
+	connect(&_humancomparisonAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAction](const bool& toggled)
+		{
+			if (_humancomparisonAction.isChecked())
+			{
+				_humancomparisonAbsoluteValuesAction.setVisible(true);
+				_humancomparisonAction.setText("Differential expression: human vs other species");
+				//_humancomparisonAction.setHighlighted(false);
+			}
+			else
+			{
+				_humancomparisonAbsoluteValuesAction.setVisible(false);
+				_humancomparisonAction.setText("Gene expression: all species");
+				//_humancomparisonAction.setHighlighted(false);
+			}
+			
+			updateHumancomparisonAction();
+		});
+		const auto updateHumancomparisonAbsoluteValuesAction = [this]() -> void
+	{
+		updateData();
+	};
+
+	connect(&_humancomparisonAbsoluteValuesAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAbsoluteValuesAction](const bool& toggled)
+		{
+			updateHumancomparisonAbsoluteValuesAction();
+		});
+
 	updateDatasetPickerAction();
 }
 
@@ -445,7 +529,32 @@ void ParallelBarsOptionsAction::updateData()
 				}
 
 			}
-			std::string jsonData = "[";
+			std::string humanComparisonflag = "hide";
+			if (_humancomparisonAction.isChecked())
+			{
+				humanComparisonflag = "show";
+			}
+			else
+			{
+				humanComparisonflag = "hide";
+			}
+			
+			std::string humanComparisonAbsoluteValuesflag = "hide";
+			if (_humancomparisonAbsoluteValuesAction.isChecked())
+			{
+				humanComparisonAbsoluteValuesflag = "show";
+			}
+			else
+			{
+				humanComparisonAbsoluteValuesflag = "hide";
+			}
+
+			std::string jsonData = "[{";
+			jsonData += '"';
+			jsonData += "data";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '[';
 			for (auto ittr = _deStatsDataStorage.rbegin(); ittr != _deStatsDataStorage.rend(); ++ittr)
 			{
 				//qDebug() << "\n++++++++++++++++++++++++++++++++++++++++++++++++++\n";
@@ -469,13 +578,110 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += "species1ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.humandeStatsCount;
+				if (humanComparisonflag=="show")
+				{
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount);
+
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+
+				}
+				else {
+					jsonData += ittr->second.humandeStatsCount;
+				}
+
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "species2ClusterCount";
 				jsonData += '"';
 				jsonData += ":";
-				jsonData += ittr->second.chimpdeStatsCount;
+				if (humanComparisonflag == "show")
+				{
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+				}
+				else {
+					jsonData += ittr->second.chimpdeStatsCount;
+				}
+				
+
+				jsonData += ",";
+				jsonData += '"';
+				jsonData += "species3ClusterCount";
+				jsonData += '"';
+				jsonData += ":";
+				if (humanComparisonflag == "show")
+				{
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+				}
+				else {
+					jsonData += ittr->second.gorilladeStatsCount;
+				}
+				
+
+				jsonData += ",";
+				jsonData += '"';
+				jsonData += "species4ClusterCount";
+				jsonData += '"';
+				jsonData += ":";
+				if (humanComparisonflag == "show")
+				{
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+				}
+				else {
+					jsonData += ittr->second.rhesusdeStatsCount;
+				}
+				
+
+				jsonData += ",";
+				jsonData += '"';
+				jsonData += "species5ClusterCount";
+				jsonData += '"';
+				jsonData += ":";
+				if (humanComparisonflag == "show")
+				{
+					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount);
+					if (_humancomparisonAbsoluteValuesAction.isChecked())
+					{
+						jsonData += std::to_string(std::abs(result));
+					}
+					else
+					{
+						jsonData += std::to_string(result);
+					}
+				}
+				else {
+					jsonData += ittr->second.marmosetdeStatsCount;
+				}
 				jsonData += ",";
 				jsonData += '"';
 				jsonData += "clusterColor";
@@ -484,40 +690,83 @@ void ParallelBarsOptionsAction::updateData()
 				jsonData += '"';
 				jsonData += ittr->second.deStatsColor;
 				jsonData += '"';
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species1Name";
-				jsonData += '"';
-				jsonData += ":";
-				jsonData += '"';
-				jsonData += "human";
-				jsonData += '"';
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species2Name";
-				jsonData += '"';
-				jsonData += ":";
-				jsonData += '"';
-				jsonData += "chimp";
-				jsonData += '"';
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "geneName";
-				jsonData += '"';
-				jsonData += ":";
-				jsonData += '"';
-				jsonData += _geneNameAction.getString().toStdString();
-				jsonData += '"';
-				jsonData += "}";
+				jsonData += '}';
 				jsonData += ",";
 			}
 			jsonData.pop_back();
-			jsonData += "]";
+			jsonData += "],";
+			jsonData += '"';
+			jsonData += "info";
+			jsonData += '"';
+			jsonData += ":[{";
+			jsonData += '"';
+			jsonData += "species1Name";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += "human";
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species2Name";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += "chimp";
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species3Name";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += "gorilla";
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species4Name";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += "rhesus";
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species5Name";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += "marmoset";
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "geneName";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += _geneNameAction.getString().toStdString();
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "humanComparisonflag";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += humanComparisonflag;
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "humanComparisonAbsoluteValuesflag";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += humanComparisonAbsoluteValuesflag;
+			jsonData += '"';
+			jsonData += "}";
+			jsonData += "]}]";
 			_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
 
 		}
-
-
 }
 
 
@@ -599,6 +848,9 @@ ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidge
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._neighborhoodAction.createLabelWidget(this), ParallelBarsOptionsAction._neighborhoodAction.createWidget(this));
 
+	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species1Name.createLabelWidget(this), ParallelBarsOptionsAction._species1Name.createWidget(this));
+
+	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species2Name.createLabelWidget(this), ParallelBarsOptionsAction._species2Name.createWidget(this));
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._selectedCrossspeciescluster.createLabelWidget(this), ParallelBarsOptionsAction._selectedCrossspeciescluster.createWidget(this));
 
@@ -656,6 +908,8 @@ void ParallelBarsOptionsAction::initLoader()
 {
 
 		updateData();
+		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 
 }
 
@@ -668,7 +922,9 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 	//_geneNameAction.fromParentVariantMap(variantMap);
 	//_neighborhoodAction.fromParentVariantMap(variantMap);
 	//_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
-
+	_species1Name.fromParentVariantMap(variantMap);
+	_species2Name.fromParentVariantMap(variantMap);
+	initLoader();
 
 }
 
@@ -681,5 +937,7 @@ QVariantMap ParallelBarsOptionsAction::toVariantMap() const
 	//_neighborhoodAction.insertIntoVariantMap(variantMap);
 	//_geneNameAction.insertIntoVariantMap(variantMap);
 	//_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
+	_species1Name.insertIntoVariantMap(variantMap);
+	_species2Name.insertIntoVariantMap(variantMap);
 	return variantMap;
 }

@@ -31,6 +31,14 @@ ParallelBarsViewerPlugin::ParallelBarsViewerPlugin(const PluginFactory* factory)
 {
 	setSerializationName("ParallelBarsViewer");
 	//_ParallelBars_viewer = new ParallelBarsViewerWidget();
+
+
+	getVisibleAction().setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	getVisibleAction().publish("ParallelBars::PluginVisibility");
+
+	//connect(&getVisibleAction(), &ToggleAction::toggled, this, [](bool toggled) -> void {
+	//	qDebug() << __FUNCTION__ << "toggled changed to" << toggled;
+	//	});
 }
 
 ParallelBarsViewerPlugin::~ParallelBarsViewerPlugin()
@@ -61,8 +69,11 @@ void ParallelBarsViewerPlugin::init()
 	auto ClusterDataset1SelectionWidget = _ParallelBarsOptionsAction.getdeStatsDataset1SelectionAction().createCollapsedWidget(&getWidget());
 	//ClusterDataset1SelectionWidget->setMaximumWidth(280);
 	//topToolbarLayout->addWidget(ClusterDataset1SelectionWidget);
-
-
+	auto humancompTempWidget = _ParallelBarsOptionsAction.getHumancomparisonAction().createWidget(&getWidget());
+	humancompTempWidget->setFixedWidth(270);
+	topToolbarLayout->addWidget(humancompTempWidget);
+	topToolbarLayout->addSpacing(10);
+	topToolbarLayout->addWidget(_ParallelBarsOptionsAction.getHumancomparisonAbsoluteValuesAction().createWidget(&getWidget()));
 	//auto ClusterDataset2SelectionWidget = _ParallelBarsOptionsAction.getdeStatsDataset2SelectionAction().createCollapsedWidget(&getWidget());
 	////ClusterDataset2SelectionWidget->setMaximumWidth(280);
 	//topToolbarLayout->addWidget(ClusterDataset2SelectionWidget);
