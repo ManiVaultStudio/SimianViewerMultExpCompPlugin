@@ -69,11 +69,13 @@ void ParallelBarsViewerPlugin::init()
 	auto ClusterDataset1SelectionWidget = _ParallelBarsOptionsAction.getdeStatsDataset1SelectionAction().createCollapsedWidget(&getWidget());
 	//ClusterDataset1SelectionWidget->setMaximumWidth(280);
 	//topToolbarLayout->addWidget(ClusterDataset1SelectionWidget);
-	auto humancompTempWidget = _ParallelBarsOptionsAction.getHumancomparisonAction().createWidget(&getWidget());
-	humancompTempWidget->setFixedWidth(270);
-	topToolbarLayout->addWidget(humancompTempWidget);
-	topToolbarLayout->addSpacing(10);
-	topToolbarLayout->addWidget(_ParallelBarsOptionsAction.getHumancomparisonAbsoluteValuesAction().createWidget(&getWidget()));
+	//auto humancompTempWidget = _ParallelBarsOptionsAction.getHumancomparisonAction().createWidget(&getWidget());
+	//humancompTempWidget->setFixedWidth(270);
+	//topToolbarLayout->addWidget(humancompTempWidget);
+	topToolbarLayout->addWidget(&_ParallelBarsOptionsAction.getRadioButtonforAllSpeciesGeneExpression());
+	topToolbarLayout->addWidget(&_ParallelBarsOptionsAction.getRadioButtonforHumandifferentialExpression());
+	//topToolbarLayout->addSpacing(10);
+	//topToolbarLayout->addWidget(_ParallelBarsOptionsAction.getHumancomparisonAbsoluteValuesAction().createWidget(&getWidget()));
 	//auto ClusterDataset2SelectionWidget = _ParallelBarsOptionsAction.getdeStatsDataset2SelectionAction().createCollapsedWidget(&getWidget());
 	////ClusterDataset2SelectionWidget->setMaximumWidth(280);
 	//topToolbarLayout->addWidget(ClusterDataset2SelectionWidget);

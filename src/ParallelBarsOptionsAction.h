@@ -26,6 +26,7 @@
 #include <QFormLayout>
 #include <QString>
 #include <string>
+#include<QRadioButton>
 //#include "ParallelBarsViewerPlugin.h"
 #include <event/Event.h>
 #include <QDebug>
@@ -120,8 +121,10 @@ public: // Action getters
 	bool& getSelectedCrossspeciesclusterFlag() { return _selectedCrossspeciesclusterFlag; }
 	OptionAction& getNeighborhoodAction() { return _neighborhoodAction; }
 	ColorAction& getSelectionColorAction() { return _selectionColorAction; }
-	ToggleAction& getHumancomparisonAction() { return _humancomparisonAction; };
-	ToggleAction& getHumancomparisonAbsoluteValuesAction() { return _humancomparisonAbsoluteValuesAction; };
+	//ToggleAction& getHumancomparisonAction() { return _humancomparisonAction; };
+	//ToggleAction& getHumancomparisonAbsoluteValuesAction() { return _humancomparisonAbsoluteValuesAction; };
+	QRadioButton& getRadioButtonforAllSpeciesGeneExpression() { return _radioButtonforAllSpeciesGeneExpression; };
+	QRadioButton& getRadioButtonforHumandifferentialExpression() { return _radioButtonforHumandifferentialExpression; };
 public:
 		void initLoader();
 
@@ -176,8 +179,10 @@ protected:
 	//std::vector<std::string> lamp5_sncg_vip_Neighborhood = { "Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Pax6_1", "Pax6_2", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8" };
 	//std::vector<std::string> sst_sst_chodl_pvalb_Neighborhood = { "Chandelier_1", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9" };
 	StringAction _geneNameAction;
-	ToggleAction _humancomparisonAction;
-	ToggleAction _humancomparisonAbsoluteValuesAction;
+	//ToggleAction _humancomparisonAction;
+	//ToggleAction _humancomparisonAbsoluteValuesAction;
 	hdps::EventListener     _eventListener;
+	QRadioButton _radioButtonforAllSpeciesGeneExpression;
+	QRadioButton _radioButtonforHumandifferentialExpression;
 	friend class ChannelAction;
 };
