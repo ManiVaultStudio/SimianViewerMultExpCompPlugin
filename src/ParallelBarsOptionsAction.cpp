@@ -21,9 +21,11 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_neighborhoodAction(this, "Neighborhood"),
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
-	_selectionColorAction(this, "Selection color"),
-	_humancomparisonAction(this, "Gene expression: all species"),
-	_humancomparisonAbsoluteValuesAction(this, "Absolute values ")
+	_selectionColorAction(this, "Selection color")//,
+	//_humancomparisonAction(this, "Gene expression: all species"),
+	//_humancomparisonAbsoluteValuesAction(this, "Absolute values ")//,
+	//_radioButtonforHumandifferentialExpression(this, "Absolute values "),
+	//_radioButtonforAllSpeciesGeneExpression(this, "Radio Button All Species Gene Expression")
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
@@ -31,6 +33,11 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	setSerializationName("PopPyramidSettings");
 	_species1Name.setSerializationName("Species1Name");
 	_species2Name.setSerializationName("Species2Name");
+	//_humancomparisonAbsoluteValuesAction.setVisible(false);
+	_radioButtonforAllSpeciesGeneExpression.setText("Gene expression: all species");
+	_radioButtonforHumandifferentialExpression.setText("Differential expression: human vs other species");
+	_radioButtonforAllSpeciesGeneExpression.setChecked(true);
+	_radioButtonforHumandifferentialExpression.setChecked(false);
 	//_geneNameAction.setSerializationName("Gene");
 	//_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
 	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
@@ -52,13 +59,13 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_selectedCrossspeciescluster.initialize("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
-	_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
-	_humancomparisonAction.initialize(false, false);
-	_humancomparisonAction.setText("Gene expression: all species");
+	//_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
+	//_humancomparisonAction.initialize(false, false);
+	//_humancomparisonAction.setText("Gene expression: all species");
 	//_humancomparisonAction.setHighlighted(false);
-	_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
-	_humancomparisonAbsoluteValuesAction.initialize(false, false);
-	_humancomparisonAbsoluteValuesAction.setVisible(false);
+	//_humancomparisonAbsoluteValuesAction.setDefaultWidgetFlags(ToggleAction::CheckBox);
+	//_humancomparisonAbsoluteValuesAction.initialize(false, false);
+	//_humancomparisonAbsoluteValuesAction.setVisible(false);
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
@@ -327,37 +334,53 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	connect(&_geneNameAction, &StringAction::stringChanged, this, updateGeneName);
 	connect(&_selectedCrossspeciescluster, &StringAction::stringChanged, this, updateSelectedCrossspeciescluster);
 
-	const auto updateHumancomparisonAction = [this]() -> void
+	//const auto updateHumancomparisonAction = [this]() -> void
+	//{
+	//	updateData();
+	//};
+
+	//connect(&_humancomparisonAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAction](const bool& toggled)
+	//	{
+	//		if (_humancomparisonAction.isChecked())
+	//		{
+	//			_humancomparisonAbsoluteValuesAction.setVisible(true);
+	//			_humancomparisonAction.setText("Differential expression: human vs other species");
+	//			//_humancomparisonAction.setHighlighted(false);
+	//		}
+	//		else
+	//		{
+	//			_humancomparisonAbsoluteValuesAction.setVisible(false);
+	//			_humancomparisonAction.setText("Gene expression: all species");
+	//			//_humancomparisonAction.setHighlighted(false);
+	//		}
+	//		
+	//		updateHumancomparisonAction();
+	//	});
+
+	//	const auto updateHumancomparisonAbsoluteValuesAction = [this]() -> void
+	//{
+	//	updateData();
+	//};
+
+	//connect(&_humancomparisonAbsoluteValuesAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAbsoluteValuesAction](const bool& toggled)
+	//	{
+	//		updateHumancomparisonAbsoluteValuesAction();
+	//	});
+
+
+	const auto RadioButtonAllSpeciesGeneExpressionUpdate = [this]() -> void
 	{
+		_radioButtonforHumandifferentialExpression.setChecked(false);
 		updateData();
 	};
+	connect(&_radioButtonforAllSpeciesGeneExpression, &QRadioButton::toggled, this, RadioButtonAllSpeciesGeneExpressionUpdate);
 
-	connect(&_humancomparisonAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAction](const bool& toggled)
-		{
-			if (_humancomparisonAction.isChecked())
-			{
-				_humancomparisonAbsoluteValuesAction.setVisible(true);
-				_humancomparisonAction.setText("Differential expression: human vs other species");
-				//_humancomparisonAction.setHighlighted(false);
-			}
-			else
-			{
-				_humancomparisonAbsoluteValuesAction.setVisible(false);
-				_humancomparisonAction.setText("Gene expression: all species");
-				//_humancomparisonAction.setHighlighted(false);
-			}
-			
-			updateHumancomparisonAction();
-		});
-		const auto updateHumancomparisonAbsoluteValuesAction = [this]() -> void
+	const auto RadioButtonHumandifferentialExpression = [this]() -> void
 	{
+		_radioButtonforAllSpeciesGeneExpression.setChecked(false);
 		updateData();
 	};
-
-	connect(&_humancomparisonAbsoluteValuesAction, &ToggleAction::toggled, this, [this, updateHumancomparisonAbsoluteValuesAction](const bool& toggled)
-		{
-			updateHumancomparisonAbsoluteValuesAction();
-		});
+	connect(&_radioButtonforHumandifferentialExpression, &QRadioButton::toggled, this, RadioButtonHumandifferentialExpression);
 
 	updateDatasetPickerAction();
 }
@@ -530,7 +553,7 @@ void ParallelBarsOptionsAction::updateData()
 
 			}
 			std::string humanComparisonflag = "hide";
-			if (_humancomparisonAction.isChecked())
+			if (_radioButtonforHumandifferentialExpression.isChecked())
 			{
 				humanComparisonflag = "show";
 			}
@@ -540,14 +563,14 @@ void ParallelBarsOptionsAction::updateData()
 			}
 			
 			std::string humanComparisonAbsoluteValuesflag = "hide";
-			if (_humancomparisonAbsoluteValuesAction.isChecked())
-			{
-				humanComparisonAbsoluteValuesflag = "show";
-			}
-			else
-			{
-				humanComparisonAbsoluteValuesflag = "hide";
-			}
+			//if (_humancomparisonAbsoluteValuesAction.isChecked())
+			//{
+			//	humanComparisonAbsoluteValuesflag = "show";
+			//}
+			//else
+			//{
+			//	humanComparisonAbsoluteValuesflag = "hide";
+			//}
 
 			std::string jsonData = "[{";
 			jsonData += '"';
@@ -582,11 +605,11 @@ void ParallelBarsOptionsAction::updateData()
 				{
 					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount);
 
-					if (_humancomparisonAbsoluteValuesAction.isChecked())
-					{
-						jsonData += std::to_string(std::abs(result));
-					}
-					else
+					//if (_humancomparisonAbsoluteValuesAction.isChecked())
+					//{
+					//	jsonData += std::to_string(std::abs(result));
+					//}
+					//else
 					{
 						jsonData += std::to_string(result);
 					}
@@ -604,11 +627,11 @@ void ParallelBarsOptionsAction::updateData()
 				if (humanComparisonflag == "show")
 				{
 					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount);
-					if (_humancomparisonAbsoluteValuesAction.isChecked())
-					{
-						jsonData += std::to_string(std::abs(result));
-					}
-					else
+					//if (_humancomparisonAbsoluteValuesAction.isChecked())
+					//{
+					//	jsonData += std::to_string(std::abs(result));
+					//}
+					//else
 					{
 						jsonData += std::to_string(result);
 					}
@@ -626,11 +649,11 @@ void ParallelBarsOptionsAction::updateData()
 				if (humanComparisonflag == "show")
 				{
 					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount);
-					if (_humancomparisonAbsoluteValuesAction.isChecked())
-					{
-						jsonData += std::to_string(std::abs(result));
-					}
-					else
+					//if (_humancomparisonAbsoluteValuesAction.isChecked())
+					//{
+					//	jsonData += std::to_string(std::abs(result));
+					//}
+					//else
 					{
 						jsonData += std::to_string(result);
 					}
@@ -648,11 +671,11 @@ void ParallelBarsOptionsAction::updateData()
 				if (humanComparisonflag == "show")
 				{
 					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount);
-					if (_humancomparisonAbsoluteValuesAction.isChecked())
-					{
-						jsonData += std::to_string(std::abs(result));
-					}
-					else
+					//if (_humancomparisonAbsoluteValuesAction.isChecked())
+					//{
+					//	jsonData += std::to_string(std::abs(result));
+					//}
+					//else
 					{
 						jsonData += std::to_string(result);
 					}
@@ -670,11 +693,11 @@ void ParallelBarsOptionsAction::updateData()
 				if (humanComparisonflag == "show")
 				{
 					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount);
-					if (_humancomparisonAbsoluteValuesAction.isChecked())
-					{
-						jsonData += std::to_string(std::abs(result));
-					}
-					else
+					//if (_humancomparisonAbsoluteValuesAction.isChecked())
+					//{
+					///	jsonData += std::to_string(std::abs(result));
+					//}
+					//else
 					{
 						jsonData += std::to_string(result);
 					}
