@@ -1266,6 +1266,17 @@ function doALoadOfStuff() {
         }
     }
 }
+document.addEventListener("DOMContentLoaded", function (event) {
+    if (flag) {
+        if (humanComparisonflag == "show") {
+            VisHumanComparison();
+        }
+        else {
+
+            ParallelBarsVis();
+        }
+    }
+});
 
 
 
