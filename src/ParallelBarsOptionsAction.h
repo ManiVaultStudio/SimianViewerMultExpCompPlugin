@@ -26,6 +26,7 @@
 #include <QFormLayout>
 #include <QString>
 #include <string>
+#include<QRadioButton>
 //#include "ParallelBarsViewerPlugin.h"
 #include <event/Event.h>
 #include <QDebug>
@@ -115,9 +116,15 @@ public: // Action getters
 	//OptionAction& getCrossSpecies1HeatMapCellAction() { return _crossSpecies1HeatMapCellAction; }
 	//OptionAction& getCrossSpecies2HeatMapCellAction() { return _crossSpecies2HeatMapCellAction; }
 	StringAction& getSelectedCrossspeciescluster() { return _selectedCrossspeciescluster; }
-
+	StringAction& getSpecies1Name() { return _species1Name; }
+	StringAction& getSpecies2Name() { return _species2Name; }
 	bool& getSelectedCrossspeciesclusterFlag() { return _selectedCrossspeciesclusterFlag; }
 	OptionAction& getNeighborhoodAction() { return _neighborhoodAction; }
+	ColorAction& getSelectionColorAction() { return _selectionColorAction; }
+	//ToggleAction& getHumancomparisonAction() { return _humancomparisonAction; };
+	//ToggleAction& getHumancomparisonAbsoluteValuesAction() { return _humancomparisonAbsoluteValuesAction; };
+	QRadioButton& getRadioButtonforAllSpeciesGeneExpression() { return _radioButtonforAllSpeciesGeneExpression; };
+	QRadioButton& getRadioButtonforHumandifferentialExpression() { return _radioButtonforHumandifferentialExpression; };
 public:
 		void initLoader();
 
@@ -162,13 +169,20 @@ protected:
 	hdps::Dataset<Clusters>  _rhesusClusterDataset;
 	hdps::Dataset<Clusters>  _marmosetClusterDataset;
 	StringAction                  _selectedCrossspeciescluster;
+	StringAction                  _species1Name;
+	StringAction                  _species2Name;
 	bool _selectedCrossspeciesclusterFlag;
+	ColorAction             _selectionColorAction;
 	//std::vector<std::string> glia_Neighborhood = { "Astro_1", "Endo_1", "Micro-PVM_1", "OPC_1", "OPC_2", "Oligo_1", "VLMC_1" };
 	//std::vector<std::string> it_types_Neighborhood = { "L2/3 IT_1", "L2/3 IT_2", "L2/3 IT_3", "L4 IT_1", "L4 IT_2", "L5 IT_1", "L5 IT_2", "L6 IT Car3_1", "L6 IT Car3_2", "L6 IT_1" };
 	//std::vector<std::string> l5et_l56np_l6ct_l6b_Neighborhood = { "L5 ET_1", "L5 ET_2", "L5/6 NP_1", "L5/6 NP_2", "L6 CT_1", "L6 CT_2", "L6b_1", "L6b_2", "L6b_3" };
 	//std::vector<std::string> lamp5_sncg_vip_Neighborhood = { "Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Pax6_1", "Pax6_2", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8" };
 	//std::vector<std::string> sst_sst_chodl_pvalb_Neighborhood = { "Chandelier_1", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9" };
 	StringAction _geneNameAction;
+	//ToggleAction _humancomparisonAction;
+	//ToggleAction _humancomparisonAbsoluteValuesAction;
 	hdps::EventListener     _eventListener;
+	QRadioButton _radioButtonforAllSpeciesGeneExpression;
+	QRadioButton _radioButtonforHumandifferentialExpression;
 	friend class ChannelAction;
 };
