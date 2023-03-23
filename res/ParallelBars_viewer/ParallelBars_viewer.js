@@ -43,7 +43,7 @@ var species4BarStart;
 var species5BarStart;
 var selectedSpecies1 = "";
 var selectedSpecies2 = "";
-const sortingCrossSpeciesClustersList = ["Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8", "Pax6_1", "Pax6_2","Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Chandelier_1","L2/3 IT_1", "L2/3 IT_2", "L2/3 IT_3", "L4 IT_1", "L4 IT_2", "L5 IT_1", "L5 IT_2", "L6 IT Car3_1", "L6 IT Car3_2", "L6 IT_1", "Astro_1", "Oligo_1", "VLMC_1", "Endo_1", "Micro-PVM_1", "OPC_1", "OPC_2", "L6 CT_1", "L6 CT_2", "L6b_1", "L6b_2", "L6b_3", "L5 ET_1", "L5 ET_2", "L5/6 NP_1", "L5/6 NP_2"];
+const sortingCrossSpeciesClustersList = ["Lamp5_1", "Lamp5_2", "Lamp5_Lhx6_1", "Sncg_1", "Sncg_2", "Sncg_3", "Vip_1", "Vip_2", "Vip_3", "Vip_4", "Vip_5", "Vip_6", "Vip_7", "Vip_8", "Pax6_1", "Pax6_2", "Sst Chodl_1", "Sst_1", "Sst_2", "Sst_3", "Sst_4", "Sst_5", "Sst_6", "Sst_7", "Sst_8", "Sst_9", "Pvalb_1", "Pvalb_2", "Pvalb_3", "Pvalb_4", "Chandelier_1", "L2/3 IT_1", "L2/3 IT_2", "L2/3 IT_3", "L4 IT_1", "L4 IT_2", "L5 IT_1", "L5 IT_2", "L6 IT Car3_1", "L6 IT Car3_2", "L6 IT_1", "Astro_1", "Oligo_1", "VLMC_1", "Endo_1", "Micro-PVM_1", "OPC_1", "OPC_2", "L6 CT_1", "L6 CT_2", "L6b_1", "L6b_2", "L6b_3", "L5 ET_1", "L5 ET_2", "L5/6 NP_1", "L5/6 NP_2"];
 //Qt Connections
 try {
     new QWebChannel(qt.webChannelTransport, function (channel) {
@@ -226,11 +226,11 @@ function selectBars(d) {
             }
         });
     if (yScaleTooltipSpecies(d) > 1) {
-        window.scrollTo(0, yScaleTooltipSpecies(d) -1);
-        }
-        else {
+        window.scrollTo(0, yScaleTooltipSpecies(d) - 1);
+    }
+    else {
         window.scrollTo(0, yScaleTooltipSpecies(d));
-        }
+    }
 }
 
 function mouseleaveSpecies(d) {
@@ -255,7 +255,7 @@ function mousemoveSpecies(d) {
     else {
         temp = window.innerHeight / 2;
     }
-    
+
     if (d3.event.pageY > temp / 2) {
         tooltip
             .style('top', (d3.event.pageY - 10) + 'px')
@@ -269,7 +269,7 @@ function mousemoveSpecies(d) {
 
 function mouseoverSpecies1(d) {
     tooltip
-        .html("<div><b>" + d.species1ClusterCount+"</b></div>")
+        .html("<div><b>" + d.species1ClusterCount + "</b></div>")
         .style("opacity", 1)
 }
 
@@ -312,7 +312,7 @@ const ParallelBarsVis = () => {
     //    { clusterName: "3", species1ClusterCount: 90, species2ClusterCount: 24, species3ClusterCount: 36, species4ClusterCount: 90, species5ClusterCount: 204, clusterColor: "blue", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
     //    { clusterName: "4", species1ClusterCount: 100, species2ClusterCount: 55, species3ClusterCount: 10, species4ClusterCount: 120, species5ClusterCount: 220, clusterColor: "green", species1Name: "human", species2Name: "chimp", species3Name: "gorilla", species4Name: "rhesus", species5Name: "marmoset", geneName: "AAVF" },
     //];
-     numOFBars = _data.length;
+    numOFBars = _data.length;
 
     containerHeight = numOFBars * 20;
 
@@ -395,7 +395,7 @@ const ParallelBarsVis = () => {
     var species5BarGroup = svg
         .append("g")
         .attr("transform", "translate(" + species5BarStart + "," + 0 + ")");
-     yAxisLabelsLeft = d3
+    yAxisLabelsLeft = d3
         .axisLeft()
         .scale(yScaleTooltipSpecies)
         .tickSize(1, 0)
@@ -584,11 +584,10 @@ const ParallelBarsVis = () => {
         .attr("font-size", "10").style("font-family", "Arial")
         .style("fill", function (d) {
 
-            if (species1Name == selectedSpecies2 ) {
+            if (species1Name == selectedSpecies2) {
                 return selectioncolor;
             }
-            else if (species1Name == selectedSpecies1)
-            {
+            else if (species1Name == selectedSpecies1) {
                 return selectioncolor;
             }
             else {
@@ -956,11 +955,11 @@ const VisHumanComparison = () => {
         .on("mouseleave", mouseleaveSpecies)
         ;
     if (humanComparisonAbsoluteValuesflag == "hide") {
-    svg.append("g")
-        .attr("class", "y axis species4")
-        .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species4BarStart) + "," + 0 + ")")
-        .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');;
-}
+        svg.append("g")
+            .attr("class", "y axis species4")
+            .attr("transform", "translate(" + (xScaleTooltipSpecies(0) + species4BarStart) + "," + 0 + ")")
+            .call(yAxisLabelsLeft).select('.domain').attr('class', 'dashed-line');;
+    }
     species5BarGroup
         .selectAll(".bar.right.species5")
         .data(_data)
@@ -1154,11 +1153,11 @@ function setSpecies1(d) {
     //if (d !== "") 
     {
         selectedSpecies1 = d;
-        if (humanComparisonflag=="show") {
+        if (humanComparisonflag == "show") {
             VisHumanComparison();
         }
         else {
-           
+
             ParallelBarsVis();
         }
 
@@ -1204,7 +1203,7 @@ function queueData(d) {
     //log("\nd::::" + d);
     const jsonData = JSON.parse(d);
     //log("\jsonData::::" + jsonData);
-    const _info  = jsonData[0].info;
+    const _info = jsonData[0].info;
     _data = jsonData[0].data;
     //log("\n_info::::" + _info);
     //log("\n_data::::" + _data);
@@ -1277,7 +1276,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
 });
-
 
 
 

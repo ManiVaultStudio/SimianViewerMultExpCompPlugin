@@ -121,4 +121,3 @@ void ParallelBarsViewerWidget::addDataOption(const QString option)
 }
 
 
-

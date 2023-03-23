@@ -126,7 +126,7 @@ public: // Action getters
 	QRadioButton& getRadioButtonforAllSpeciesGeneExpression() { return _radioButtonforAllSpeciesGeneExpression; };
 	QRadioButton& getRadioButtonforHumandifferentialExpression() { return _radioButtonforHumandifferentialExpression; };
 public:
-		void initLoader();
+	void initLoader();
 
 public: // Serialization
 
