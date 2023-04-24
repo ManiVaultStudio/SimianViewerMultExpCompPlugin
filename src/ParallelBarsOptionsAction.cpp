@@ -104,7 +104,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
 	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
+	_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
 
 	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
