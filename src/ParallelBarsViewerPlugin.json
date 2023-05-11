@@ -1,5 +1,5 @@
 {
-    "name" : "ParallelBars Viewer",
-    "version" : "1",
-    "dependencies" : ["Points"]
+  "name": "ParallelBars Viewer",
+  "version": "1",
+  "dependencies": [ "Points" ]
 }

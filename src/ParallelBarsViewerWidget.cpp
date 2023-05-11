@@ -1,6 +1,6 @@
 #include "ParallelBarsViewerWidget.h"
-#include "PointData.h"
-#include "ClusterData.h"
+#include "PointData/PointData.h"
+#include "ClusterData/ClusterData.h"
 #include "util/FileUtil.h"
 #include <fstream>
 #include <string>
@@ -119,6 +119,5 @@ void ParallelBarsViewerWidget::addDataOption(const QString option)
 	else
 		dataOptionBuffer.append(option);
 }
-
 
 

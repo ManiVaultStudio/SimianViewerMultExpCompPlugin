@@ -6,8 +6,8 @@
 #include <actions/OptionsAction.h>
 #include <actions/ToggleAction.h>
 #include "actions/DatasetPickerAction.h"
-#include "PointData.h"
-#include "ClusterData.h"
+#include "PointData/PointData.h"
+#include "ClusterData/ClusterData.h"
 #include "event/EventListener.h"
 #include "actions/Actions.h"
 #include "Plugin.h"
@@ -126,7 +126,7 @@ public: // Action getters
 	QRadioButton& getRadioButtonforAllSpeciesGeneExpression() { return _radioButtonforAllSpeciesGeneExpression; };
 	QRadioButton& getRadioButtonforHumandifferentialExpression() { return _radioButtonforHumandifferentialExpression; };
 public:
-		void initLoader();
+	void initLoader();
 
 public: // Serialization
 

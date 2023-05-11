@@ -11,7 +11,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	WidgetAction(&ParallelBarsViewerPlugin),
 	_ParallelBarsViewerPlugin(ParallelBarsViewerPlugin),
 	_core(core),
-	_geneNameAction(this,"Gene"),
+	_geneNameAction(this, "Gene"),
 	_deStatsDataset1Action(this, "Species1"),
 	_deStatsDataset2Action(this, "Species2"),
 	//_helpAction(this, "Help"),
@@ -52,7 +52,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
-	_geneNameAction.initialize("A1BG","");
+	_geneNameAction.initialize("A1BG", "");
 	_species1Name.initialize("Species1");
 	_species2Name.initialize("Species2");
 	_selectedCrossspeciesclusterFlag = true;
@@ -104,7 +104,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
 	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_selectedCrossspeciescluster.connectToPublicActionByName("Pop Pyramid:: Selected CrossSpecies Cluster");
+	_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
 
 	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
@@ -113,223 +113,223 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
 	_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
-		const auto updateGeneName = [this]() -> void
+	const auto updateGeneName = [this]() -> void
 	{
-			updateData();
-			
-			
+		updateData();
+
+
 	};
 
-		const auto updateSelectionColor = [this]() -> void
+	const auto updateSelectionColor = [this]() -> void
+	{
+		if (_selectionColorAction.getColor().isValid())
 		{
-			if (_selectionColorAction.getColor().isValid())
+			QColor color = _selectionColorAction.getColor();
+			QString hexValueColor = "#" + QString::number(color.red(), 16).rightJustified(2, '0')
+				+ QString::number(color.green(), 16).rightJustified(2, '0')
+				+ QString::number(color.blue(), 16).rightJustified(2, '0');
+
+
+			_ParallelBarsViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
+
+		}
+
+	};
+
+	connect(&_selectionColorAction, &ColorAction::colorChanged, this, updateSelectionColor);
+
+
+	const auto updateSelectedCrossspeciescluster = [this]() -> void
+	{
+		if (_selectedCrossspeciesclusterFlag)
+		{
+			_ParallelBarsViewerPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
+		}
+		_selectedCrossspeciesclusterFlag = true;
+
+	};
+
+
+	//const auto generateScreenshot = [this]() -> void {
+
+
+	//	QFileDialog saveFileDialog;
+
+	//	saveFileDialog.setAcceptMode(QFileDialog::AcceptSave);
+	//	saveFileDialog.setDirectory(QDir::home().absolutePath());
+
+	//	saveFileDialog.selectFile("BarchartViewerScreenshot.pdf");
+	//	saveFileDialog.setNameFilter(tr("PDF Files (*.pdf)"));
+
+	//	QString fileName;
+	//	if (saveFileDialog.exec())
+	//	{
+	//		fileName = saveFileDialog.selectedFiles().first();
+
+
+
+	//		QPageLayout pl;
+	//		QPageSize ps;
+	//		//qDebug() << "height" << _simianViewerPlugin.getSimianViewerWidget()->height();
+
+	//		int width = _ParallelBarsViewerPlugin.getBarChartWidget().width();
+	//		int height = _ParallelBarsViewerPlugin.getBarChartWidget().height();
+	//		int reducedWidth = static_cast<double>(width) / 100 * 75;
+	//		int reducedHeight = static_cast<double>(height) / 100 * 78;
+	//		//qDebug() << "width" << width;
+	//		//qDebug() << "reduced width" << reducedWidth;
+	//		//qDebug() << "height" << height;
+	//		//qDebug() << "reduced height" << reducedHeight;
+	//		ps = QPageSize(QSizeF(reducedWidth, reducedHeight), QPageSize::Point, QString(), QPageSize::ExactMatch);
+	//		pl.setPageSize(ps);
+	//		pl.setOrientation(QPageLayout::Portrait);
+
+
+	//		_ParallelBarsViewerPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
+
+	//	}
+	//	//..getSimianViewerWidget()->getPage()->printToPdf(fileName, pl);
+
+	//};
+
+	const auto updateNeighborhood = [this]() -> void
+	{
+		if (!_AllcrossSpeciesDatasets.isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
+		{
+			hdps::Datasets filteredDatasets;
+			for (auto dataset : _AllcrossSpeciesDatasets)
 			{
-				QColor color = _selectionColorAction.getColor();
-				QString hexValueColor = "#" + QString::number(color.red(), 16).rightJustified(2, '0')
-					+ QString::number(color.green(), 16).rightJustified(2, '0')
-					+ QString::number(color.blue(), 16).rightJustified(2, '0');
-
-
-				_ParallelBarsViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
-
+				std::string str1 = dataset->getGuiName().toStdString();
+				std::string str2 = "_" + _neighborhoodAction.getCurrentText().toStdString() + "_cross_species_cluster";
+				if (strstr(str1.c_str(), str2.c_str()))
+				{
+					filteredDatasets.append(dataset);
+				}
 			}
 
-		};
-
-		connect(&_selectionColorAction, &ColorAction::colorChanged, this, updateSelectionColor);
-
-
-		const auto updateSelectedCrossspeciescluster = [this]() -> void
-		{
-			if (_selectedCrossspeciesclusterFlag)
+			if (!filteredDatasets.isEmpty())
 			{
-				_ParallelBarsViewerPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
-			}
-			_selectedCrossspeciesclusterFlag = true;
-
-		};
-
-
-		//const auto generateScreenshot = [this]() -> void {
-
-
-		//	QFileDialog saveFileDialog;
-
-		//	saveFileDialog.setAcceptMode(QFileDialog::AcceptSave);
-		//	saveFileDialog.setDirectory(QDir::home().absolutePath());
-
-		//	saveFileDialog.selectFile("BarchartViewerScreenshot.pdf");
-		//	saveFileDialog.setNameFilter(tr("PDF Files (*.pdf)"));
-
-		//	QString fileName;
-		//	if (saveFileDialog.exec())
-		//	{
-		//		fileName = saveFileDialog.selectedFiles().first();
-
-
-
-		//		QPageLayout pl;
-		//		QPageSize ps;
-		//		//qDebug() << "height" << _simianViewerPlugin.getSimianViewerWidget()->height();
-
-		//		int width = _ParallelBarsViewerPlugin.getBarChartWidget().width();
-		//		int height = _ParallelBarsViewerPlugin.getBarChartWidget().height();
-		//		int reducedWidth = static_cast<double>(width) / 100 * 75;
-		//		int reducedHeight = static_cast<double>(height) / 100 * 78;
-		//		//qDebug() << "width" << width;
-		//		//qDebug() << "reduced width" << reducedWidth;
-		//		//qDebug() << "height" << height;
-		//		//qDebug() << "reduced height" << reducedHeight;
-		//		ps = QPageSize(QSizeF(reducedWidth, reducedHeight), QPageSize::Point, QString(), QPageSize::ExactMatch);
-		//		pl.setPageSize(ps);
-		//		pl.setOrientation(QPageLayout::Portrait);
-
-
-		//		_ParallelBarsViewerPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
-
-		//	}
-		//	//..getSimianViewerWidget()->getPage()->printToPdf(fileName, pl);
-
-		//};
-
-		const auto updateNeighborhood = [this]() -> void
-		{
-			if (!_AllcrossSpeciesDatasets.isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
-			{
-				hdps::Datasets filteredDatasets;
-				for (auto dataset : _AllcrossSpeciesDatasets)
+				for (auto dataset : filteredDatasets)
 				{
 					std::string str1 = dataset->getGuiName().toStdString();
-					std::string str2 = "_"+_neighborhoodAction.getCurrentText().toStdString()+"_cross_species_cluster";
-					if (strstr(str1.c_str(), str2.c_str()))
+					std::string humanStr = "human";
+					std::string chimpStr = "chimp";
+					std::string gorillaStr = "gorilla";
+					std::string rhesusStr = "rhesus";
+					std::string marmosetStr = "marmoset";
+					if (strstr(str1.c_str(), humanStr.c_str()))
 					{
-						filteredDatasets.append(dataset);
+						const QString child_DE_Statistics_DatasetName = "DE_Statistics";
+						_humanClusterDataset = dataset;
+						QString DatasetGUID = "";
+						const auto& childDatasets = _humanClusterDataset->getChildren({ PointType });
+						for (qsizetype i = 0; i < childDatasets.size(); ++i)
+						{
+							if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
+							{
+								_humanDEDataset = childDatasets[i];
+							}
+						}
+
 					}
-				}
-
-				if (!filteredDatasets.isEmpty())
-				{
-					for (auto dataset : filteredDatasets)
+					else if (strstr(str1.c_str(), chimpStr.c_str()))
 					{
-						std::string str1 = dataset->getGuiName().toStdString();
-						std::string humanStr = "human";
-						std::string chimpStr = "chimp";
-						std::string gorillaStr = "gorilla";
-						std::string rhesusStr = "rhesus";
-						std::string marmosetStr = "marmoset";
-						if (strstr(str1.c_str(), humanStr.c_str()))
+
+						const QString child_DE_Statistics_DatasetName = "DE_Statistics";
+						_chimpClusterDataset = dataset;
+						QString DatasetGUID = "";
+						const auto& childDatasets = _chimpClusterDataset->getChildren({ PointType });
+						for (qsizetype i = 0; i < childDatasets.size(); ++i)
 						{
-							const QString child_DE_Statistics_DatasetName = "DE_Statistics";
-							_humanClusterDataset = dataset;
-							QString DatasetGUID = "";
-							const auto& childDatasets = _humanClusterDataset->getChildren({ PointType });
-							for (qsizetype i = 0; i < childDatasets.size(); ++i)
+							if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
 							{
-								if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
-								{
-									_humanDEDataset = childDatasets[i];
-								}
+								_chimpDEDataset = childDatasets[i];
 							}
-
 						}
-						else if (strstr(str1.c_str(), chimpStr.c_str()))
-						{
 
-							const QString child_DE_Statistics_DatasetName = "DE_Statistics";
-							_chimpClusterDataset = dataset;
-							QString DatasetGUID = "";
-							const auto& childDatasets = _chimpClusterDataset->getChildren({ PointType });
-							for (qsizetype i = 0; i < childDatasets.size(); ++i)
+
+					}
+					else if (strstr(str1.c_str(), gorillaStr.c_str()))
+					{
+						const QString child_DE_Statistics_DatasetName = "DE_Statistics";
+						_gorillaClusterDataset = dataset;
+						QString DatasetGUID = "";
+						const auto& childDatasets = _gorillaClusterDataset->getChildren({ PointType });
+						for (qsizetype i = 0; i < childDatasets.size(); ++i)
+						{
+							if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
 							{
-								if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
-								{
-									_chimpDEDataset = childDatasets[i];
-								}
+								_gorillaDEDataset = childDatasets[i];
 							}
-
-
 						}
-						else if (strstr(str1.c_str(), gorillaStr.c_str()))
+
+					}
+					else if (strstr(str1.c_str(), rhesusStr.c_str()))
+					{
+						const QString child_DE_Statistics_DatasetName = "DE_Statistics";
+						_rhesusClusterDataset = dataset;
+						QString DatasetGUID = "";
+						const auto& childDatasets = _rhesusClusterDataset->getChildren({ PointType });
+						for (qsizetype i = 0; i < childDatasets.size(); ++i)
 						{
-							const QString child_DE_Statistics_DatasetName = "DE_Statistics";
-							_gorillaClusterDataset = dataset;
-							QString DatasetGUID = "";
-							const auto& childDatasets = _gorillaClusterDataset->getChildren({ PointType });
-							for (qsizetype i = 0; i < childDatasets.size(); ++i)
+							if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
 							{
-								if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
-								{
-									_gorillaDEDataset = childDatasets[i];
-								}
+								_rhesusDEDataset = childDatasets[i];
 							}
-
 						}
-						else if (strstr(str1.c_str(), rhesusStr.c_str()))
-						{
-							const QString child_DE_Statistics_DatasetName = "DE_Statistics";
-							_rhesusClusterDataset = dataset;
-							QString DatasetGUID = "";
-							const auto& childDatasets = _rhesusClusterDataset->getChildren({ PointType });
-							for (qsizetype i = 0; i < childDatasets.size(); ++i)
-							{
-								if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
-								{
-									_rhesusDEDataset = childDatasets[i];
-								}
-							}
 
 
-						}
-						else if (strstr(str1.c_str(), marmosetStr.c_str()))
+					}
+					else if (strstr(str1.c_str(), marmosetStr.c_str()))
+					{
+						const QString child_DE_Statistics_DatasetName = "DE_Statistics";
+						_marmosetClusterDataset = dataset;
+						QString DatasetGUID = "";
+						const auto& childDatasets = _marmosetClusterDataset->getChildren({ PointType });
+						for (qsizetype i = 0; i < childDatasets.size(); ++i)
 						{
-							const QString child_DE_Statistics_DatasetName = "DE_Statistics";
-							_marmosetClusterDataset = dataset;
-							QString DatasetGUID = "";
-							const auto& childDatasets = _marmosetClusterDataset->getChildren({ PointType });
-							for (qsizetype i = 0; i < childDatasets.size(); ++i)
+							if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
 							{
-								if (childDatasets[i]->getGuiName() == child_DE_Statistics_DatasetName)
-								{
-									_marmosetDEDataset = childDatasets[i];
-								}
+								_marmosetDEDataset = childDatasets[i];
 							}
 						}
 					}
 				}
 			}
-				updateData();
+		}
+		updateData();
 
-		};
+	};
 
-		const auto updatedeStatsDataset1 = [this]() -> void
+	const auto updatedeStatsDataset1 = [this]() -> void
+	{
+
+
+	};
+
+	const auto updatedeStatsDataset2 = [this]() -> void
+	{
+
+	};
+	const auto updateSpecies1Name = [this]() -> void
+	{
+		if (_species1Name.getString() != "")
 		{
-
-
-		};
-
-		const auto updatedeStatsDataset2 = [this]() -> void
+			_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+		}
+	};
+	const auto updateSpecies2Name = [this]() -> void
+	{
+		if (_species2Name.getString() != "")
 		{
+			_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+		}
+	};
+	connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
+	connect(&_species2Name, &StringAction::stringChanged, this, updateSpecies2Name);
+	connect(&_deStatsDataset1Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset1);
 
-		};
-		const auto updateSpecies1Name = [this]() -> void
-		{
-			if (_species1Name.getString()!="")
-			{
-				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
-			}
-		};
-		const auto updateSpecies2Name = [this]() -> void
-		{
-			if (_species2Name.getString() != "")
-			{
-				_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
-			}
-		};
-		connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
-		connect(&_species2Name, &StringAction::stringChanged, this, updateSpecies2Name);
-		connect(&_deStatsDataset1Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset1);
-
-		connect(&_deStatsDataset2Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset2);
+	connect(&_deStatsDataset2Action, &DatasetPickerAction::datasetPicked, this, updatedeStatsDataset2);
 	connect(&_neighborhoodAction, &OptionAction::currentIndexChanged, this, updateNeighborhood);
 	connect(&_geneNameAction, &StringAction::stringChanged, this, updateGeneName);
 	connect(&_selectedCrossspeciescluster, &StringAction::stringChanged, this, updateSelectedCrossspeciescluster);
@@ -396,405 +396,405 @@ void ParallelBarsOptionsAction::updateData()
 
 
 	if (!_marmosetDEDataset.getDatasetGuid().isEmpty() && !_rhesusDEDataset.getDatasetGuid().isEmpty() && !_gorillaDEDataset.getDatasetGuid().isEmpty() && !_chimpDEDataset.getDatasetGuid().isEmpty() && !_humanDEDataset.getDatasetGuid().isEmpty() && !_marmosetClusterDataset.getDatasetGuid().isEmpty() && !_rhesusClusterDataset.getDatasetGuid().isEmpty() && !_gorillaClusterDataset.getDatasetGuid().isEmpty() && !_chimpClusterDataset.getDatasetGuid().isEmpty() && !_humanClusterDataset.getDatasetGuid().isEmpty())
+	{
+
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+		//qDebug() << "Human";
+		//qDebug() << _humanDEDataset->getGuiName();
+		//qDebug() << _humanClusterDataset->getGuiName();
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+		//qDebug() << "Chimp";
+		//qDebug() << _chimpDEDataset->getGuiName();
+		//qDebug() << _chimpClusterDataset->getGuiName();
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+		//qDebug() << "Gorilla";
+		//qDebug() << _gorillaDEDataset->getGuiName();
+		//qDebug() << _gorillaClusterDataset->getGuiName();
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+		//qDebug() << "Rhesus";
+		//qDebug() << _rhesusDEDataset->getGuiName();
+		//qDebug() << _rhesusClusterDataset->getGuiName();
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+		//qDebug() << "Marmoset";
+		//qDebug() << _marmosetDEDataset->getGuiName();
+		//qDebug() << _marmosetClusterDataset->getGuiName();
+		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+
+
+		_deStatsDataStorage.clear();
+		auto geneNamesHuman = _humanDEDataset->getDimensionNames();
+		auto geneNamesChimp = _chimpDEDataset->getDimensionNames();
+		auto geneNamesGorilla = _gorillaDEDataset->getDimensionNames();
+		auto geneNamesRhesus = _rhesusDEDataset->getDimensionNames();
+		auto geneNamesMarmoset = _marmosetDEDataset->getDimensionNames();
+		std::vector<float> geneColumnHuman;
+		std::vector<float> geneColumnChimp;
+		std::vector<float> geneColumnGorilla;
+		std::vector<float> geneColumnRhesus;
+		std::vector<float> geneColumnMarmoset;
+		extractGeneDimensions(&geneNamesHuman, &geneColumnHuman, _humanDEDataset);
+		extractGeneDimensions(&geneNamesChimp, &geneColumnChimp, _chimpDEDataset);
+		extractGeneDimensions(&geneNamesGorilla, &geneColumnGorilla, _gorillaDEDataset);
+		extractGeneDimensions(&geneNamesRhesus, &geneColumnRhesus, _rhesusDEDataset);
+		extractGeneDimensions(&geneNamesMarmoset, &geneColumnMarmoset, _marmosetDEDataset);
+		auto clusterListHuman = _humanClusterDataset->getClusters();
+		auto clusterListChimp = _chimpClusterDataset->getClusters();
+		auto clusterListGorilla = _gorillaClusterDataset->getClusters();
+		auto clusterListRhesus = _rhesusClusterDataset->getClusters();
+		auto clusterListMarmoset = _marmosetClusterDataset->getClusters();
+
+		//human
+		for (int i = 0; i < clusterListHuman.size(); i++)
 		{
-			
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
-			//qDebug() << "Human";
-			//qDebug() << _humanDEDataset->getGuiName();
-			//qDebug() << _humanClusterDataset->getGuiName();
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
-			//qDebug() << "Chimp";
-			//qDebug() << _chimpDEDataset->getGuiName();
-			//qDebug() << _chimpClusterDataset->getGuiName();
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
-			//qDebug() << "Gorilla";
-			//qDebug() << _gorillaDEDataset->getGuiName();
-			//qDebug() << _gorillaClusterDataset->getGuiName();
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
-			//qDebug() << "Rhesus";
-			//qDebug() << _rhesusDEDataset->getGuiName();
-			//qDebug() << _rhesusClusterDataset->getGuiName();
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
-			//qDebug() << "Marmoset";
-			//qDebug() << _marmosetDEDataset->getGuiName();
-			//qDebug() << _marmosetClusterDataset->getGuiName();
-			//qDebug() << "+++++++++++++++++++++++++++++++++++++";
+			speciesStorage tempStore;
+			tempStore.clusterName = clusterListHuman.at(i).getName().toStdString();
+			tempStore.humandeStatsCount = std::to_string(geneColumnHuman.at(i));
+			tempStore.chimpdeStatsCount = std::to_string(0);
+			tempStore.gorilladeStatsCount = std::to_string(0);
+			tempStore.rhesusdeStatsCount = std::to_string(0);
+			tempStore.marmosetdeStatsCount = std::to_string(0);
+			tempStore.deStatsColor = clusterListHuman.at(i).getColor().name().toStdString();
+			_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListHuman.at(i).getName().toStdString(), tempStore));
+		}
+		//chimp
+		for (int i = 0; i < clusterListChimp.size(); i++)
+		{
+			auto deStatsName = clusterListChimp.at(i).getName().toStdString();
 
 
-			_deStatsDataStorage.clear();
-			auto geneNamesHuman = _humanDEDataset->getDimensionNames();
-			auto geneNamesChimp = _chimpDEDataset->getDimensionNames();
-			auto geneNamesGorilla = _gorillaDEDataset->getDimensionNames();
-			auto geneNamesRhesus = _rhesusDEDataset->getDimensionNames();
-			auto geneNamesMarmoset = _marmosetDEDataset->getDimensionNames();
-			std::vector<float> geneColumnHuman;
-			std::vector<float> geneColumnChimp;
-			std::vector<float> geneColumnGorilla;
-			std::vector<float> geneColumnRhesus;
-			std::vector<float> geneColumnMarmoset;
-			extractGeneDimensions(&geneNamesHuman, &geneColumnHuman, _humanDEDataset);
-			extractGeneDimensions(&geneNamesChimp, &geneColumnChimp, _chimpDEDataset);
-			extractGeneDimensions(&geneNamesGorilla, &geneColumnGorilla, _gorillaDEDataset);
-			extractGeneDimensions(&geneNamesRhesus, &geneColumnRhesus, _rhesusDEDataset);
-			extractGeneDimensions(&geneNamesMarmoset, &geneColumnMarmoset, _marmosetDEDataset);
-			auto clusterListHuman = _humanClusterDataset->getClusters();
-			auto clusterListChimp = _chimpClusterDataset->getClusters();
-			auto clusterListGorilla = _gorillaClusterDataset->getClusters();
-			auto clusterListRhesus = _rhesusClusterDataset->getClusters();
-			auto clusterListMarmoset = _marmosetClusterDataset->getClusters();
-			
-//human
-			for (int i = 0; i < clusterListHuman.size(); i++)
-			{
-				speciesStorage tempStore;
-				tempStore.clusterName = clusterListHuman.at(i).getName().toStdString();
-				tempStore.humandeStatsCount = std::to_string(geneColumnHuman.at(i));
-				tempStore.chimpdeStatsCount = std::to_string(0);
-				tempStore.gorilladeStatsCount = std::to_string(0);
-				tempStore.rhesusdeStatsCount = std::to_string(0);
-				tempStore.marmosetdeStatsCount = std::to_string(0);
-				tempStore.deStatsColor = clusterListHuman.at(i).getColor().name().toStdString();
-				_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListHuman.at(i).getName().toStdString(), tempStore));
-			}
-//chimp
-			for (int i = 0; i < clusterListChimp.size(); i++)
-			{
-				auto deStatsName = clusterListChimp.at(i).getName().toStdString();
-
-
-				std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
-				if (it != _deStatsDataStorage.end()) {
-					it->second.chimpdeStatsCount = std::to_string(geneColumnChimp.at(i));
-				}
-				else
-				{
-					speciesStorage tempStore;
-					tempStore.clusterName = clusterListChimp.at(i).getName().toStdString();
-					tempStore.chimpdeStatsCount = std::to_string(geneColumnChimp.at(i));
-					tempStore.humandeStatsCount = std::to_string(0);
-					tempStore.gorilladeStatsCount = std::to_string(0);
-					tempStore.rhesusdeStatsCount = std::to_string(0);
-					tempStore.marmosetdeStatsCount = std::to_string(0);
-					tempStore.deStatsColor = clusterListChimp.at(i).getColor().name().toStdString();
-					_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListChimp.at(i).getName().toStdString(), tempStore));
-				}
-
-			}
-			//gorilla
-			for (int i = 0; i < clusterListGorilla.size(); i++)
-			{
-				auto deStatsName = clusterListGorilla.at(i).getName().toStdString();
-
-
-				std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
-				if (it != _deStatsDataStorage.end()) {
-					it->second.gorilladeStatsCount = std::to_string(geneColumnGorilla.at(i));
-				}
-				else
-				{
-					speciesStorage tempStore;
-					tempStore.clusterName = clusterListGorilla.at(i).getName().toStdString();
-					tempStore.gorilladeStatsCount = std::to_string(geneColumnGorilla.at(i));
-					tempStore.humandeStatsCount = std::to_string(0);
-					tempStore.chimpdeStatsCount = std::to_string(0);
-					tempStore.rhesusdeStatsCount = std::to_string(0);
-					tempStore.marmosetdeStatsCount = std::to_string(0);
-					tempStore.deStatsColor = clusterListGorilla.at(i).getColor().name().toStdString();
-					_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListGorilla.at(i).getName().toStdString(), tempStore));
-				}
-
-			}
-			//rhesus
-			for (int i = 0; i < clusterListRhesus.size(); i++)
-			{
-				auto deStatsName = clusterListRhesus.at(i).getName().toStdString();
-
-
-				std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
-				if (it != _deStatsDataStorage.end()) {
-					it->second.rhesusdeStatsCount = std::to_string(geneColumnRhesus.at(i));
-				}
-				else
-				{
-					speciesStorage tempStore;
-					tempStore.clusterName = clusterListRhesus.at(i).getName().toStdString();
-					tempStore.rhesusdeStatsCount = std::to_string(geneColumnRhesus.at(i));
-					tempStore.humandeStatsCount = std::to_string(0);
-					tempStore.gorilladeStatsCount = std::to_string(0);
-					tempStore.chimpdeStatsCount = std::to_string(0);
-					tempStore.marmosetdeStatsCount = std::to_string(0);
-					tempStore.deStatsColor = clusterListRhesus.at(i).getColor().name().toStdString();
-					_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListRhesus.at(i).getName().toStdString(), tempStore));
-				}
-
-			}
-			//marmoset
-			for (int i = 0; i < clusterListMarmoset.size(); i++)
-			{
-				auto deStatsName = clusterListMarmoset.at(i).getName().toStdString();
-
-
-				std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
-				if (it != _deStatsDataStorage.end()) {
-					it->second.marmosetdeStatsCount = std::to_string(geneColumnMarmoset.at(i));
-				}
-				else
-				{
-					speciesStorage tempStore;
-					tempStore.clusterName = clusterListMarmoset.at(i).getName().toStdString();
-					tempStore.marmosetdeStatsCount = std::to_string(geneColumnMarmoset.at(i));
-					tempStore.humandeStatsCount = std::to_string(0);
-					tempStore.gorilladeStatsCount = std::to_string(0);
-					tempStore.rhesusdeStatsCount = std::to_string(0);
-					tempStore.chimpdeStatsCount = std::to_string(0);
-					tempStore.deStatsColor = clusterListMarmoset.at(i).getColor().name().toStdString();
-					_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListMarmoset.at(i).getName().toStdString(), tempStore));
-				}
-
-			}
-			std::string humanComparisonflag = "hide";
-			if (_radioButtonforHumandifferentialExpression.isChecked())
-			{
-				humanComparisonflag = "show";
+			std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
+			if (it != _deStatsDataStorage.end()) {
+				it->second.chimpdeStatsCount = std::to_string(geneColumnChimp.at(i));
 			}
 			else
 			{
-				humanComparisonflag = "hide";
+				speciesStorage tempStore;
+				tempStore.clusterName = clusterListChimp.at(i).getName().toStdString();
+				tempStore.chimpdeStatsCount = std::to_string(geneColumnChimp.at(i));
+				tempStore.humandeStatsCount = std::to_string(0);
+				tempStore.gorilladeStatsCount = std::to_string(0);
+				tempStore.rhesusdeStatsCount = std::to_string(0);
+				tempStore.marmosetdeStatsCount = std::to_string(0);
+				tempStore.deStatsColor = clusterListChimp.at(i).getColor().name().toStdString();
+				_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListChimp.at(i).getName().toStdString(), tempStore));
 			}
-			
-			std::string humanComparisonAbsoluteValuesflag = "hide";
-			//if (_humancomparisonAbsoluteValuesAction.isChecked())
-			//{
-			//	humanComparisonAbsoluteValuesflag = "show";
-			//}
-			//else
-			//{
-			//	humanComparisonAbsoluteValuesflag = "hide";
-			//}
-
-			std::string jsonData = "[{";
-			jsonData += '"';
-			jsonData += "data";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '[';
-			for (auto ittr = _deStatsDataStorage.rbegin(); ittr != _deStatsDataStorage.rend(); ++ittr)
-			{
-				//qDebug() << "\n++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-				//qDebug() << "clusterName: "<< QString::fromStdString(ittr->second.clusterName);
-				//qDebug() << "species1deStatsCount: " << QString::fromStdString(ittr->second.species1deStatsCount);
-				//qDebug() << "species2deStatsCount: " << QString::fromStdString(ittr->second.species2deStatsCount);
-				//qDebug() << "deStatsColor: " << QString::fromStdString(ittr->second.deStatsColor);
-				//qDebug() << "\n++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
-				jsonData += "{";
-
-				jsonData += '"';
-				jsonData += "clusterName";
-				jsonData += '"';
-				jsonData += ":";
-				jsonData += '"';
-				jsonData += ittr->second.clusterName;
-				jsonData += '"';
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species1ClusterCount";
-				jsonData += '"';
-				jsonData += ":";
-				if (humanComparisonflag=="show")
-				{
-					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount);
-
-					//if (_humancomparisonAbsoluteValuesAction.isChecked())
-					//{
-					//	jsonData += std::to_string(std::abs(result));
-					//}
-					//else
-					{
-						jsonData += std::to_string(result);
-					}
-
-				}
-				else {
-					jsonData += ittr->second.humandeStatsCount;
-				}
-
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species2ClusterCount";
-				jsonData += '"';
-				jsonData += ":";
-				if (humanComparisonflag == "show")
-				{
-					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount);
-					//if (_humancomparisonAbsoluteValuesAction.isChecked())
-					//{
-					//	jsonData += std::to_string(std::abs(result));
-					//}
-					//else
-					{
-						jsonData += std::to_string(result);
-					}
-				}
-				else {
-					jsonData += ittr->second.chimpdeStatsCount;
-				}
-				
-
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species3ClusterCount";
-				jsonData += '"';
-				jsonData += ":";
-				if (humanComparisonflag == "show")
-				{
-					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount);
-					//if (_humancomparisonAbsoluteValuesAction.isChecked())
-					//{
-					//	jsonData += std::to_string(std::abs(result));
-					//}
-					//else
-					{
-						jsonData += std::to_string(result);
-					}
-				}
-				else {
-					jsonData += ittr->second.gorilladeStatsCount;
-				}
-				
-
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species4ClusterCount";
-				jsonData += '"';
-				jsonData += ":";
-				if (humanComparisonflag == "show")
-				{
-					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount);
-					//if (_humancomparisonAbsoluteValuesAction.isChecked())
-					//{
-					//	jsonData += std::to_string(std::abs(result));
-					//}
-					//else
-					{
-						jsonData += std::to_string(result);
-					}
-				}
-				else {
-					jsonData += ittr->second.rhesusdeStatsCount;
-				}
-				
-
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "species5ClusterCount";
-				jsonData += '"';
-				jsonData += ":";
-				if (humanComparisonflag == "show")
-				{
-					float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount);
-					//if (_humancomparisonAbsoluteValuesAction.isChecked())
-					//{
-					///	jsonData += std::to_string(std::abs(result));
-					//}
-					//else
-					{
-						jsonData += std::to_string(result);
-					}
-				}
-				else {
-					jsonData += ittr->second.marmosetdeStatsCount;
-				}
-				jsonData += ",";
-				jsonData += '"';
-				jsonData += "clusterColor";
-				jsonData += '"';
-				jsonData += ":";
-				jsonData += '"';
-				jsonData += ittr->second.deStatsColor;
-				jsonData += '"';
-				jsonData += '}';
-				jsonData += ",";
-			}
-			jsonData.pop_back();
-			jsonData += "],";
-			jsonData += '"';
-			jsonData += "info";
-			jsonData += '"';
-			jsonData += ":[{";
-			jsonData += '"';
-			jsonData += "species1Name";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += "human";
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "species2Name";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += "chimp";
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "species3Name";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += "gorilla";
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "species4Name";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += "rhesus";
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "species5Name";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += "marmoset";
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "geneName";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += _geneNameAction.getString().toStdString();
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "humanComparisonflag";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += humanComparisonflag;
-			jsonData += '"';
-			jsonData += ",";
-			jsonData += '"';
-			jsonData += "humanComparisonAbsoluteValuesflag";
-			jsonData += '"';
-			jsonData += ":";
-			jsonData += '"';
-			jsonData += humanComparisonAbsoluteValuesflag;
-			jsonData += '"';
-			jsonData += "}";
-			jsonData += "]}]";
-			_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
 
 		}
+		//gorilla
+		for (int i = 0; i < clusterListGorilla.size(); i++)
+		{
+			auto deStatsName = clusterListGorilla.at(i).getName().toStdString();
+
+
+			std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
+			if (it != _deStatsDataStorage.end()) {
+				it->second.gorilladeStatsCount = std::to_string(geneColumnGorilla.at(i));
+			}
+			else
+			{
+				speciesStorage tempStore;
+				tempStore.clusterName = clusterListGorilla.at(i).getName().toStdString();
+				tempStore.gorilladeStatsCount = std::to_string(geneColumnGorilla.at(i));
+				tempStore.humandeStatsCount = std::to_string(0);
+				tempStore.chimpdeStatsCount = std::to_string(0);
+				tempStore.rhesusdeStatsCount = std::to_string(0);
+				tempStore.marmosetdeStatsCount = std::to_string(0);
+				tempStore.deStatsColor = clusterListGorilla.at(i).getColor().name().toStdString();
+				_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListGorilla.at(i).getName().toStdString(), tempStore));
+			}
+
+		}
+		//rhesus
+		for (int i = 0; i < clusterListRhesus.size(); i++)
+		{
+			auto deStatsName = clusterListRhesus.at(i).getName().toStdString();
+
+
+			std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
+			if (it != _deStatsDataStorage.end()) {
+				it->second.rhesusdeStatsCount = std::to_string(geneColumnRhesus.at(i));
+			}
+			else
+			{
+				speciesStorage tempStore;
+				tempStore.clusterName = clusterListRhesus.at(i).getName().toStdString();
+				tempStore.rhesusdeStatsCount = std::to_string(geneColumnRhesus.at(i));
+				tempStore.humandeStatsCount = std::to_string(0);
+				tempStore.gorilladeStatsCount = std::to_string(0);
+				tempStore.chimpdeStatsCount = std::to_string(0);
+				tempStore.marmosetdeStatsCount = std::to_string(0);
+				tempStore.deStatsColor = clusterListRhesus.at(i).getColor().name().toStdString();
+				_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListRhesus.at(i).getName().toStdString(), tempStore));
+			}
+
+		}
+		//marmoset
+		for (int i = 0; i < clusterListMarmoset.size(); i++)
+		{
+			auto deStatsName = clusterListMarmoset.at(i).getName().toStdString();
+
+
+			std::map<std::string, speciesStorage>::iterator it = _deStatsDataStorage.find(deStatsName);
+			if (it != _deStatsDataStorage.end()) {
+				it->second.marmosetdeStatsCount = std::to_string(geneColumnMarmoset.at(i));
+			}
+			else
+			{
+				speciesStorage tempStore;
+				tempStore.clusterName = clusterListMarmoset.at(i).getName().toStdString();
+				tempStore.marmosetdeStatsCount = std::to_string(geneColumnMarmoset.at(i));
+				tempStore.humandeStatsCount = std::to_string(0);
+				tempStore.gorilladeStatsCount = std::to_string(0);
+				tempStore.rhesusdeStatsCount = std::to_string(0);
+				tempStore.chimpdeStatsCount = std::to_string(0);
+				tempStore.deStatsColor = clusterListMarmoset.at(i).getColor().name().toStdString();
+				_deStatsDataStorage.insert(std::pair<std::string, speciesStorage>(clusterListMarmoset.at(i).getName().toStdString(), tempStore));
+			}
+
+		}
+		std::string humanComparisonflag = "hide";
+		if (_radioButtonforHumandifferentialExpression.isChecked())
+		{
+			humanComparisonflag = "show";
+		}
+		else
+		{
+			humanComparisonflag = "hide";
+		}
+
+		std::string humanComparisonAbsoluteValuesflag = "hide";
+		//if (_humancomparisonAbsoluteValuesAction.isChecked())
+		//{
+		//	humanComparisonAbsoluteValuesflag = "show";
+		//}
+		//else
+		//{
+		//	humanComparisonAbsoluteValuesflag = "hide";
+		//}
+
+		std::string jsonData = "[{";
+		jsonData += '"';
+		jsonData += "data";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '[';
+		for (auto ittr = _deStatsDataStorage.rbegin(); ittr != _deStatsDataStorage.rend(); ++ittr)
+		{
+			//qDebug() << "\n++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+			//qDebug() << "clusterName: "<< QString::fromStdString(ittr->second.clusterName);
+			//qDebug() << "species1deStatsCount: " << QString::fromStdString(ittr->second.species1deStatsCount);
+			//qDebug() << "species2deStatsCount: " << QString::fromStdString(ittr->second.species2deStatsCount);
+			//qDebug() << "deStatsColor: " << QString::fromStdString(ittr->second.deStatsColor);
+			//qDebug() << "\n++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+
+			jsonData += "{";
+
+			jsonData += '"';
+			jsonData += "clusterName";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += ittr->second.clusterName;
+			jsonData += '"';
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species1ClusterCount";
+			jsonData += '"';
+			jsonData += ":";
+			if (humanComparisonflag == "show")
+			{
+				float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.humandeStatsCount);
+
+				//if (_humancomparisonAbsoluteValuesAction.isChecked())
+				//{
+				//	jsonData += std::to_string(std::abs(result));
+				//}
+				//else
+				{
+					jsonData += std::to_string(result);
+				}
+
+			}
+			else {
+				jsonData += ittr->second.humandeStatsCount;
+			}
+
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species2ClusterCount";
+			jsonData += '"';
+			jsonData += ":";
+			if (humanComparisonflag == "show")
+			{
+				float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.chimpdeStatsCount);
+				//if (_humancomparisonAbsoluteValuesAction.isChecked())
+				//{
+				//	jsonData += std::to_string(std::abs(result));
+				//}
+				//else
+				{
+					jsonData += std::to_string(result);
+				}
+			}
+			else {
+				jsonData += ittr->second.chimpdeStatsCount;
+			}
+
+
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species3ClusterCount";
+			jsonData += '"';
+			jsonData += ":";
+			if (humanComparisonflag == "show")
+			{
+				float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.gorilladeStatsCount);
+				//if (_humancomparisonAbsoluteValuesAction.isChecked())
+				//{
+				//	jsonData += std::to_string(std::abs(result));
+				//}
+				//else
+				{
+					jsonData += std::to_string(result);
+				}
+			}
+			else {
+				jsonData += ittr->second.gorilladeStatsCount;
+			}
+
+
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species4ClusterCount";
+			jsonData += '"';
+			jsonData += ":";
+			if (humanComparisonflag == "show")
+			{
+				float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.rhesusdeStatsCount);
+				//if (_humancomparisonAbsoluteValuesAction.isChecked())
+				//{
+				//	jsonData += std::to_string(std::abs(result));
+				//}
+				//else
+				{
+					jsonData += std::to_string(result);
+				}
+			}
+			else {
+				jsonData += ittr->second.rhesusdeStatsCount;
+			}
+
+
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "species5ClusterCount";
+			jsonData += '"';
+			jsonData += ":";
+			if (humanComparisonflag == "show")
+			{
+				float result = std::stof(ittr->second.humandeStatsCount) - std::stof(ittr->second.marmosetdeStatsCount);
+				//if (_humancomparisonAbsoluteValuesAction.isChecked())
+				//{
+				///	jsonData += std::to_string(std::abs(result));
+				//}
+				//else
+				{
+					jsonData += std::to_string(result);
+				}
+			}
+			else {
+				jsonData += ittr->second.marmosetdeStatsCount;
+			}
+			jsonData += ",";
+			jsonData += '"';
+			jsonData += "clusterColor";
+			jsonData += '"';
+			jsonData += ":";
+			jsonData += '"';
+			jsonData += ittr->second.deStatsColor;
+			jsonData += '"';
+			jsonData += '}';
+			jsonData += ",";
+		}
+		jsonData.pop_back();
+		jsonData += "],";
+		jsonData += '"';
+		jsonData += "info";
+		jsonData += '"';
+		jsonData += ":[{";
+		jsonData += '"';
+		jsonData += "species1Name";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += "human";
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "species2Name";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += "chimp";
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "species3Name";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += "gorilla";
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "species4Name";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += "rhesus";
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "species5Name";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += "marmoset";
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "geneName";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += _geneNameAction.getString().toStdString();
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "humanComparisonflag";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += humanComparisonflag;
+		jsonData += '"';
+		jsonData += ",";
+		jsonData += '"';
+		jsonData += "humanComparisonAbsoluteValuesflag";
+		jsonData += '"';
+		jsonData += ":";
+		jsonData += '"';
+		jsonData += humanComparisonAbsoluteValuesflag;
+		jsonData += '"';
+		jsonData += "}";
+		jsonData += "]}]";
+		_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
+
+	}
 }
 
 
 
-void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, hdps::Dataset<Points> deStatsDataset )
+void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, hdps::Dataset<Points> deStatsDataset)
 
 {
 	auto it1 = std::find(geneNames->begin(), geneNames->end(), _geneNameAction.getString());
@@ -901,38 +901,38 @@ inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset
 void ParallelBarsOptionsAction::onDataEvent(hdps::DataEvent* dataEvent)
 {
 	if (dataEvent->getType() == hdps::EventType::DataAdded)
-{
-	updateDatasetPickerAction();
-}
-if (dataEvent->getType() == hdps::EventType::DataRemoved)
-{
-	updateDatasetPickerAction();
-}
-if (dataEvent->getType() == hdps::EventType::DataChildAdded)
-{
-	updateDatasetPickerAction();
-}
-if (dataEvent->getType() == hdps::EventType::DataChildRemoved)
-{
-	updateDatasetPickerAction();
-}
-if (dataEvent->getType() == hdps::EventType::DataChanged)
-{
-	updateDatasetPickerAction();
-}
-if (dataEvent->getType() == hdps::EventType::DataGuiNameChanged)
-{
-	updateDatasetPickerAction();
-}
+	{
+		updateDatasetPickerAction();
+	}
+	if (dataEvent->getType() == hdps::EventType::DataRemoved)
+	{
+		updateDatasetPickerAction();
+	}
+	if (dataEvent->getType() == hdps::EventType::DataChildAdded)
+	{
+		updateDatasetPickerAction();
+	}
+	if (dataEvent->getType() == hdps::EventType::DataChildRemoved)
+	{
+		updateDatasetPickerAction();
+	}
+	if (dataEvent->getType() == hdps::EventType::DataChanged)
+	{
+		updateDatasetPickerAction();
+	}
+	if (dataEvent->getType() == hdps::EventType::DataGuiNameChanged)
+	{
+		updateDatasetPickerAction();
+	}
 
 }
 
 void ParallelBarsOptionsAction::initLoader()
 {
 
-		updateData();
-		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
-		_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+	updateData();
+	_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+	_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 
 }
 
