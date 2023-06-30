@@ -155,7 +155,7 @@ protected:
 	//TriggerAction                _screenshotAction;
 	//TriggerAction                _helpAction;
 	std::map<std::string, speciesStorage> _deStatsDataStorage;
-	hdps::Datasets _AllcrossSpeciesDatasets;
+	DatasetPickerAction _AllcrossSpeciesDatasets;
 	hdps::Dataset<Points> _humanDEDataset;
 	hdps::Dataset<Points>  _chimpDEDataset;
 	hdps::Dataset<Points>  _gorillaDEDataset;

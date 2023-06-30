@@ -50,6 +50,63 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
+
+	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+		Datasets clusterDatasets;
+
+		for (auto dataset : datasets)
+			if (dataset->getDataType() == ClusterType)
+			{
+				std::string str1 = dataset->getGuiName().toStdString();
+				std::string str2 = "cross_species_cluster";
+				if (strstr(str1.c_str(), str2.c_str()))
+				{
+					clusterDatasets << dataset;
+				}
+			}
+		return clusterDatasets;
+		});
+
+	_deStatsDataset1Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+		Datasets pointDatasets;
+
+		for (auto dataset : datasets)
+		{
+			if (dataset->getDataType() == PointType)
+			{
+				std::string str1 = dataset->getGuiName().toStdString();
+				std::string str2 = "DE_Statistics";
+				if (strstr(str1.c_str(), str2.c_str()))
+				{
+					pointDatasets << dataset;
+				}
+			}
+
+		}
+
+		return pointDatasets;
+		});
+
+		_deStatsDataset2Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+			Datasets pointDatasets;
+
+			for (auto dataset : datasets)
+			{
+				if (dataset->getDataType() == PointType)
+				{
+					std::string str1 = dataset->getGuiName().toStdString();
+					std::string str2 = "DE_Statistics";
+					if (strstr(str1.c_str(), str2.c_str()))
+					{
+						pointDatasets << dataset;
+					}
+				}
+
+			}
+
+			return pointDatasets;
+			});
+
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
 	_geneNameAction.setString("A1BG");
@@ -194,10 +251,10 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	const auto updateNeighborhood = [this]() -> void
 	{
-		if (!_AllcrossSpeciesDatasets.isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
+		if (_AllcrossSpeciesDatasets.getDatasets().isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
 		{
 			hdps::Datasets filteredDatasets;
-			for (auto dataset : _AllcrossSpeciesDatasets)
+			for (auto dataset : _AllcrossSpeciesDatasets.getDatasets())
 			{
 				std::string str1 = dataset->getGuiName().toStdString();
 				std::string str2 = "_" + _neighborhoodAction.getCurrentText().toStdString() + "_cross_species_cluster";
@@ -382,7 +439,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	};
 	connect(&_radioButtonforHumandifferentialExpression, &QRadioButton::toggled, this, RadioButtonHumandifferentialExpression);
 
-	updateDatasetPickerAction();
+	//updateDatasetPickerAction();
 }
 
 
@@ -810,49 +867,49 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 	}
 }
 
-void ParallelBarsOptionsAction::updateDatasetPickerAction()
-{
-	_AllcrossSpeciesDatasets.clear();
-	auto ClusterDatasets = _core->requestAllDataSets(QVector<hdps::DataType> {ClusterType});
-	auto filteredClusterDatasets = ClusterDatasets;
-	for (auto dataset : ClusterDatasets)
-	{
-		std::string str1 = dataset->getGuiName().toStdString();
-		std::string str2 = "cross_species_cluster";
-		if (strstr(str1.c_str(), str2.c_str()))
-		{
-			_AllcrossSpeciesDatasets.append(dataset);
-		}
-		//else {
-		//	ClusterDatasets.removeOne(dataset);
-		//}
-	}
-
-	auto datasets = _core->requestAllDataSets(QVector<hdps::DataType> {PointType});
-	auto filteredDEStatsDatasets = datasets;
-	for (auto dataset : datasets)
-	{
-		std::string str1 = dataset->getGuiName().toStdString();
-		std::string str2 = "DE_Statistics";
-		if (strstr(str1.c_str(), str2.c_str()))
-		{
-		}
-		else {
-			filteredDEStatsDatasets.removeOne(dataset);
-		}
-	}
-
-
-	_deStatsDataset1Action.setDatasets(filteredDEStatsDatasets);
-	_deStatsDataset1Action.setPlaceHolderString("deStats dataset1");
-	_deStatsDataset2Action.setDatasets(filteredDEStatsDatasets);
-	_deStatsDataset2Action.setPlaceHolderString("deStats dataset2");
-	if (filteredDEStatsDatasets.isEmpty())
-	{
-		//_barSettingsAction.setEnabled(false);
-	}
-
-}
+//void ParallelBarsOptionsAction::updateDatasetPickerAction()
+//{
+//	_AllcrossSpeciesDatasets.clear();
+//	auto ClusterDatasets = _core->requestAllDataSets(QVector<hdps::DataType> {ClusterType});
+//	auto filteredClusterDatasets = ClusterDatasets;
+//	for (auto dataset : ClusterDatasets)
+//	{
+//		std::string str1 = dataset->getGuiName().toStdString();
+//		std::string str2 = "cross_species_cluster";
+//		if (strstr(str1.c_str(), str2.c_str()))
+//		{
+//			_AllcrossSpeciesDatasets.append(dataset);
+//		}
+//		//else {
+//		//	ClusterDatasets.removeOne(dataset);
+//		//}
+//	}
+//
+//	auto datasets = _core->requestAllDataSets(QVector<hdps::DataType> {PointType});
+//	auto filteredDEStatsDatasets = datasets;
+//	for (auto dataset : datasets)
+//	{
+//		std::string str1 = dataset->getGuiName().toStdString();
+//		std::string str2 = "DE_Statistics";
+//		if (strstr(str1.c_str(), str2.c_str()))
+//		{
+//		}
+//		else {
+//			filteredDEStatsDatasets.removeOne(dataset);
+//		}
+//	}
+//
+//
+//	_deStatsDataset1Action.setDatasets(filteredDEStatsDatasets);
+//	_deStatsDataset1Action.setPlaceHolderString("deStats dataset1");
+//	_deStatsDataset2Action.setDatasets(filteredDEStatsDatasets);
+//	_deStatsDataset2Action.setPlaceHolderString("deStats dataset2");
+//	if (filteredDEStatsDatasets.isEmpty())
+//	{
+//		//_barSettingsAction.setEnabled(false);
+//	}
+//
+//}
 
 ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidget* parent, deStatsDataset1SelectionAction* deStatsDataset1SelectAction) :
 	WidgetActionWidget(parent, deStatsDataset1SelectAction)
