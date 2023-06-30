@@ -83,7 +83,7 @@ public:
 
 
 public:
-	void onDataEvent(hdps::DataEvent* dataEvent);
+	void onDataEvent(hdps::DatasetEvent* dataEvent);
 protected:
 
 	class Widget : public hdps::gui::WidgetActionWidget {

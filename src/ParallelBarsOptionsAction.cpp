@@ -8,7 +8,7 @@ using namespace hdps;
 using namespace hdps::gui;
 
 ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, hdps::CoreInterface* core) :
-	WidgetAction(&ParallelBarsViewerPlugin),
+	WidgetAction(&ParallelBarsViewerPlugin,"ParallelBarsViewerPlugin"),
 	_ParallelBarsViewerPlugin(ParallelBarsViewerPlugin),
 	_core(core),
 	_geneNameAction(this, "Gene"),
@@ -43,22 +43,22 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
 	//_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
 	//_neighborhoodAction.setSerializationName("Neighborhood");
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChildAdded));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChildRemoved));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetAdded));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetRemoved));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildAdded));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildRemoved));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
+	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
-	_geneNameAction.initialize("A1BG", "");
-	_species1Name.initialize("Species1");
-	_species2Name.initialize("Species2");
+	_geneNameAction.setString("A1BG");
+	_species1Name.setString("Species1");
+	_species2Name.setString("Species2");
 	_selectedCrossspeciesclusterFlag = true;
-	_selectedCrossspeciescluster.initialize("");
+	_selectedCrossspeciescluster.setString("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
-	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
+	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory");
 	//_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
 	//_humancomparisonAction.initialize(false, false);
 	//_humancomparisonAction.setText("Gene expression: all species");
@@ -94,25 +94,25 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
 
-	_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
+	//_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
 
-	_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
-	_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
-	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
-	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
+	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
+	//_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
+	//_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
+	//_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
 
-	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
-	_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
+	//_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
+	//_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
-	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
-	_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
+	//_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
+	//_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
 	const auto updateGeneName = [this]() -> void
 	{
 		updateData();
@@ -395,7 +395,7 @@ void ParallelBarsOptionsAction::updateData()
 {
 
 
-	if (!_marmosetDEDataset.getDatasetGuid().isEmpty() && !_rhesusDEDataset.getDatasetGuid().isEmpty() && !_gorillaDEDataset.getDatasetGuid().isEmpty() && !_chimpDEDataset.getDatasetGuid().isEmpty() && !_humanDEDataset.getDatasetGuid().isEmpty() && !_marmosetClusterDataset.getDatasetGuid().isEmpty() && !_rhesusClusterDataset.getDatasetGuid().isEmpty() && !_gorillaClusterDataset.getDatasetGuid().isEmpty() && !_chimpClusterDataset.getDatasetGuid().isEmpty() && !_humanClusterDataset.getDatasetGuid().isEmpty())
+	if (!_marmosetDEDataset.getDatasetId().isEmpty() && !_rhesusDEDataset.getDatasetId().isEmpty() && !_gorillaDEDataset.getDatasetId().isEmpty() && !_chimpDEDataset.getDatasetId().isEmpty() && !_humanDEDataset.getDatasetId().isEmpty() && !_marmosetClusterDataset.getDatasetId().isEmpty() && !_rhesusClusterDataset.getDatasetId().isEmpty() && !_gorillaClusterDataset.getDatasetId().isEmpty() && !_chimpClusterDataset.getDatasetId().isEmpty() && !_humanClusterDataset.getDatasetId().isEmpty())
 	{
 
 		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
@@ -887,10 +887,11 @@ ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidge
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._deStatsDataset2Action.createLabelWidget(this), selectiondeStats2Widget);
 
-	setPopupLayout(selectionExampledeStatsOptionLayout);
+	setLayout(selectionExampledeStatsOptionLayout);
 }
 
 inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset1SelectionAction(ParallelBarsOptionsAction& ParallelBarsOptionsAction) :
+	WidgetAction(nullptr, "deStatsDataset1SelectionAction"),
 	_ParallelBarsOptionsAction(ParallelBarsOptionsAction)
 {
 	setText("Options");
@@ -898,32 +899,29 @@ inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset
 
 }
 
-void ParallelBarsOptionsAction::onDataEvent(hdps::DataEvent* dataEvent)
+void ParallelBarsOptionsAction::onDataEvent(hdps::DatasetEvent* dataEvent)
 {
-	if (dataEvent->getType() == hdps::EventType::DataAdded)
+	if (dataEvent->getType() == hdps::EventType::DatasetAdded)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataRemoved)
+	if (dataEvent->getType() == hdps::EventType::DatasetRemoved)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChildAdded)
+	if (dataEvent->getType() == hdps::EventType::DatasetChildAdded)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChildRemoved)
+	if (dataEvent->getType() == hdps::EventType::DatasetChildRemoved)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChanged)
+	if (dataEvent->getType() == hdps::EventType::DatasetDataChanged)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataGuiNameChanged)
-	{
-		updateDatasetPickerAction();
-	}
+
 
 }
 
