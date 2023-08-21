@@ -444,7 +444,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 
 ParallelBarsOptionsAction::Widget::Widget(QWidget* parent, ParallelBarsOptionsAction* ParallelBarsOptionsAction) :
-	WidgetActionWidget(parent, ParallelBarsOptionsAction, State::Standard)
+	WidgetActionWidget(parent, ParallelBarsOptionsAction)
 {
 }
 
