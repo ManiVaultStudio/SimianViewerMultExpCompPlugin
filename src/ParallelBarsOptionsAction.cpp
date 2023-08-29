@@ -21,7 +21,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_neighborhoodAction(this, "Neighborhood"),
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
-	_selectionColorAction(this, "Selection color")//,
+	_selectionColorAction(this, "Selection color"),
 	//_humancomparisonAction(this, "Gene expression: all species"),
 	//_humancomparisonAbsoluteValuesAction(this, "Absolute values ")//,
 	//_radioButtonforHumandifferentialExpression(this, "Absolute values "),
@@ -29,6 +29,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
+	_AllcrossSpeciesDatasets(this, "All cross-species datasets")
 {
 	setSerializationName("PopPyramidSettings");
 	_species1Name.setSerializationName("Species1Name");
