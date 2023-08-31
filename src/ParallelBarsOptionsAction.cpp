@@ -31,7 +31,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
 	_AllcrossSpeciesDatasets(this, "All cross-species datasets")
 {
-	setSerializationName("PopPyramidSettings");
+	setSerializationName("ParallelBarsPyramidSettings");
 	_species1Name.setSerializationName("Species1Name");
 	_species2Name.setSerializationName("Species2Name");
 	//_humancomparisonAbsoluteValuesAction.setVisible(false);
