@@ -51,7 +51,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
-
+	_AllcrossSpeciesDatasets.setShowFullPathName(false);
 	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
 		Datasets clusterDatasets;
 
@@ -67,7 +67,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 			}
 		return clusterDatasets;
 		});
-
+	_deStatsDataset1Action.setShowFullPathName(false);
 	_deStatsDataset1Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
 		Datasets pointDatasets;
 
@@ -87,7 +87,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 		return pointDatasets;
 		});
-
+	_deStatsDataset2Action.setShowFullPathName(false);
 		_deStatsDataset2Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
 			Datasets pointDatasets;
 
