@@ -39,11 +39,11 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_radioButtonforHumandifferentialExpression.setText("Differential expression: human vs other species");
 	_radioButtonforAllSpeciesGeneExpression.setChecked(true);
 	_radioButtonforHumandifferentialExpression.setChecked(false);
-	//_geneNameAction.setSerializationName("Gene");
-	//_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
-	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
-	//_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
-	//_neighborhoodAction.setSerializationName("Neighborhood");
+	_geneNameAction.setSerializationName("Gene");
+	_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
+	_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
+	_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
+	_neighborhoodAction.setSerializationName("Neighborhood");
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetAdded));
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetRemoved));
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildAdded));
@@ -996,11 +996,11 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 {
 	WidgetAction::fromVariantMap(variantMap);
 
-	//_deStatsDataset1Action.fromParentVariantMap(variantMap);
-	//_deStatsDataset2Action.fromParentVariantMap(variantMap);
-	//_geneNameAction.fromParentVariantMap(variantMap);
-	//_neighborhoodAction.fromParentVariantMap(variantMap);
-	//_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
+	_deStatsDataset1Action.fromParentVariantMap(variantMap);
+	_deStatsDataset2Action.fromParentVariantMap(variantMap);
+	_geneNameAction.fromParentVariantMap(variantMap);
+	_neighborhoodAction.fromParentVariantMap(variantMap);
+	_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
 	_species1Name.fromParentVariantMap(variantMap);
 	_species2Name.fromParentVariantMap(variantMap);
 	initLoader();
@@ -1011,11 +1011,11 @@ QVariantMap ParallelBarsOptionsAction::toVariantMap() const
 {
 	QVariantMap variantMap = WidgetAction::toVariantMap();
 
-	//_deStatsDataset1Action.insertIntoVariantMap(variantMap);
-	//_deStatsDataset2Action.insertIntoVariantMap(variantMap);
-	//_neighborhoodAction.insertIntoVariantMap(variantMap);
-	//_geneNameAction.insertIntoVariantMap(variantMap);
-	//_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
+	_deStatsDataset1Action.insertIntoVariantMap(variantMap);
+	_deStatsDataset2Action.insertIntoVariantMap(variantMap);
+	_neighborhoodAction.insertIntoVariantMap(variantMap);
+	_geneNameAction.insertIntoVariantMap(variantMap);
+	_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
 	_species1Name.insertIntoVariantMap(variantMap);
 	_species2Name.insertIntoVariantMap(variantMap);
 	return variantMap;
