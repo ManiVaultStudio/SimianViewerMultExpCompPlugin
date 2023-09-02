@@ -44,6 +44,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
 	_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
 	_neighborhoodAction.setSerializationName("Neighborhood");
+	_selectionColorAction.setSerializationName("SelectionColor");
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetAdded));
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetRemoved));
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildAdded));
@@ -252,7 +253,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	const auto updateNeighborhood = [this]() -> void
 	{
-		if (_AllcrossSpeciesDatasets.getDatasets().isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
+		if (_AllcrossSpeciesDatasets.getDatasets().size()!=0 && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
 		{
 			hdps::Datasets filteredDatasets;
 			for (auto dataset : _AllcrossSpeciesDatasets.getDatasets())
@@ -265,7 +266,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 				}
 			}
 
-			if (!filteredDatasets.isEmpty())
+			if (filteredDatasets.size() != 0)
 			{
 				for (auto dataset : filteredDatasets)
 				{
@@ -453,7 +454,7 @@ void ParallelBarsOptionsAction::updateData()
 {
 
 
-	if (!_marmosetDEDataset.getDatasetId().isEmpty() && !_rhesusDEDataset.getDatasetId().isEmpty() && !_gorillaDEDataset.getDatasetId().isEmpty() && !_chimpDEDataset.getDatasetId().isEmpty() && !_humanDEDataset.getDatasetId().isEmpty() && !_marmosetClusterDataset.getDatasetId().isEmpty() && !_rhesusClusterDataset.getDatasetId().isEmpty() && !_gorillaClusterDataset.getDatasetId().isEmpty() && !_chimpClusterDataset.getDatasetId().isEmpty() && !_humanClusterDataset.getDatasetId().isEmpty())
+	if (_marmosetDEDataset.getDatasetId()!="" && _rhesusDEDataset.getDatasetId() != "" && _gorillaDEDataset.getDatasetId() != "" && _chimpDEDataset.getDatasetId() != "" && _humanDEDataset.getDatasetId() != "" && _marmosetClusterDataset.getDatasetId() != "" && _rhesusClusterDataset.getDatasetId() != "" && _gorillaClusterDataset.getDatasetId()!="" && _chimpClusterDataset.getDatasetId() != "" && _humanClusterDataset.getDatasetId() != "")
 	{
 
 		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
@@ -1003,6 +1004,7 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 	_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
 	_species1Name.fromParentVariantMap(variantMap);
 	_species2Name.fromParentVariantMap(variantMap);
+	_selectionColorAction.fromParentVariantMap(variantMap);
 	initLoader();
 
 }
@@ -1018,5 +1020,6 @@ QVariantMap ParallelBarsOptionsAction::toVariantMap() const
 	_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
 	_species1Name.insertIntoVariantMap(variantMap);
 	_species2Name.insertIntoVariantMap(variantMap);
+	_selectionColorAction.insertIntoVariantMap(variantMap);
 	return variantMap;
 }
