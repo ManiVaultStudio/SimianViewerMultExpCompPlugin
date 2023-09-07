@@ -8,12 +8,12 @@ using namespace hdps;
 using namespace hdps::gui;
 
 ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, hdps::CoreInterface* core) :
-	WidgetAction(&ParallelBarsViewerPlugin),
+	WidgetAction(&ParallelBarsViewerPlugin,"ParallelBarsViewerPlugin"),
 	_ParallelBarsViewerPlugin(ParallelBarsViewerPlugin),
 	_core(core),
-	_geneNameAction(this, "Gene"),
-	_deStatsDataset1Action(this, "Species1"),
-	_deStatsDataset2Action(this, "Species2"),
+	_geneNameAction(this, "SelectedID"),
+	_deStatsDataset1Action(this, "DE Dataset1"),
+	_deStatsDataset2Action(this, "DE Dataset2"),
 	//_helpAction(this, "Help"),
 	//_screenshotAction(this, "Screenshot"),
 	_deStatsDataset1SelectionAction(*this),
@@ -21,7 +21,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_neighborhoodAction(this, "Neighborhood"),
 	_species1Name(this, "Species1Name"),
 	_species2Name(this, "Species2Name"),
-	_selectionColorAction(this, "Selection color")//,
+	_selectionColorAction(this, "Selection color"),
 	//_humancomparisonAction(this, "Gene expression: all species"),
 	//_humancomparisonAbsoluteValuesAction(this, "Absolute values ")//,
 	//_radioButtonforHumandifferentialExpression(this, "Absolute values "),
@@ -29,8 +29,9 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//,
 	//_crossSpecies1HeatMapCellAction(this, "Link cross-species1 heatmap cell"),
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
+	_AllcrossSpeciesDatasets(this, "All cross-species datasets")
 {
-	setSerializationName("PopPyramidSettings");
+	setSerializationName("ParallelBarsPyramidSettings");
 	_species1Name.setSerializationName("Species1Name");
 	_species2Name.setSerializationName("Species2Name");
 	//_humancomparisonAbsoluteValuesAction.setVisible(false);
@@ -38,27 +39,85 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_radioButtonforHumandifferentialExpression.setText("Differential expression: human vs other species");
 	_radioButtonforAllSpeciesGeneExpression.setChecked(true);
 	_radioButtonforHumandifferentialExpression.setChecked(false);
-	//_geneNameAction.setSerializationName("Gene");
-	//_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
-	//_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
-	//_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
-	//_neighborhoodAction.setSerializationName("Neighborhood");
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChildAdded));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChildRemoved));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
-	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
+	_geneNameAction.setSerializationName("Gene");
+	_deStatsDataset1Action.setSerializationName("Species1(X-axis)");
+	_deStatsDataset2Action.setSerializationName("Species2(Y-axis)");
+	_selectedCrossspeciescluster.setSerializationName("Selected CrossSpecies Cluster"); 
+	_neighborhoodAction.setSerializationName("Neighborhood");
+	_selectionColorAction.setSerializationName("SelectionColor");
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetAdded));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetRemoved));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildAdded));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildRemoved));
+	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
+	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
+	_AllcrossSpeciesDatasets.setShowFullPathName(false);
+	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+		Datasets clusterDatasets;
+
+		for (auto dataset : datasets)
+			if (dataset->getDataType() == ClusterType)
+			{
+				std::string str1 = dataset->getGuiName().toStdString();
+				std::string str2 = "cross_species_cluster";
+				if (strstr(str1.c_str(), str2.c_str()))
+				{
+					clusterDatasets << dataset;
+				}
+			}
+		return clusterDatasets;
+		});
+	_deStatsDataset1Action.setShowFullPathName(false);
+	_deStatsDataset1Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+		Datasets pointDatasets;
+
+		for (auto dataset : datasets)
+		{
+			if (dataset->getDataType() == PointType)
+			{
+				std::string str1 = dataset->getGuiName().toStdString();
+				std::string str2 = "DE_Statistics";
+				if (strstr(str1.c_str(), str2.c_str()))
+				{
+					pointDatasets << dataset;
+				}
+			}
+
+		}
+
+		return pointDatasets;
+		});
+	_deStatsDataset2Action.setShowFullPathName(false);
+		_deStatsDataset2Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+			Datasets pointDatasets;
+
+			for (auto dataset : datasets)
+			{
+				if (dataset->getDataType() == PointType)
+				{
+					std::string str1 = dataset->getGuiName().toStdString();
+					std::string str2 = "DE_Statistics";
+					if (strstr(str1.c_str(), str2.c_str()))
+					{
+						pointDatasets << dataset;
+					}
+				}
+
+			}
+
+			return pointDatasets;
+			});
+
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
-	_geneNameAction.initialize("A1BG", "");
-	_species1Name.initialize("Species1");
-	_species2Name.initialize("Species2");
+	_geneNameAction.setString("A1BG");
+	_species1Name.setString("Species1");
+	_species2Name.setString("Species2");
 	_selectedCrossspeciesclusterFlag = true;
-	_selectedCrossspeciescluster.initialize("");
+	_selectedCrossspeciescluster.setString("");
 	_neighborhoodAction.setDefaultWidgetFlags(OptionAction::ComboBox);
-	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory", "CGE-derived inhibitory");
+	_neighborhoodAction.initialize(QStringList({ "Non-neuronal cells","IT-projecting excitatory","Non-IT-projecting excitatory","CGE-derived inhibitory","MGE-derived inhibitory" }), "CGE-derived inhibitory");
 	//_humancomparisonAction.setDefaultWidgetFlags(ToggleAction::PushButton);
 	//_humancomparisonAction.initialize(false, false);
 	//_humancomparisonAction.setText("Gene expression: all species");
@@ -81,11 +140,11 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 
 	//_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_deStatsDataset1Action.publish("Pop Pyramid:: DE Dataset1");
+
 	//_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_deStatsDataset2Action.publish("Pop Pyramid:: DE Dataset2");
+
 	//_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	//_selectedCrossspeciescluster.publish("Pop Pyramid:: Selected CrossSpecies Cluster");
+
 
 	//_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	//_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
@@ -94,25 +153,24 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
 
-	_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_neighborhoodAction.publish("ParallelBars::Neighbhorhood");
+	//_neighborhoodAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
 
-	_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
-	_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
-	_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
-	_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
+	//_geneNameAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_geneNameAction.connectToPublicActionByName("Cluster Differential Expression 1::LastSelectedId");
+	//_species1Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_species1Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName1");
+	//_species2Name.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_species2Name.connectToPublicActionByName("Cluster Differential Expression 1::DatasetName2");
+	//_selectedCrossspeciescluster.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_selectedCrossspeciescluster.connectToPublicActionByName("GlobalSelectedCrossspeciesCluster");
 
-	_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
-	_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
-	_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
+	//_deStatsDataset1Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset1Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset1");
+	//_deStatsDataset2Action.setConnectionPermissionsFlag(ConnectionPermissionFlag::All);
+	//_deStatsDataset2Action.connectToPublicActionByName("Pop Pyramid:: DE Dataset2");
 
-	_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
-	_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
+	//_selectionColorAction.setConnectionPermissionsFlag(ConnectionPermissionFlag::ConnectViaApi);
+	//_selectionColorAction.connectToPublicActionByName("GlobalSelectionColor");
 	const auto updateGeneName = [this]() -> void
 	{
 		updateData();
@@ -194,10 +252,10 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 
 	const auto updateNeighborhood = [this]() -> void
 	{
-		if (!_AllcrossSpeciesDatasets.isEmpty() && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
+		if (_AllcrossSpeciesDatasets.getDatasets().size()!=0 && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
 		{
 			hdps::Datasets filteredDatasets;
-			for (auto dataset : _AllcrossSpeciesDatasets)
+			for (auto dataset : _AllcrossSpeciesDatasets.getDatasets())
 			{
 				std::string str1 = dataset->getGuiName().toStdString();
 				std::string str2 = "_" + _neighborhoodAction.getCurrentText().toStdString() + "_cross_species_cluster";
@@ -207,7 +265,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 				}
 			}
 
-			if (!filteredDatasets.isEmpty())
+			if (filteredDatasets.size() != 0)
 			{
 				for (auto dataset : filteredDatasets)
 				{
@@ -382,12 +440,12 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	};
 	connect(&_radioButtonforHumandifferentialExpression, &QRadioButton::toggled, this, RadioButtonHumandifferentialExpression);
 
-	updateDatasetPickerAction();
+	//updateDatasetPickerAction();
 }
 
 
 ParallelBarsOptionsAction::Widget::Widget(QWidget* parent, ParallelBarsOptionsAction* ParallelBarsOptionsAction) :
-	WidgetActionWidget(parent, ParallelBarsOptionsAction, State::Standard)
+	WidgetActionWidget(parent, ParallelBarsOptionsAction)
 {
 }
 
@@ -395,7 +453,7 @@ void ParallelBarsOptionsAction::updateData()
 {
 
 
-	if (!_marmosetDEDataset.getDatasetGuid().isEmpty() && !_rhesusDEDataset.getDatasetGuid().isEmpty() && !_gorillaDEDataset.getDatasetGuid().isEmpty() && !_chimpDEDataset.getDatasetGuid().isEmpty() && !_humanDEDataset.getDatasetGuid().isEmpty() && !_marmosetClusterDataset.getDatasetGuid().isEmpty() && !_rhesusClusterDataset.getDatasetGuid().isEmpty() && !_gorillaClusterDataset.getDatasetGuid().isEmpty() && !_chimpClusterDataset.getDatasetGuid().isEmpty() && !_humanClusterDataset.getDatasetGuid().isEmpty())
+	if (_marmosetDEDataset.getDatasetId()!="" && _rhesusDEDataset.getDatasetId() != "" && _gorillaDEDataset.getDatasetId() != "" && _chimpDEDataset.getDatasetId() != "" && _humanDEDataset.getDatasetId() != "" && _marmosetClusterDataset.getDatasetId() != "" && _rhesusClusterDataset.getDatasetId() != "" && _gorillaClusterDataset.getDatasetId()!="" && _chimpClusterDataset.getDatasetId() != "" && _humanClusterDataset.getDatasetId() != "")
 	{
 
 		//qDebug() << "+++++++++++++++++++++++++++++++++++++";
@@ -810,49 +868,49 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 	}
 }
 
-void ParallelBarsOptionsAction::updateDatasetPickerAction()
-{
-	_AllcrossSpeciesDatasets.clear();
-	auto ClusterDatasets = _core->requestAllDataSets(QVector<hdps::DataType> {ClusterType});
-	auto filteredClusterDatasets = ClusterDatasets;
-	for (auto dataset : ClusterDatasets)
-	{
-		std::string str1 = dataset->getGuiName().toStdString();
-		std::string str2 = "cross_species_cluster";
-		if (strstr(str1.c_str(), str2.c_str()))
-		{
-			_AllcrossSpeciesDatasets.append(dataset);
-		}
-		//else {
-		//	ClusterDatasets.removeOne(dataset);
-		//}
-	}
-
-	auto datasets = _core->requestAllDataSets(QVector<hdps::DataType> {PointType});
-	auto filteredDEStatsDatasets = datasets;
-	for (auto dataset : datasets)
-	{
-		std::string str1 = dataset->getGuiName().toStdString();
-		std::string str2 = "DE_Statistics";
-		if (strstr(str1.c_str(), str2.c_str()))
-		{
-		}
-		else {
-			filteredDEStatsDatasets.removeOne(dataset);
-		}
-	}
-
-
-	_deStatsDataset1Action.setDatasets(filteredDEStatsDatasets);
-	_deStatsDataset1Action.setPlaceHolderString("deStats dataset1");
-	_deStatsDataset2Action.setDatasets(filteredDEStatsDatasets);
-	_deStatsDataset2Action.setPlaceHolderString("deStats dataset2");
-	if (filteredDEStatsDatasets.isEmpty())
-	{
-		//_barSettingsAction.setEnabled(false);
-	}
-
-}
+//void ParallelBarsOptionsAction::updateDatasetPickerAction()
+//{
+//	_AllcrossSpeciesDatasets.clear();
+//	auto ClusterDatasets = _core->requestAllDataSets(QVector<hdps::DataType> {ClusterType});
+//	auto filteredClusterDatasets = ClusterDatasets;
+//	for (auto dataset : ClusterDatasets)
+//	{
+//		std::string str1 = dataset->getGuiName().toStdString();
+//		std::string str2 = "cross_species_cluster";
+//		if (strstr(str1.c_str(), str2.c_str()))
+//		{
+//			_AllcrossSpeciesDatasets.append(dataset);
+//		}
+//		//else {
+//		//	ClusterDatasets.removeOne(dataset);
+//		//}
+//	}
+//
+//	auto datasets = _core->requestAllDataSets(QVector<hdps::DataType> {PointType});
+//	auto filteredDEStatsDatasets = datasets;
+//	for (auto dataset : datasets)
+//	{
+//		std::string str1 = dataset->getGuiName().toStdString();
+//		std::string str2 = "DE_Statistics";
+//		if (strstr(str1.c_str(), str2.c_str()))
+//		{
+//		}
+//		else {
+//			filteredDEStatsDatasets.removeOne(dataset);
+//		}
+//	}
+//
+//
+//	_deStatsDataset1Action.setDatasets(filteredDEStatsDatasets);
+//	_deStatsDataset1Action.setPlaceHolderString("deStats dataset1");
+//	_deStatsDataset2Action.setDatasets(filteredDEStatsDatasets);
+//	_deStatsDataset2Action.setPlaceHolderString("deStats dataset2");
+//	if (filteredDEStatsDatasets.isEmpty())
+//	{
+//		//_barSettingsAction.setEnabled(false);
+//	}
+//
+//}
 
 ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidget* parent, deStatsDataset1SelectionAction* deStatsDataset1SelectAction) :
 	WidgetActionWidget(parent, deStatsDataset1SelectAction)
@@ -887,10 +945,11 @@ ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidge
 
 	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._deStatsDataset2Action.createLabelWidget(this), selectiondeStats2Widget);
 
-	setPopupLayout(selectionExampledeStatsOptionLayout);
+	setLayout(selectionExampledeStatsOptionLayout);
 }
 
 inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset1SelectionAction(ParallelBarsOptionsAction& ParallelBarsOptionsAction) :
+	WidgetAction(nullptr, "deStatsDataset1SelectionAction"),
 	_ParallelBarsOptionsAction(ParallelBarsOptionsAction)
 {
 	setText("Options");
@@ -898,32 +957,29 @@ inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset
 
 }
 
-void ParallelBarsOptionsAction::onDataEvent(hdps::DataEvent* dataEvent)
+void ParallelBarsOptionsAction::onDataEvent(hdps::DatasetEvent* dataEvent)
 {
-	if (dataEvent->getType() == hdps::EventType::DataAdded)
+	if (dataEvent->getType() == hdps::EventType::DatasetAdded)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataRemoved)
+	if (dataEvent->getType() == hdps::EventType::DatasetRemoved)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChildAdded)
+	if (dataEvent->getType() == hdps::EventType::DatasetChildAdded)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChildRemoved)
+	if (dataEvent->getType() == hdps::EventType::DatasetChildRemoved)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataChanged)
+	if (dataEvent->getType() == hdps::EventType::DatasetDataChanged)
 	{
-		updateDatasetPickerAction();
+		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DataGuiNameChanged)
-	{
-		updateDatasetPickerAction();
-	}
+
 
 }
 
@@ -940,13 +996,14 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 {
 	WidgetAction::fromVariantMap(variantMap);
 
-	//_deStatsDataset1Action.fromParentVariantMap(variantMap);
-	//_deStatsDataset2Action.fromParentVariantMap(variantMap);
-	//_geneNameAction.fromParentVariantMap(variantMap);
-	//_neighborhoodAction.fromParentVariantMap(variantMap);
-	//_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
+	_deStatsDataset1Action.fromParentVariantMap(variantMap);
+	_deStatsDataset2Action.fromParentVariantMap(variantMap);
+	_geneNameAction.fromParentVariantMap(variantMap);
+	_neighborhoodAction.fromParentVariantMap(variantMap);
+	_selectedCrossspeciescluster.fromParentVariantMap(variantMap);
 	_species1Name.fromParentVariantMap(variantMap);
 	_species2Name.fromParentVariantMap(variantMap);
+	_selectionColorAction.fromParentVariantMap(variantMap);
 	initLoader();
 
 }
@@ -955,12 +1012,13 @@ QVariantMap ParallelBarsOptionsAction::toVariantMap() const
 {
 	QVariantMap variantMap = WidgetAction::toVariantMap();
 
-	//_deStatsDataset1Action.insertIntoVariantMap(variantMap);
-	//_deStatsDataset2Action.insertIntoVariantMap(variantMap);
-	//_neighborhoodAction.insertIntoVariantMap(variantMap);
-	//_geneNameAction.insertIntoVariantMap(variantMap);
-	//_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
+	_deStatsDataset1Action.insertIntoVariantMap(variantMap);
+	_deStatsDataset2Action.insertIntoVariantMap(variantMap);
+	_neighborhoodAction.insertIntoVariantMap(variantMap);
+	_geneNameAction.insertIntoVariantMap(variantMap);
+	_selectedCrossspeciescluster.insertIntoVariantMap(variantMap);
 	_species1Name.insertIntoVariantMap(variantMap);
 	_species2Name.insertIntoVariantMap(variantMap);
+	_selectionColorAction.insertIntoVariantMap(variantMap);
 	return variantMap;
 }
