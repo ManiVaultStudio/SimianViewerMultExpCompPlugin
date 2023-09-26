@@ -12,17 +12,17 @@ class ParallelBarsViewerPluginConan(ConanFile):
     """Class to package ParallelBarsViewerPlugin using conan
 
     Packages both RELEASE and DEBUG.
-    Uses rules_support (github.com/hdps/rulessupport) to derive
+    Uses rules_support (github.com/ManiVaultStudio/rulessupport) to derive
     versioninfo based on the branch naming convention
-    as described in https://github.com/hdps/core/wiki/Branch-naming-rules
+    as described in https://github.com/ManiVaultStudio/core/wiki/Branch-naming-rules
     """
 
     name = "ParallelBarsViewerPlugin"
     description = (
-        "A plugin for viewing exampleD3 data in the high-dimensional plugin system (HDPS)."
+        "A plugin for viewing exampleD3 data in the high-dimensional plugin system (ManiVaultStudio)."
     )
-    topics = ("hdps", "plugin", "ParallelBars data", "viewing")
-    url = "https://github.com/hdps/ParallelBarsViewerPlugin"
+    topics = ("ManiVaultStudio", "plugin", "ParallelBars data", "viewing")
+    url = "https://github.com/ManiVaultStudio/ParallelBarsViewerPlugin"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
 
@@ -36,7 +36,7 @@ class ParallelBarsViewerPluginConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "hdps/ParallelBarsViewerPlugin",
+        "subfolder": "ManiVaultStudio/ParallelBarsViewerPlugin",
         "url": "auto",
         "revision": "auto",
     }
@@ -98,7 +98,7 @@ class ParallelBarsViewerPluginConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(build_script_folder="hdps/ParallelBarsViewerPlugin")
+        cmake.configure(build_script_folder="ManiVaultStudio/ParallelBarsViewerPlugin")
         cmake.verbose = True
         return cmake
 
