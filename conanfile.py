@@ -8,8 +8,8 @@ import subprocess
 from rules_support import PluginBranchInfo
 
 
-class SimianViewerMultiSpeciesGeneExpressionComparisonPluginConan(ConanFile):
-    """Class to package SimianViewerMultiSpeciesGeneExpressionComparisonPlugin using conan
+class SimianViewerMultipleGeneExpressionComparisonPluginConan(ConanFile):
+    """Class to package SimianViewerMultipleGeneExpressionComparisonPlugin using conan
 
     Packages both RELEASE and DEBUG.
     Uses rules_support (github.com/ManiVaultStudio/rulessupport) to derive
@@ -17,12 +17,12 @@ class SimianViewerMultiSpeciesGeneExpressionComparisonPluginConan(ConanFile):
     as described in https://github.com/ManiVaultStudio/core/wiki/Branch-naming-rules
     """
 
-    name = "SimianViewerMultiSpeciesGeneExpressionComparisonPlugin"
+    name = "SimianViewerMultipleGeneExpressionComparisonPlugin"
     description = (
         "A plugin for viewing exampleD3 data in the high-dimensional plugin system (ManiVaultStudio)."
     )
     topics = ("ManiVaultStudio", "plugin", "ParallelBars data", "viewing")
-    url = "https://github.com/ManiVaultStudio/SimianViewerMultiSpeciesGeneExpressionComparisonPlugin"
+    url = "https://github.com/ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
 
@@ -36,7 +36,7 @@ class SimianViewerMultiSpeciesGeneExpressionComparisonPluginConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "ManiVaultStudio/SimianViewerMultiSpeciesGeneExpressionComparisonPlugin",
+        "subfolder": "ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin",
         "url": "auto",
         "revision": "auto",
     }
@@ -98,7 +98,7 @@ class SimianViewerMultiSpeciesGeneExpressionComparisonPluginConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(build_script_folder="ManiVaultStudio/SimianViewerMultiSpeciesGeneExpressionComparisonPlugin")
+        cmake.configure(build_script_folder="ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin")
         cmake.verbose = True
         return cmake
 
