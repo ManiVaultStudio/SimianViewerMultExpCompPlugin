@@ -8,8 +8,8 @@ import subprocess
 from rules_support import PluginBranchInfo
 
 
-class SimianViewerMultipleGeneExpressionComparisonPluginConan(ConanFile):
-    """Class to package SimianViewerMultipleGeneExpressionComparisonPlugin using conan
+class SimianViewerMultExpCompPluginConan(ConanFile):
+    """Class to package SimianViewerMultExpCompPlugin using conan
 
     Packages both RELEASE and DEBUG.
     Uses rules_support (github.com/ManiVaultStudio/rulessupport) to derive
@@ -17,12 +17,12 @@ class SimianViewerMultipleGeneExpressionComparisonPluginConan(ConanFile):
     as described in https://github.com/ManiVaultStudio/core/wiki/Branch-naming-rules
     """
 
-    name = "SimianViewerMultipleGeneExpressionComparisonPlugin"
+    name = "SimianViewerMultExpCompPlugin"
     description = (
         "A plugin for viewing exampleD3 data in the high-dimensional plugin system (ManiVaultStudio)."
     )
     topics = ("ManiVaultStudio", "plugin", "ParallelBars data", "viewing")
-    url = "https://github.com/ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin"
+    url = "https://github.com/ManiVaultStudio/SimianViewerMultExpCompPlugin"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
 
@@ -36,7 +36,7 @@ class SimianViewerMultipleGeneExpressionComparisonPluginConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin",
+        "subfolder": "ManiVaultStudio/SimianViewerMultExpCompPlugin",
         "url": "auto",
         "revision": "auto",
     }
@@ -98,7 +98,7 @@ class SimianViewerMultipleGeneExpressionComparisonPluginConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(build_script_folder="ManiVaultStudio/SimianViewerMultipleGeneExpressionComparisonPlugin")
+        cmake.configure(build_script_folder="ManiVaultStudio/SimianViewerMultExpCompPlugin")
         cmake.verbose = True
         return cmake
 

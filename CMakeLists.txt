@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-set(PROJECT "SimianViewerMultipleGeneExpressionComparisonPlugin")
+set(PROJECT "SimianViewerMultExpCompPlugin")
 
 PROJECT(${PROJECT})
 
