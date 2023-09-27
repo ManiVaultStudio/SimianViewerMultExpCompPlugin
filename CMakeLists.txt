@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-set(PROJECT "ParallelBarsViewerPlugin")
+set(PROJECT "SimianViewerMultiSpeciesGeneExpressionComparisonPlugin")
 
 PROJECT(${PROJECT})
 

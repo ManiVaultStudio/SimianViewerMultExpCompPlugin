@@ -1,4 +1,4 @@
-name: ParallelBarsViewerPlugin
+name: SimianViewerMultiSpeciesGeneExpressionComparisonPlugin
 
 on:
   push:
