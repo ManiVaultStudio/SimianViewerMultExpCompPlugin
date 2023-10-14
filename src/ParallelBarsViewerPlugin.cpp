@@ -18,7 +18,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ParallelBarsViewerPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 // =============================================================================
 // View
@@ -88,9 +88,9 @@ void ParallelBarsViewerPlugin::init()
 
 }
 
-void ParallelBarsViewerPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
+void ParallelBarsViewerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
-	if (dataEvent->getType() == hdps::EventType::DatasetDataSelectionChanged)
+	if (dataEvent->getType() == mv::EventType::DatasetDataSelectionChanged)
 	{
 
 
@@ -222,14 +222,14 @@ ViewPlugin* ParallelBarsViewerPluginFactory::produce()
 	return new ParallelBarsViewerPlugin(this);
 }
 
-hdps::DataTypes ParallelBarsViewerPluginFactory::supportedDataTypes() const
+mv::DataTypes ParallelBarsViewerPluginFactory::supportedDataTypes() const
 {
 	DataTypes supportedTypes;
 	return supportedTypes;
 }
 
 
-hdps::gui::PluginTriggerActions ParallelBarsViewerPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+mv::gui::PluginTriggerActions ParallelBarsViewerPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
 	PluginTriggerActions pluginTriggerActions;
 

@@ -15,7 +15,7 @@ class QWebChannel;
 
 class ParallelBarsViewerWidget;
 
-class ParallelBarsViewerCommunicationObject : public hdps::gui::WebCommunicationObject
+class ParallelBarsViewerCommunicationObject : public mv::gui::WebCommunicationObject
 {
 	Q_OBJECT
 public:
@@ -39,7 +39,7 @@ private:
 	ParallelBarsViewerWidget* _parent;
 };
 
-class ParallelBarsViewerWidget : public hdps::gui::WebWidget
+class ParallelBarsViewerWidget : public mv::gui::WebWidget
 {
 	Q_OBJECT
 public:

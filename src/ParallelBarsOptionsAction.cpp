@@ -4,10 +4,10 @@
 #include <QFileDialog>
 #include <QPageLayout>
 #include <QWebEngineView>
-using namespace hdps;
-using namespace hdps::gui;
+using namespace mv;
+using namespace mv::gui;
 
-ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, hdps::CoreInterface* core) :
+ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, mv::CoreInterface* core) :
 	WidgetAction(&ParallelBarsViewerPlugin,"ParallelBarsViewerPlugin"),
 	_ParallelBarsViewerPlugin(ParallelBarsViewerPlugin),
 	_core(core),
@@ -53,7 +53,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
 	_AllcrossSpeciesDatasets.setShowFullPathName(false);
-	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
 		Datasets clusterDatasets;
 
 		for (auto dataset : datasets)
@@ -69,7 +69,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 		return clusterDatasets;
 		});
 	_deStatsDataset1Action.setShowFullPathName(false);
-	_deStatsDataset1Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+	_deStatsDataset1Action.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
 		Datasets pointDatasets;
 
 		for (auto dataset : datasets)
@@ -89,7 +89,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 		return pointDatasets;
 		});
 	_deStatsDataset2Action.setShowFullPathName(false);
-		_deStatsDataset2Action.setDatasetsFilterFunction([this](const hdps::Datasets& datasets) ->hdps::Datasets {
+		_deStatsDataset2Action.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
 			Datasets pointDatasets;
 
 			for (auto dataset : datasets)
@@ -254,7 +254,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	{
 		if (_AllcrossSpeciesDatasets.getDatasets().size()!=0 && _neighborhoodAction.getCurrentText() != "" && _geneNameAction.getString() != "")
 		{
-			hdps::Datasets filteredDatasets;
+			mv::Datasets filteredDatasets;
 			for (auto dataset : _AllcrossSpeciesDatasets.getDatasets())
 			{
 				std::string str1 = dataset->getGuiName().toStdString();
@@ -852,7 +852,7 @@ void ParallelBarsOptionsAction::updateData()
 
 
 
-void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, hdps::Dataset<Points> deStatsDataset)
+void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, mv::Dataset<Points> deStatsDataset)
 
 {
 	auto it1 = std::find(geneNames->begin(), geneNames->end(), _geneNameAction.getString());
@@ -871,7 +871,7 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 //void ParallelBarsOptionsAction::updateDatasetPickerAction()
 //{
 //	_AllcrossSpeciesDatasets.clear();
-//	auto ClusterDatasets = _core->requestAllDataSets(QVector<hdps::DataType> {ClusterType});
+//	auto ClusterDatasets = _core->requestAllDataSets(QVector<mv::DataType> {ClusterType});
 //	auto filteredClusterDatasets = ClusterDatasets;
 //	for (auto dataset : ClusterDatasets)
 //	{
@@ -886,7 +886,7 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 //		//}
 //	}
 //
-//	auto datasets = _core->requestAllDataSets(QVector<hdps::DataType> {PointType});
+//	auto datasets = _core->requestAllDataSets(QVector<mv::DataType> {PointType});
 //	auto filteredDEStatsDatasets = datasets;
 //	for (auto dataset : datasets)
 //	{
@@ -957,25 +957,25 @@ inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset
 
 }
 
-void ParallelBarsOptionsAction::onDataEvent(hdps::DatasetEvent* dataEvent)
+void ParallelBarsOptionsAction::onDataEvent(mv::DatasetEvent* dataEvent)
 {
-	if (dataEvent->getType() == hdps::EventType::DatasetAdded)
+	if (dataEvent->getType() == mv::EventType::DatasetAdded)
 	{
 		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DatasetRemoved)
+	if (dataEvent->getType() == mv::EventType::DatasetRemoved)
 	{
 		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DatasetChildAdded)
+	if (dataEvent->getType() == mv::EventType::DatasetChildAdded)
 	{
 		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DatasetChildRemoved)
+	if (dataEvent->getType() == mv::EventType::DatasetChildRemoved)
 	{
 		//updateDatasetPickerAction();
 	}
-	if (dataEvent->getType() == hdps::EventType::DatasetDataChanged)
+	if (dataEvent->getType() == mv::EventType::DatasetDataChanged)
 	{
 		//updateDatasetPickerAction();
 	}

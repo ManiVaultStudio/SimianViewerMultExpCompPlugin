@@ -10,8 +10,8 @@
 #include <QStackedWidget>
 #include <QList>
 
-using namespace hdps::plugin;
-using namespace hdps::util;
+using namespace mv::plugin;
+using namespace mv::util;
 
 class Points;
 //class ParallelBarsViewerWidget;
@@ -34,9 +34,9 @@ public:
 
 	void init() override;
 
-	void onDataEvent(hdps::DatasetEvent* dataEvent);
+	void onDataEvent(mv::DatasetEvent* dataEvent);
 
-	hdps::CoreInterface* getCore() { return _core; }
+	mv::CoreInterface* getCore() { return _core; }
 
 	ParallelBarsViewerWidget& getBarChartWidget() { return _ParallelBars_viewer; }
 	ParallelBarsOptionsAction& getParallelBarsOptionsAction() { return _ParallelBarsOptionsAction; }
@@ -68,7 +68,7 @@ private:
 	ParallelBarsOptionsAction _ParallelBarsOptionsAction;
 	/** ParallelBarsViewer widget displaying cluster data */
 
-	hdps::EventListener     _eventListener;
+	mv::EventListener     _eventListener;
 };
 
 // =============================================================================
@@ -77,7 +77,7 @@ private:
 
 class ParallelBarsViewerPluginFactory : public ViewPluginFactory
 {
-	Q_INTERFACES(hdps::plugin::ViewPluginFactory hdps::plugin::PluginFactory)
+	Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
 		Q_OBJECT
 		Q_PLUGIN_METADATA(IID   "nl.tudelft.ParallelBarsViewerPlugin"
 			FILE  "ParallelBarsViewerPlugin.json")
@@ -95,14 +95,14 @@ public:
 
 	ViewPlugin* produce() override;
 
-	hdps::DataTypes supportedDataTypes() const override;
+	mv::DataTypes supportedDataTypes() const override;
 
 	/**
 	 * Get plugin trigger actions given \p datasets
 	 * @param datasets Vector of input datasets
 	 * @return Vector of plugin trigger actions
 	 */
-	PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+	PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 	//public: // Help
 	//
 	///**

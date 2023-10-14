@@ -33,12 +33,12 @@
 #include <QLabel>
 #include <string>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 class QMenu;
 class ParallelBarsViewerPlugin;
 //class ParallelBarsViewerWidget;
 class FetchMetaData;
-namespace hdps
+namespace mv
 {
 	class CoreInterface;
 }
@@ -60,7 +60,7 @@ public:
 	class deStatsDataset1SelectionAction : public WidgetAction
 	{
 	protected:
-		class Widget : public hdps::gui::WidgetActionWidget {
+		class Widget : public mv::gui::WidgetActionWidget {
 		public:
 			Widget(QWidget* parent, deStatsDataset1SelectionAction* deStatsDataset1SelectAction);
 
@@ -83,10 +83,10 @@ public:
 
 
 public:
-	void onDataEvent(hdps::DatasetEvent* dataEvent);
+	void onDataEvent(mv::DatasetEvent* dataEvent);
 protected:
 
-	class Widget : public hdps::gui::WidgetActionWidget {
+	class Widget : public mv::gui::WidgetActionWidget {
 	public:
 		Widget(QWidget* parent, ParallelBarsOptionsAction* ParallelBarsOptionsAction);
 	};
@@ -96,11 +96,11 @@ protected:
 	};
 
 public:
-	ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, hdps::CoreInterface* core);
+	ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, mv::CoreInterface* core);
 
 private:
 	void updateData();
-	void extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, hdps::Dataset<Points> deStatsDataset);
+	void extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, mv::Dataset<Points> deStatsDataset);
 protected:
 	void updateDatasetPickerAction();
 
@@ -144,7 +144,7 @@ public: // Serialization
 
 protected:
 	ParallelBarsViewerPlugin& _ParallelBarsViewerPlugin;
-	hdps::CoreInterface* _core;
+	mv::CoreInterface* _core;
 	FetchMetaData* _metaData;
 	std::vector<std::vector<std::string>>                _ParallelBarsData;
 	deStatsDataset1SelectionAction               _deStatsDataset1SelectionAction;
@@ -156,18 +156,18 @@ protected:
 	//TriggerAction                _helpAction;
 	std::map<std::string, speciesStorage> _deStatsDataStorage;
 	DatasetPickerAction _AllcrossSpeciesDatasets;
-	hdps::Dataset<Points> _humanDEDataset;
-	hdps::Dataset<Points>  _chimpDEDataset;
-	hdps::Dataset<Points>  _gorillaDEDataset;
-	hdps::Dataset<Points>  _rhesusDEDataset;
-	hdps::Dataset<Points>  _marmosetDEDataset;
+	mv::Dataset<Points> _humanDEDataset;
+	mv::Dataset<Points>  _chimpDEDataset;
+	mv::Dataset<Points>  _gorillaDEDataset;
+	mv::Dataset<Points>  _rhesusDEDataset;
+	mv::Dataset<Points>  _marmosetDEDataset;
 	DatasetPickerAction                 _deStatsDataset1Action;
 	DatasetPickerAction                 _deStatsDataset2Action;
-	hdps::Dataset<Clusters> _humanClusterDataset;
-	hdps::Dataset<Clusters>  _chimpClusterDataset;
-	hdps::Dataset<Clusters>  _gorillaClusterDataset;
-	hdps::Dataset<Clusters>  _rhesusClusterDataset;
-	hdps::Dataset<Clusters>  _marmosetClusterDataset;
+	mv::Dataset<Clusters> _humanClusterDataset;
+	mv::Dataset<Clusters>  _chimpClusterDataset;
+	mv::Dataset<Clusters>  _gorillaClusterDataset;
+	mv::Dataset<Clusters>  _rhesusClusterDataset;
+	mv::Dataset<Clusters>  _marmosetClusterDataset;
 	StringAction                  _selectedCrossspeciescluster;
 	StringAction                  _species1Name;
 	StringAction                  _species2Name;
@@ -181,7 +181,7 @@ protected:
 	StringAction _geneNameAction;
 	//ToggleAction _humancomparisonAction;
 	//ToggleAction _humancomparisonAbsoluteValuesAction;
-	hdps::EventListener     _eventListener;
+	mv::EventListener     _eventListener;
 	QRadioButton _radioButtonforAllSpeciesGeneExpression;
 	QRadioButton _radioButtonforHumandifferentialExpression;
 	friend class ChannelAction;
