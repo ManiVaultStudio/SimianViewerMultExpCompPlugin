@@ -1,6 +1,6 @@
 var _data = null;
 var flag = false;
-var _dataQueue = new SimianViewerMultExpCompViewerDataQueue(1, queueData);
+var _dataQueue = new SimianViewerMultExpCompDataQueue(1, queueData);
 var _defaultValues = null;
 var yAxisLabelsLeft;
 window.onresize = doALoadOfStuff;

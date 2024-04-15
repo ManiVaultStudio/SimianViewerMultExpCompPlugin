@@ -1,5 +1,5 @@
 #include "SimianViewerMultExpCompOptionsAction.h"
-#include "SimianViewerMultExpCompViewerPlugin.h"
+#include "SimianViewerMultExpCompPlugin.h"
 #include<string>  
 #include <QFileDialog>
 #include <QPageLayout>
@@ -7,9 +7,9 @@
 using namespace mv;
 using namespace mv::gui;
 
-SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompViewerPlugin& SimianViewerMultExpCompViewerPlugin, mv::CoreInterface* core) :
-	WidgetAction(&SimianViewerMultExpCompViewerPlugin,"SimianViewerMultExpCompViewerPlugin"),
-	_SimianViewerMultExpCompViewerPlugin(SimianViewerMultExpCompViewerPlugin),
+SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompPlugin& SimianViewerMultExpCompPlugin, mv::CoreInterface* core) :
+	WidgetAction(&SimianViewerMultExpCompPlugin,"SimianViewerMultExpCompPlugin"),
+	_SimianViewerMultExpCompPlugin(SimianViewerMultExpCompPlugin),
 	_core(core),
 	_geneNameAction(this, "SelectedID"),
 	_deStatsDataset1Action(this, "DE Dataset1"),
@@ -128,7 +128,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
-	//	_SimianViewerMultExpCompViewerPlugin.getTriggerHelpAction().trigger();
+	//	_SimianViewerMultExpCompPlugin.getTriggerHelpAction().trigger();
 	//	});
 	//_crossSpecies1HeatMapCellAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	//_crossSpecies2HeatMapCellAction.setDefaultWidgetFlags(OptionAction::ComboBox);
@@ -188,7 +188,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 				+ QString::number(color.blue(), 16).rightJustified(2, '0');
 
 
-			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
+			_SimianViewerMultExpCompPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
 
 		}
 
@@ -201,7 +201,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	{
 		if (_selectedCrossspeciesclusterFlag)
 		{
-			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
+			_SimianViewerMultExpCompPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
 		}
 		_selectedCrossspeciesclusterFlag = true;
 
@@ -230,8 +230,8 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	//		QPageSize ps;
 	//		//qDebug() << "height" << _simianViewerPlugin.getSimianViewerWidget()->height();
 
-	//		int width = _SimianViewerMultExpCompViewerPlugin.getBarChartWidget().width();
-	//		int height = _SimianViewerMultExpCompViewerPlugin.getBarChartWidget().height();
+	//		int width = _SimianViewerMultExpCompPlugin.getBarChartWidget().width();
+	//		int height = _SimianViewerMultExpCompPlugin.getBarChartWidget().height();
 	//		int reducedWidth = static_cast<double>(width) / 100 * 75;
 	//		int reducedHeight = static_cast<double>(height) / 100 * 78;
 	//		//qDebug() << "width" << width;
@@ -243,7 +243,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	//		pl.setOrientation(QPageLayout::Portrait);
 
 
-	//		_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
+	//		_SimianViewerMultExpCompPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
 
 	//	}
 	//	//..getSimianViewerWidget()->getPage()->printToPdf(fileName, pl);
@@ -373,14 +373,14 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	{
 		if (_species1Name.getString() != "")
 		{
-			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+			_SimianViewerMultExpCompPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
 		}
 	};
 	const auto updateSpecies2Name = [this]() -> void
 	{
 		if (_species2Name.getString() != "")
 		{
-			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+			_SimianViewerMultExpCompPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 		}
 	};
 	connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
@@ -845,7 +845,7 @@ void SimianViewerMultExpCompOptionsAction::updateData()
 		jsonData += '"';
 		jsonData += "}";
 		jsonData += "]}]";
-		_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setData(jsonData);
+		_SimianViewerMultExpCompPlugin.getBarChartWidget().setData(jsonData);
 
 	}
 }
@@ -987,8 +987,8 @@ void SimianViewerMultExpCompOptionsAction::initLoader()
 {
 
 	updateData();
-	_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
-	_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+	_SimianViewerMultExpCompPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+	_SimianViewerMultExpCompPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 
 }
 

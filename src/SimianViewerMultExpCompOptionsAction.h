@@ -15,7 +15,7 @@
 #include "Set.h"
 #include <AnalysisPlugin.h>
 #include <memory>
-#include "SimianViewerMultExpCompViewerWidget.h"
+#include "SimianViewerMultExpCompWidget.h"
 #include <algorithm>    
 #include <QDebug>
 #include <QLabel>
@@ -27,7 +27,7 @@
 #include <QString>
 #include <string>
 #include<QRadioButton>
-//#include "SimianViewerMultExpCompViewerPlugin.h"
+//#include "SimianViewerMultExpCompPlugin.h"
 #include <event/Event.h>
 #include <QDebug>
 #include <QLabel>
@@ -35,8 +35,8 @@
 
 using namespace mv::gui;
 class QMenu;
-class SimianViewerMultExpCompViewerPlugin;
-//class SimianViewerMultExpCompViewerWidget;
+class SimianViewerMultExpCompPlugin;
+//class SimianViewerMultExpCompWidget;
 class FetchMetaData;
 namespace mv
 {
@@ -96,7 +96,7 @@ protected:
 	};
 
 public:
-	SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompViewerPlugin& SimianViewerMultExpCompViewerPlugin, mv::CoreInterface* core);
+	SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompPlugin& SimianViewerMultExpCompPlugin, mv::CoreInterface* core);
 
 private:
 	void updateData();
@@ -143,7 +143,7 @@ public: // Serialization
 	QVariantMap toVariantMap() const override;
 
 protected:
-	SimianViewerMultExpCompViewerPlugin& _SimianViewerMultExpCompViewerPlugin;
+	SimianViewerMultExpCompPlugin& _SimianViewerMultExpCompPlugin;
 	mv::CoreInterface* _core;
 	FetchMetaData* _metaData;
 	std::vector<std::vector<std::string>>                _SimianViewerMultExpCompData;

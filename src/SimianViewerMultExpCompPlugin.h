@@ -3,7 +3,7 @@
 #include <ViewPlugin.h>
 #include "Dataset.h"
 #include "SimianViewerMultExpCompOptionsAction.h"
-#include "SimianViewerMultExpCompViewerWidget.h"
+#include "SimianViewerMultExpCompWidget.h"
 #include "widgets/DropWidget.h"
 #include <QBoxLayout>
 #include <QLabel>
@@ -14,7 +14,7 @@ using namespace mv::plugin;
 using namespace mv::util;
 
 class Points;
-//class SimianViewerMultExpCompViewerWidget;
+//class SimianViewerMultExpCompWidget;
 //class SimianViewerMultExpCompOptionsAction;
 
 // =============================================================================
@@ -22,15 +22,15 @@ class Points;
 // =============================================================================
 
 /**
- * SimianViewerMultExpCompViewer Plugin
+ * SimianViewerMultExpComp Plugin
  */
-class SimianViewerMultExpCompViewerPlugin : public ViewPlugin
+class SimianViewerMultExpCompPlugin : public ViewPlugin
 {
 	Q_OBJECT
 
 public:
-	SimianViewerMultExpCompViewerPlugin(const PluginFactory* factory);
-	~SimianViewerMultExpCompViewerPlugin(void) override;
+	SimianViewerMultExpCompPlugin(const PluginFactory* factory);
+	~SimianViewerMultExpCompPlugin(void) override;
 
 	void init() override;
 
@@ -38,7 +38,7 @@ public:
 
 	mv::CoreInterface* getCore() { return _core; }
 
-	SimianViewerMultExpCompViewerWidget& getBarChartWidget() { return _SimianViewerMultExpComp_viewer; }
+	SimianViewerMultExpCompWidget& getBarChartWidget() { return _SimianViewerMultExpComp_viewer; }
 	SimianViewerMultExpCompOptionsAction& getSimianViewerMultExpCompOptionsAction() { return _SimianViewerMultExpCompOptionsAction; }
 
 public: // Serialization
@@ -64,9 +64,9 @@ private:
 	void publishSelectionSpecies2(std::string selectedIDs);
 	void clusterSelection(std::string selectedIDs);
 
-	SimianViewerMultExpCompViewerWidget _SimianViewerMultExpComp_viewer;
+	SimianViewerMultExpCompWidget _SimianViewerMultExpComp_viewer;
 	SimianViewerMultExpCompOptionsAction _SimianViewerMultExpCompOptionsAction;
-	/** SimianViewerMultExpCompViewer widget displaying cluster data */
+	/** SimianViewerMultExpComp widget displaying cluster data */
 
 	mv::EventListener     _eventListener;
 };
@@ -75,16 +75,16 @@ private:
 // Factory
 // =============================================================================
 
-class SimianViewerMultExpCompViewerPluginFactory : public ViewPluginFactory
+class SimianViewerMultExpCompPluginFactory : public ViewPluginFactory
 {
 	Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID   "nl.tudelft.SimianViewerMultExpCompViewerPlugin"
-			FILE  "SimianViewerMultExpCompViewerPlugin.json")
+		Q_PLUGIN_METADATA(IID   "nl.tudelft.SimianViewerMultExpCompPlugin"
+			FILE  "SimianViewerMultExpCompPlugin.json")
 
 public:
-	SimianViewerMultExpCompViewerPluginFactory(void) {}
-	~SimianViewerMultExpCompViewerPluginFactory(void) override {}
+	SimianViewerMultExpCompPluginFactory(void) {}
+	~SimianViewerMultExpCompPluginFactory(void) override {}
 
 	/**
 	 * Get plugin icon

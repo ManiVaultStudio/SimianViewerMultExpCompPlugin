@@ -1,5 +1,5 @@
 {
-  "name": "SimianViewerMultExpComp",
+  "name": "SimianViewerMultExpCompPlugin",
   "version": "1",
   "dependencies": [ "Points" ]
 }

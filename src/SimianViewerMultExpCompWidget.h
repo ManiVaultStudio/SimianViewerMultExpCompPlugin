@@ -13,13 +13,13 @@ class QWebEnginePage;
 class QWebChannel;
 
 
-class SimianViewerMultExpCompViewerWidget;
+class SimianViewerMultExpCompWidget;
 
-class SimianViewerMultExpCompViewerCommunicationObject : public mv::gui::WebCommunicationObject
+class SimianViewerMultExpCompCommunicationObject : public mv::gui::WebCommunicationObject
 {
 	Q_OBJECT
 public:
-	SimianViewerMultExpCompViewerCommunicationObject(SimianViewerMultExpCompViewerWidget* parent);
+	SimianViewerMultExpCompCommunicationObject(SimianViewerMultExpCompWidget* parent);
 
 signals:
 	void qt_setData(QString data);
@@ -36,15 +36,15 @@ public slots:
 	void js_passSelectionSpecies2ToQt(QString data);
 	void js_crossspeciesclusterSelection(QString data);
 private:
-	SimianViewerMultExpCompViewerWidget* _parent;
+	SimianViewerMultExpCompWidget* _parent;
 };
 
-class SimianViewerMultExpCompViewerWidget : public mv::gui::WebWidget
+class SimianViewerMultExpCompWidget : public mv::gui::WebWidget
 {
 	Q_OBJECT
 public:
-	SimianViewerMultExpCompViewerWidget();
-	~SimianViewerMultExpCompViewerWidget() override;
+	SimianViewerMultExpCompWidget();
+	~SimianViewerMultExpCompWidget() override;
 
 	void addDataOption(const QString option);
 	void setData(std::string visDataContent);
@@ -74,7 +74,7 @@ private slots:
 	void initWebPage() override;
 
 private:
-	SimianViewerMultExpCompViewerCommunicationObject* _communicationObject;
+	SimianViewerMultExpCompCommunicationObject* _communicationObject;
 
 
 	/** Whether the web view has loaded and web-functions are ready to be called. */

@@ -1,4 +1,4 @@
-#include "SimianViewerMultExpCompViewerPlugin.h"
+#include "SimianViewerMultExpCompPlugin.h"
 
 #include "PointData/PointData.h"
 #include "event/Event.h"
@@ -16,7 +16,7 @@
 #include <vector>
 #include <sstream>
 
-Q_PLUGIN_METADATA(IID "nl.tudelft.SimianViewerMultExpCompViewerPlugin")
+Q_PLUGIN_METADATA(IID "nl.tudelft.SimianViewerMultExpCompPlugin")
 
 using namespace mv;
 
@@ -24,34 +24,34 @@ using namespace mv;
 // View
 // =============================================================================
 
-SimianViewerMultExpCompViewerPlugin::SimianViewerMultExpCompViewerPlugin(const PluginFactory* factory) :
+SimianViewerMultExpCompPlugin::SimianViewerMultExpCompPlugin(const PluginFactory* factory) :
 	ViewPlugin(factory),
 	_SimianViewerMultExpComp_viewer(),
 	_SimianViewerMultExpCompOptionsAction(*this, _core)
 {
-	setSerializationName("SimianViewerMultExpCompViewer");
+	setSerializationName("SimianViewerMultExpComp");
 
 }
 
-SimianViewerMultExpCompViewerPlugin::~SimianViewerMultExpCompViewerPlugin()
+SimianViewerMultExpCompPlugin::~SimianViewerMultExpCompPlugin()
 {
 }
 
-void SimianViewerMultExpCompViewerPlugin::init()
+void SimianViewerMultExpCompPlugin::init()
 {
-	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompViewerWidget::widgetInitialized, &_SimianViewerMultExpCompOptionsAction, &SimianViewerMultExpCompOptionsAction::initLoader);
+	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompWidget::widgetInitialized, &_SimianViewerMultExpCompOptionsAction, &SimianViewerMultExpCompOptionsAction::initLoader);
 	_SimianViewerMultExpComp_viewer.setPage(":/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html", "qrc:/SimianViewerMultExpComp_viewer/");
 	_SimianViewerMultExpComp_viewer.setContentsMargins(0, 0, 0, 0);
 	_SimianViewerMultExpComp_viewer.layout()->setContentsMargins(0, 0, 0, 0);
 	//_SimianViewerMultExpCompOptionsAction = new SimianViewerMultExpCompOptionsAction(*this, _core);
-	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompViewerWidget::passSelectionSpecies1ToQt, this, &SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies1);
+	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompWidget::passSelectionSpecies1ToQt, this, &SimianViewerMultExpCompPlugin::publishSelectionSpecies1);
 
-	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompViewerWidget::passSelectionSpecies2ToQt, this, &SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies2);
+	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompWidget::passSelectionSpecies2ToQt, this, &SimianViewerMultExpCompPlugin::publishSelectionSpecies2);
 
-	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompViewerWidget::crossspeciesclusterSelection, this, &SimianViewerMultExpCompViewerPlugin::clusterSelection);
+	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompWidget::crossspeciesclusterSelection, this, &SimianViewerMultExpCompPlugin::clusterSelection);
 
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataSelectionChanged));
-	_eventListener.registerDataEventByType(ClusterType, std::bind(&SimianViewerMultExpCompViewerPlugin::onDataEvent, this, std::placeholders::_1));
+	_eventListener.registerDataEventByType(ClusterType, std::bind(&SimianViewerMultExpCompPlugin::onDataEvent, this, std::placeholders::_1));
 
 	auto topToolbarWidget = new QWidget();
 	auto topToolbarLayout = new QHBoxLayout();
@@ -88,7 +88,7 @@ void SimianViewerMultExpCompViewerPlugin::init()
 
 }
 
-void SimianViewerMultExpCompViewerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
+void SimianViewerMultExpCompPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
 	if (dataEvent->getType() == mv::EventType::DatasetDataSelectionChanged)
 	{
@@ -97,7 +97,7 @@ void SimianViewerMultExpCompViewerPlugin::onDataEvent(mv::DatasetEvent* dataEven
 	}
 }
 
-void SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies1(std::string clusterName)
+void SimianViewerMultExpCompPlugin::publishSelectionSpecies1(std::string clusterName)
 {
 
 	//qDebug() << QString::fromStdString(selectedIDs);
@@ -125,7 +125,7 @@ void SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies1(std::string c
 
 }
 
-void SimianViewerMultExpCompViewerPlugin::clusterSelection(std::string clusterName)
+void SimianViewerMultExpCompPlugin::clusterSelection(std::string clusterName)
 {
 	_SimianViewerMultExpCompOptionsAction.getSelectedCrossspeciesclusterFlag() = false;
 	if (clusterName == "")
@@ -143,7 +143,7 @@ void SimianViewerMultExpCompViewerPlugin::clusterSelection(std::string clusterNa
 }
 
 
-void SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies2(std::string clusterName)
+void SimianViewerMultExpCompPlugin::publishSelectionSpecies2(std::string clusterName)
 {
 
 	//qDebug() << QString::fromStdString(selectedIDs);
@@ -171,14 +171,14 @@ void SimianViewerMultExpCompViewerPlugin::publishSelectionSpecies2(std::string c
 
 }
 
-void SimianViewerMultExpCompViewerPlugin::fromVariantMap(const QVariantMap& variantMap)
+void SimianViewerMultExpCompPlugin::fromVariantMap(const QVariantMap& variantMap)
 {
 	ViewPlugin::fromVariantMap(variantMap);
 
 	_SimianViewerMultExpCompOptionsAction.fromParentVariantMap(variantMap);
 }
 
-QVariantMap SimianViewerMultExpCompViewerPlugin::toVariantMap() const
+QVariantMap SimianViewerMultExpCompPlugin::toVariantMap() const
 {
 	QVariantMap variantMap = ViewPlugin::toVariantMap();
 
@@ -196,7 +196,7 @@ QVariantMap SimianViewerMultExpCompViewerPlugin::toVariantMap() const
 //	msgBox.exec();
 //};
 
-//SimianViewerMultExpCompViewerPluginFactory::SimianViewerMultExpCompViewerPluginFactory() :
+//SimianViewerMultExpCompPluginFactory::SimianViewerMultExpCompPluginFactory() :
 //	ViewPluginFactory()
 //{
 //	connect(&getTriggerHelpAction(), &TriggerAction::triggered, this, [this]() -> void {
@@ -212,29 +212,29 @@ QVariantMap SimianViewerMultExpCompViewerPlugin::toVariantMap() const
 // =============================================================================
 
 
-QIcon SimianViewerMultExpCompViewerPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+QIcon SimianViewerMultExpCompPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
 	return Application::getIconFont("FontAwesome").getIcon("chart-bar", color);
 }
 
-ViewPlugin* SimianViewerMultExpCompViewerPluginFactory::produce()
+ViewPlugin* SimianViewerMultExpCompPluginFactory::produce()
 {
-	return new SimianViewerMultExpCompViewerPlugin(this);
+	return new SimianViewerMultExpCompPlugin(this);
 }
 
-mv::DataTypes SimianViewerMultExpCompViewerPluginFactory::supportedDataTypes() const
+mv::DataTypes SimianViewerMultExpCompPluginFactory::supportedDataTypes() const
 {
 	DataTypes supportedTypes;
 	return supportedTypes;
 }
 
 
-mv::gui::PluginTriggerActions SimianViewerMultExpCompViewerPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
+mv::gui::PluginTriggerActions SimianViewerMultExpCompPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
 	PluginTriggerActions pluginTriggerActions;
 
-	const auto getInstance = [this]() -> SimianViewerMultExpCompViewerPlugin* {
-		return dynamic_cast<SimianViewerMultExpCompViewerPlugin*>(plugins().requestViewPlugin(getKind()));
+	const auto getInstance = [this]() -> SimianViewerMultExpCompPlugin* {
+		return dynamic_cast<SimianViewerMultExpCompPlugin*>(plugins().requestViewPlugin(getKind()));
 	};
 
 	const auto numberOfDatasets = datasets.count();
@@ -242,7 +242,7 @@ mv::gui::PluginTriggerActions SimianViewerMultExpCompViewerPluginFactory::getPlu
 	if (PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
 		if (numberOfDatasets >= 1) {
 			if (datasets.first()->getDataType() == PointType) {
-				auto pluginTriggerAction = new PluginTriggerAction(const_cast<SimianViewerMultExpCompViewerPluginFactory*>(this), this, "SimianViewerMultExpComp viewer", "Load dataset in SimianViewerMultExpComp viewer", getIcon(), [this, getInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+				auto pluginTriggerAction = new PluginTriggerAction(const_cast<SimianViewerMultExpCompPluginFactory*>(this), this, "SimianViewerMultExpComp viewer", "Load dataset in SimianViewerMultExpComp viewer", getIcon(), [this, getInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
 					for (auto dataset : datasets)
 						getInstance()->loadData(Datasets({ dataset }));
 					});
@@ -256,7 +256,7 @@ mv::gui::PluginTriggerActions SimianViewerMultExpCompViewerPluginFactory::getPlu
 }
 
 
-//bool SimianViewerMultExpCompViewerPluginFactory::hasHelp()
+//bool SimianViewerMultExpCompPluginFactory::hasHelp()
 //{
 //	return true;
 //}
