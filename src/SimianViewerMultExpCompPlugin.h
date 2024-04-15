@@ -2,8 +2,8 @@
 
 #include <ViewPlugin.h>
 #include "Dataset.h"
-#include "ParallelBarsOptionsAction.h"
-#include "ParallelBarsViewerWidget.h"
+#include "SimianViewerMultExpCompOptionsAction.h"
+#include "SimianViewerMultExpCompViewerWidget.h"
 #include "widgets/DropWidget.h"
 #include <QBoxLayout>
 #include <QLabel>
@@ -14,23 +14,23 @@ using namespace mv::plugin;
 using namespace mv::util;
 
 class Points;
-//class ParallelBarsViewerWidget;
-//class ParallelBarsOptionsAction;
+//class SimianViewerMultExpCompViewerWidget;
+//class SimianViewerMultExpCompOptionsAction;
 
 // =============================================================================
 // View
 // =============================================================================
 
 /**
- * ParallelBarsViewer Plugin
+ * SimianViewerMultExpCompViewer Plugin
  */
-class ParallelBarsViewerPlugin : public ViewPlugin
+class SimianViewerMultExpCompViewerPlugin : public ViewPlugin
 {
 	Q_OBJECT
 
 public:
-	ParallelBarsViewerPlugin(const PluginFactory* factory);
-	~ParallelBarsViewerPlugin(void) override;
+	SimianViewerMultExpCompViewerPlugin(const PluginFactory* factory);
+	~SimianViewerMultExpCompViewerPlugin(void) override;
 
 	void init() override;
 
@@ -38,8 +38,8 @@ public:
 
 	mv::CoreInterface* getCore() { return _core; }
 
-	ParallelBarsViewerWidget& getBarChartWidget() { return _ParallelBars_viewer; }
-	ParallelBarsOptionsAction& getParallelBarsOptionsAction() { return _ParallelBarsOptionsAction; }
+	SimianViewerMultExpCompViewerWidget& getBarChartWidget() { return _SimianViewerMultExpComp_viewer; }
+	SimianViewerMultExpCompOptionsAction& getSimianViewerMultExpCompOptionsAction() { return _SimianViewerMultExpCompOptionsAction; }
 
 public: // Serialization
 
@@ -64,9 +64,9 @@ private:
 	void publishSelectionSpecies2(std::string selectedIDs);
 	void clusterSelection(std::string selectedIDs);
 
-	ParallelBarsViewerWidget _ParallelBars_viewer;
-	ParallelBarsOptionsAction _ParallelBarsOptionsAction;
-	/** ParallelBarsViewer widget displaying cluster data */
+	SimianViewerMultExpCompViewerWidget _SimianViewerMultExpComp_viewer;
+	SimianViewerMultExpCompOptionsAction _SimianViewerMultExpCompOptionsAction;
+	/** SimianViewerMultExpCompViewer widget displaying cluster data */
 
 	mv::EventListener     _eventListener;
 };
@@ -75,16 +75,16 @@ private:
 // Factory
 // =============================================================================
 
-class ParallelBarsViewerPluginFactory : public ViewPluginFactory
+class SimianViewerMultExpCompViewerPluginFactory : public ViewPluginFactory
 {
 	Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID   "nl.tudelft.ParallelBarsViewerPlugin"
-			FILE  "ParallelBarsViewerPlugin.json")
+		Q_PLUGIN_METADATA(IID   "nl.tudelft.SimianViewerMultExpCompViewerPlugin"
+			FILE  "SimianViewerMultExpCompViewerPlugin.json")
 
 public:
-	ParallelBarsViewerPluginFactory(void) {}
-	~ParallelBarsViewerPluginFactory(void) override {}
+	SimianViewerMultExpCompViewerPluginFactory(void) {}
+	~SimianViewerMultExpCompViewerPluginFactory(void) override {}
 
 	/**
 	 * Get plugin icon

@@ -15,7 +15,7 @@
 #include "Set.h"
 #include <AnalysisPlugin.h>
 #include <memory>
-#include "ParallelBarsViewerWidget.h"
+#include "SimianViewerMultExpCompViewerWidget.h"
 #include <algorithm>    
 #include <QDebug>
 #include <QLabel>
@@ -27,7 +27,7 @@
 #include <QString>
 #include <string>
 #include<QRadioButton>
-//#include "ParallelBarsViewerPlugin.h"
+//#include "SimianViewerMultExpCompViewerPlugin.h"
 #include <event/Event.h>
 #include <QDebug>
 #include <QLabel>
@@ -35,8 +35,8 @@
 
 using namespace mv::gui;
 class QMenu;
-class ParallelBarsViewerPlugin;
-//class ParallelBarsViewerWidget;
+class SimianViewerMultExpCompViewerPlugin;
+//class SimianViewerMultExpCompViewerWidget;
 class FetchMetaData;
 namespace mv
 {
@@ -54,7 +54,7 @@ struct speciesStorage
 	std::string deStatsColor;
 };
 
-class ParallelBarsOptionsAction : public WidgetAction
+class SimianViewerMultExpCompOptionsAction : public WidgetAction
 {
 public:
 	class deStatsDataset1SelectionAction : public WidgetAction
@@ -72,12 +72,12 @@ public:
 		};
 
 	public:
-		deStatsDataset1SelectionAction(ParallelBarsOptionsAction& ParallelBarsOptionsAction);
+		deStatsDataset1SelectionAction(SimianViewerMultExpCompOptionsAction& SimianViewerMultExpCompOptionsAction);
 
 	protected:
-		ParallelBarsOptionsAction& _ParallelBarsOptionsAction;
+		SimianViewerMultExpCompOptionsAction& _SimianViewerMultExpCompOptionsAction;
 
-		friend class ParallelBarsOptionsAction;
+		friend class SimianViewerMultExpCompOptionsAction;
 	};
 
 
@@ -88,15 +88,15 @@ protected:
 
 	class Widget : public mv::gui::WidgetActionWidget {
 	public:
-		Widget(QWidget* parent, ParallelBarsOptionsAction* ParallelBarsOptionsAction);
+		Widget(QWidget* parent, SimianViewerMultExpCompOptionsAction* SimianViewerMultExpCompOptionsAction);
 	};
 
 	QWidget* getWidget(QWidget* parent, const std::int32_t& widgetFlags) override {
-		return new ParallelBarsOptionsAction::Widget(parent, this);
+		return new SimianViewerMultExpCompOptionsAction::Widget(parent, this);
 	};
 
 public:
-	ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, mv::CoreInterface* core);
+	SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompViewerPlugin& SimianViewerMultExpCompViewerPlugin, mv::CoreInterface* core);
 
 private:
 	void updateData();
@@ -143,10 +143,10 @@ public: // Serialization
 	QVariantMap toVariantMap() const override;
 
 protected:
-	ParallelBarsViewerPlugin& _ParallelBarsViewerPlugin;
+	SimianViewerMultExpCompViewerPlugin& _SimianViewerMultExpCompViewerPlugin;
 	mv::CoreInterface* _core;
 	FetchMetaData* _metaData;
-	std::vector<std::vector<std::string>>                _ParallelBarsData;
+	std::vector<std::vector<std::string>>                _SimianViewerMultExpCompData;
 	deStatsDataset1SelectionAction               _deStatsDataset1SelectionAction;
 	OptionAction                 _neighborhoodAction;
 	//OptionAction                 _crossSpecies1HeatMapCellAction;

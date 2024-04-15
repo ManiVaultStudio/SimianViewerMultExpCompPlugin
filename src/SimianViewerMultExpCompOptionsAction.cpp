@@ -1,5 +1,5 @@
-#include "ParallelBarsOptionsAction.h"
-#include "ParallelBarsViewerPlugin.h"
+#include "SimianViewerMultExpCompOptionsAction.h"
+#include "SimianViewerMultExpCompViewerPlugin.h"
 #include<string>  
 #include <QFileDialog>
 #include <QPageLayout>
@@ -7,9 +7,9 @@
 using namespace mv;
 using namespace mv::gui;
 
-ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& ParallelBarsViewerPlugin, mv::CoreInterface* core) :
-	WidgetAction(&ParallelBarsViewerPlugin,"ParallelBarsViewerPlugin"),
-	_ParallelBarsViewerPlugin(ParallelBarsViewerPlugin),
+SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompViewerPlugin& SimianViewerMultExpCompViewerPlugin, mv::CoreInterface* core) :
+	WidgetAction(&SimianViewerMultExpCompViewerPlugin,"SimianViewerMultExpCompViewerPlugin"),
+	_SimianViewerMultExpCompViewerPlugin(SimianViewerMultExpCompViewerPlugin),
 	_core(core),
 	_geneNameAction(this, "SelectedID"),
 	_deStatsDataset1Action(this, "DE Dataset1"),
@@ -31,7 +31,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_crossSpecies2HeatMapCellAction(this, "Link cross-species2 heatmap cell")
 	_AllcrossSpeciesDatasets(this, "All cross-species datasets")
 {
-	setSerializationName("ParallelBarsPyramidSettings");
+	setSerializationName("SimianViewerMultExpCompPyramidSettings");
 	_species1Name.setSerializationName("Species1Name");
 	_species2Name.setSerializationName("Species2Name");
 	//_humancomparisonAbsoluteValuesAction.setVisible(false);
@@ -51,7 +51,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetChildRemoved));
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
-	_eventListener.registerDataEventByType(PointType, std::bind(&ParallelBarsOptionsAction::onDataEvent, this, std::placeholders::_1));
+	_eventListener.registerDataEventByType(PointType, std::bind(&SimianViewerMultExpCompOptionsAction::onDataEvent, this, std::placeholders::_1));
 	_AllcrossSpeciesDatasets.setShowFullPathName(false);
 	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
 		Datasets clusterDatasets;
@@ -128,7 +128,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//_helpAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//_screenshotAction.setDefaultWidgetFlags(TriggerAction::Icon);
 	//connect(&_helpAction, &TriggerAction::triggered, this, [this]() -> void {
-	//	_ParallelBarsViewerPlugin.getTriggerHelpAction().trigger();
+	//	_SimianViewerMultExpCompViewerPlugin.getTriggerHelpAction().trigger();
 	//	});
 	//_crossSpecies1HeatMapCellAction.setDefaultWidgetFlags(OptionAction::ComboBox);
 	//_crossSpecies2HeatMapCellAction.setDefaultWidgetFlags(OptionAction::ComboBox);
@@ -188,7 +188,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 				+ QString::number(color.blue(), 16).rightJustified(2, '0');
 
 
-			_ParallelBarsViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
+			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().updateSelectionColor(hexValueColor);
 
 		}
 
@@ -201,7 +201,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	{
 		if (_selectedCrossspeciesclusterFlag)
 		{
-			_ParallelBarsViewerPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
+			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSelectedCrossspeciescluster(_selectedCrossspeciescluster.getString());
 		}
 		_selectedCrossspeciesclusterFlag = true;
 
@@ -230,8 +230,8 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//		QPageSize ps;
 	//		//qDebug() << "height" << _simianViewerPlugin.getSimianViewerWidget()->height();
 
-	//		int width = _ParallelBarsViewerPlugin.getBarChartWidget().width();
-	//		int height = _ParallelBarsViewerPlugin.getBarChartWidget().height();
+	//		int width = _SimianViewerMultExpCompViewerPlugin.getBarChartWidget().width();
+	//		int height = _SimianViewerMultExpCompViewerPlugin.getBarChartWidget().height();
 	//		int reducedWidth = static_cast<double>(width) / 100 * 75;
 	//		int reducedHeight = static_cast<double>(height) / 100 * 78;
 	//		//qDebug() << "width" << width;
@@ -243,7 +243,7 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	//		pl.setOrientation(QPageLayout::Portrait);
 
 
-	//		_ParallelBarsViewerPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
+	//		_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().getPage()->printToPdf(fileName, pl);
 
 	//	}
 	//	//..getSimianViewerWidget()->getPage()->printToPdf(fileName, pl);
@@ -373,14 +373,14 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 	{
 		if (_species1Name.getString() != "")
 		{
-			_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
 		}
 	};
 	const auto updateSpecies2Name = [this]() -> void
 	{
 		if (_species2Name.getString() != "")
 		{
-			_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+			_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 		}
 	};
 	connect(&_species1Name, &StringAction::stringChanged, this, updateSpecies1Name);
@@ -444,12 +444,12 @@ ParallelBarsOptionsAction::ParallelBarsOptionsAction(ParallelBarsViewerPlugin& P
 }
 
 
-ParallelBarsOptionsAction::Widget::Widget(QWidget* parent, ParallelBarsOptionsAction* ParallelBarsOptionsAction) :
-	WidgetActionWidget(parent, ParallelBarsOptionsAction)
+SimianViewerMultExpCompOptionsAction::Widget::Widget(QWidget* parent, SimianViewerMultExpCompOptionsAction* SimianViewerMultExpCompOptionsAction) :
+	WidgetActionWidget(parent, SimianViewerMultExpCompOptionsAction)
 {
 }
 
-void ParallelBarsOptionsAction::updateData()
+void SimianViewerMultExpCompOptionsAction::updateData()
 {
 
 
@@ -845,14 +845,14 @@ void ParallelBarsOptionsAction::updateData()
 		jsonData += '"';
 		jsonData += "}";
 		jsonData += "]}]";
-		_ParallelBarsViewerPlugin.getBarChartWidget().setData(jsonData);
+		_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setData(jsonData);
 
 	}
 }
 
 
 
-void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, mv::Dataset<Points> deStatsDataset)
+void SimianViewerMultExpCompOptionsAction::extractGeneDimensions(std::vector<QString>* geneNames, std::vector<float>* geneColumn, mv::Dataset<Points> deStatsDataset)
 
 {
 	auto it1 = std::find(geneNames->begin(), geneNames->end(), _geneNameAction.getString());
@@ -868,7 +868,7 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 	}
 }
 
-//void ParallelBarsOptionsAction::updateDatasetPickerAction()
+//void SimianViewerMultExpCompOptionsAction::updateDatasetPickerAction()
 //{
 //	_AllcrossSpeciesDatasets.clear();
 //	auto ClusterDatasets = _core->requestAllDataSets(QVector<mv::DataType> {ClusterType});
@@ -912,10 +912,10 @@ void ParallelBarsOptionsAction::extractGeneDimensions(std::vector<QString>* gene
 //
 //}
 
-ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidget* parent, deStatsDataset1SelectionAction* deStatsDataset1SelectAction) :
+SimianViewerMultExpCompOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidget* parent, deStatsDataset1SelectionAction* deStatsDataset1SelectAction) :
 	WidgetActionWidget(parent, deStatsDataset1SelectAction)
 {
-	auto& ParallelBarsOptionsAction = deStatsDataset1SelectAction->_ParallelBarsOptionsAction;
+	auto& SimianViewerMultExpCompOptionsAction = deStatsDataset1SelectAction->_SimianViewerMultExpCompOptionsAction;
 
 
 
@@ -927,37 +927,37 @@ ParallelBarsOptionsAction::deStatsDataset1SelectionAction::Widget::Widget(QWidge
 	selectionExampledeStatsOptionLayout->setContentsMargins(0, 0, 0, 0);
 
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._neighborhoodAction.createLabelWidget(this), ParallelBarsOptionsAction._neighborhoodAction.createWidget(this));
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._neighborhoodAction.createLabelWidget(this), SimianViewerMultExpCompOptionsAction._neighborhoodAction.createWidget(this));
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species1Name.createLabelWidget(this), ParallelBarsOptionsAction._species1Name.createWidget(this));
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._species1Name.createLabelWidget(this), SimianViewerMultExpCompOptionsAction._species1Name.createWidget(this));
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._species2Name.createLabelWidget(this), ParallelBarsOptionsAction._species2Name.createWidget(this));
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._species2Name.createLabelWidget(this), SimianViewerMultExpCompOptionsAction._species2Name.createWidget(this));
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._selectedCrossspeciescluster.createLabelWidget(this), ParallelBarsOptionsAction._selectedCrossspeciescluster.createWidget(this));
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._selectedCrossspeciescluster.createLabelWidget(this), SimianViewerMultExpCompOptionsAction._selectedCrossspeciescluster.createWidget(this));
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._geneNameAction.createLabelWidget(this), ParallelBarsOptionsAction._geneNameAction.createWidget(this));
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._geneNameAction.createLabelWidget(this), SimianViewerMultExpCompOptionsAction._geneNameAction.createWidget(this));
 
-	auto selectiondeStats1Widget = ParallelBarsOptionsAction._deStatsDataset1Action.createWidget(this);
+	auto selectiondeStats1Widget = SimianViewerMultExpCompOptionsAction._deStatsDataset1Action.createWidget(this);
 	selectiondeStats1Widget->findChild<QComboBox*>("ComboBox")->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	auto selectiondeStats2Widget = ParallelBarsOptionsAction._deStatsDataset2Action.createWidget(this);
+	auto selectiondeStats2Widget = SimianViewerMultExpCompOptionsAction._deStatsDataset2Action.createWidget(this);
 	selectiondeStats2Widget->findChild<QComboBox*>("ComboBox")->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._deStatsDataset1Action.createLabelWidget(this), selectiondeStats1Widget);
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._deStatsDataset1Action.createLabelWidget(this), selectiondeStats1Widget);
 
-	selectionExampledeStatsOptionLayout->addRow(ParallelBarsOptionsAction._deStatsDataset2Action.createLabelWidget(this), selectiondeStats2Widget);
+	selectionExampledeStatsOptionLayout->addRow(SimianViewerMultExpCompOptionsAction._deStatsDataset2Action.createLabelWidget(this), selectiondeStats2Widget);
 
 	setLayout(selectionExampledeStatsOptionLayout);
 }
 
-inline ParallelBarsOptionsAction::deStatsDataset1SelectionAction::deStatsDataset1SelectionAction(ParallelBarsOptionsAction& ParallelBarsOptionsAction) :
+inline SimianViewerMultExpCompOptionsAction::deStatsDataset1SelectionAction::deStatsDataset1SelectionAction(SimianViewerMultExpCompOptionsAction& SimianViewerMultExpCompOptionsAction) :
 	WidgetAction(nullptr, "deStatsDataset1SelectionAction"),
-	_ParallelBarsOptionsAction(ParallelBarsOptionsAction)
+	_SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompOptionsAction)
 {
 	setText("Options");
 	setIcon(Application::getIconFont("FontAwesome").getIcon("database"));
 
 }
 
-void ParallelBarsOptionsAction::onDataEvent(mv::DatasetEvent* dataEvent)
+void SimianViewerMultExpCompOptionsAction::onDataEvent(mv::DatasetEvent* dataEvent)
 {
 	if (dataEvent->getType() == mv::EventType::DatasetAdded)
 	{
@@ -983,16 +983,16 @@ void ParallelBarsOptionsAction::onDataEvent(mv::DatasetEvent* dataEvent)
 
 }
 
-void ParallelBarsOptionsAction::initLoader()
+void SimianViewerMultExpCompOptionsAction::initLoader()
 {
 
 	updateData();
-	_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
-	_ParallelBarsViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
+	_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies1(_species1Name.getString());
+	_SimianViewerMultExpCompViewerPlugin.getBarChartWidget().setSpecies2(_species2Name.getString());
 
 }
 
-void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
+void SimianViewerMultExpCompOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 {
 	WidgetAction::fromVariantMap(variantMap);
 
@@ -1008,7 +1008,7 @@ void ParallelBarsOptionsAction::fromVariantMap(const QVariantMap& variantMap)
 
 }
 
-QVariantMap ParallelBarsOptionsAction::toVariantMap() const
+QVariantMap SimianViewerMultExpCompOptionsAction::toVariantMap() const
 {
 	QVariantMap variantMap = WidgetAction::toVariantMap();
 

@@ -25,30 +25,30 @@ file(TO_CMAKE_PATH ${MV_INSTALL_DIR} MV_INSTALL_DIR)
 
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
-qt6_add_resources(RESOURCE_FILES res/ParallelBars_viewer_resources.qrc)
+qt6_add_resources(RESOURCE_FILES res/SimianViewerMultExpComp_viewer_resources.qrc)
 
 set(SOURCES
-    src/ParallelBarsViewerPlugin.h
-    src/ParallelBarsViewerPlugin.cpp
-    src/ParallelBarsViewerPlugin.json
-    src/ParallelBarsOptionsAction.cpp
-    src/ParallelBarsOptionsAction.h
-    src/ParallelBarsViewerWidget.h
-    src/ParallelBarsViewerWidget.cpp
+    src/SimianViewerMultExpCompPlugin.h
+    src/SimianViewerMultExpCompPlugin.cpp
+    src/SimianViewerMultExpCompPlugin.json
+    src/SimianViewerMultExpCompOptionsAction.cpp
+    src/SimianViewerMultExpCompOptionsAction.h
+    src/SimianViewerMultExpCompWidget.h
+    src/SimianViewerMultExpCompWidget.cpp
 )
 
 set (RESOURCES
-    res/ParallelBars_viewer_resources.qrc
+    res/SimianViewerMultExpComp_viewer_resources.qrc
 )
 set (Web
-    res/ParallelBars_viewer/ParallelBars_viewer.html
-	res/ParallelBars_viewer/ParallelBars_viewer.js
-	res/ParallelBars_viewer/ParallelBars_viewer.css
+    res/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html
+	res/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.js
+	res/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.css
 )
 
 source_group( PluginFiles FILES ${SOURCES})
 source_group( ResourceFiles FILES ${RESOURCES})
-source_group( ResourceFiles\\generated FILES ${CMAKE_CURRENT_BINARY_DIR}/qrc_ParallelBars_viewer_resources.cpp)
+source_group( ResourceFiles\\generated FILES ${CMAKE_CURRENT_BINARY_DIR}/qrc_SimianViewerMultExpComp_viewer_resources.cpp)
 source_group( WebFiles FILES ${Web})
 
 

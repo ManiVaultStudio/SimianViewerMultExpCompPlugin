@@ -13,13 +13,13 @@ class QWebEnginePage;
 class QWebChannel;
 
 
-class ParallelBarsViewerWidget;
+class SimianViewerMultExpCompViewerWidget;
 
-class ParallelBarsViewerCommunicationObject : public mv::gui::WebCommunicationObject
+class SimianViewerMultExpCompViewerCommunicationObject : public mv::gui::WebCommunicationObject
 {
 	Q_OBJECT
 public:
-	ParallelBarsViewerCommunicationObject(ParallelBarsViewerWidget* parent);
+	SimianViewerMultExpCompViewerCommunicationObject(SimianViewerMultExpCompViewerWidget* parent);
 
 signals:
 	void qt_setData(QString data);
@@ -36,15 +36,15 @@ public slots:
 	void js_passSelectionSpecies2ToQt(QString data);
 	void js_crossspeciesclusterSelection(QString data);
 private:
-	ParallelBarsViewerWidget* _parent;
+	SimianViewerMultExpCompViewerWidget* _parent;
 };
 
-class ParallelBarsViewerWidget : public mv::gui::WebWidget
+class SimianViewerMultExpCompViewerWidget : public mv::gui::WebWidget
 {
 	Q_OBJECT
 public:
-	ParallelBarsViewerWidget();
-	~ParallelBarsViewerWidget() override;
+	SimianViewerMultExpCompViewerWidget();
+	~SimianViewerMultExpCompViewerWidget() override;
 
 	void addDataOption(const QString option);
 	void setData(std::string visDataContent);
@@ -74,7 +74,7 @@ private slots:
 	void initWebPage() override;
 
 private:
-	ParallelBarsViewerCommunicationObject* _communicationObject;
+	SimianViewerMultExpCompViewerCommunicationObject* _communicationObject;
 
 
 	/** Whether the web view has loaded and web-functions are ready to be called. */

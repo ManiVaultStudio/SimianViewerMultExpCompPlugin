@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="">
-        <file>ParallelBars_viewer/ParallelBars_viewer.html</file>
-        <file>ParallelBars_viewer/ParallelBars_viewer.css</file>
-        <file>ParallelBars_viewer/ParallelBars_viewer.js</file>
-		<file>ParallelBars_viewer/ParallelBars_viewer.queue.js</file>
-		<file>ParallelBars_viewer/ParallelBars_viewer.ui.js</file>
-		<file>ParallelBars_viewer/ParallelBars_viewer.keys.js</file>
+        <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html</file>
+        <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.css</file>
+        <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.js</file>
+		<file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.queue.js</file>
+		<file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.ui.js</file>
+		<file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.keys.js</file>
     </qresource>
     <qresource prefix="">
         <file>jslibs/d3.v4.js</file>

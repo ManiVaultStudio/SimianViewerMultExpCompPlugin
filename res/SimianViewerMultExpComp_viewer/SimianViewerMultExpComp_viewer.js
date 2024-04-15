@@ -1,6 +1,6 @@
 var _data = null;
 var flag = false;
-var _dataQueue = new ParallelBarsViewerDataQueue(1, queueData);
+var _dataQueue = new SimianViewerMultExpCompViewerDataQueue(1, queueData);
 var _defaultValues = null;
 var yAxisLabelsLeft;
 window.onresize = doALoadOfStuff;
@@ -298,7 +298,7 @@ function mouseoverSpecies5(d) {
 }
 
 //Main Visualization
-const ParallelBarsVis = () => {
+const SimianViewerMultExpCompVis = () => {
     d3.select("g").remove();
     d3.select("svg").remove();
     svg = d3.select("#my_dataviz");
@@ -1158,7 +1158,7 @@ function setSpecies1(d) {
         }
         else {
 
-            ParallelBarsVis();
+            SimianViewerMultExpCompVis();
         }
 
     }
@@ -1174,7 +1174,7 @@ function setSpecies2(d) {
         }
         else {
 
-            ParallelBarsVis();
+            SimianViewerMultExpCompVis();
         }
     }
 
@@ -1233,7 +1233,7 @@ function queueData(d) {
     }
     else {
 
-        ParallelBarsVis();
+        SimianViewerMultExpCompVis();
     }
     flag = true;
 }
@@ -1247,7 +1247,7 @@ function updateSelectionColor(d) {
         }
         else {
 
-            ParallelBarsVis();
+            SimianViewerMultExpCompVis();
         }
     }
 
@@ -1261,7 +1261,7 @@ function doALoadOfStuff() {
         }
         else {
 
-            ParallelBarsVis();
+            SimianViewerMultExpCompVis();
         }
     }
 }
@@ -1272,7 +1272,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         else {
 
-            ParallelBarsVis();
+            SimianViewerMultExpCompVis();
         }
     }
 });
