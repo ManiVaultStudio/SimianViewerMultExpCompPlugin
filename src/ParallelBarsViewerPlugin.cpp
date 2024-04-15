@@ -104,7 +104,7 @@ void ParallelBarsViewerPlugin::publishSelectionSpecies1(std::string clusterName)
 	//_ParallelBarsOptionsAction.getCrossSpecies1HeatMapCellAction().setCurrentText("");
 	//_ParallelBarsOptionsAction.getCrossSpecies1HeatMapCellAction().setCurrentText(QString::fromStdString(clusterName));
 	auto dataset = _ParallelBarsOptionsAction.getdeStatsDataset1SelectAction().getCurrentDataset();
-	const auto candidateDataset = _core->requestDataset<Clusters>(dataset.getDatasetId());
+	const auto candidateDataset = mv::data().getDataset<Clusters>(dataset.getDatasetId());
 	std::vector<std::uint32_t> selectedIndices;
 	for (const auto& cluster : candidateDataset->getClusters())
 	{
@@ -150,7 +150,7 @@ void ParallelBarsViewerPlugin::publishSelectionSpecies2(std::string clusterName)
 	//_ParallelBarsOptionsAction.getCrossSpecies2HeatMapCellAction().setCurrentText("");
 	//_ParallelBarsOptionsAction.getCrossSpecies2HeatMapCellAction().setCurrentText(QString::fromStdString(clusterName));
 	auto dataset = _ParallelBarsOptionsAction.getdeStatsDataset2SelectAction().getCurrentDataset();
-	const auto candidateDataset = _core->requestDataset<Clusters>(dataset.getDatasetId());
+	const auto candidateDataset = mv::data().getDataset<Clusters>(dataset.getDatasetId());
 	std::vector<std::uint32_t> selectedIndices;
 	for (const auto& cluster : candidateDataset->getClusters())
 	{
