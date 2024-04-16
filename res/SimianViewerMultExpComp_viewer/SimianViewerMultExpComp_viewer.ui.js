@@ -135,12 +135,12 @@ function initContextMenu() {
             m.push({ divider: true });
 
             m.push({
-                title: "Save ParallelBarsViewer as Image ...",
+                title: "Save SimianViewerMultExpComp as Image ...",
                 action: printSVG
 		      });
 
 		    m.push({
-		        title: "Save ParallelBarsViewer as CSV ...",
+		        title: "Save SimianViewerMultExpComp as CSV ...",
 		        action: function () {
 		            d3.select('.d3-context-menu').style('display', 'none');
 		            Qt.js_saveCSV();
