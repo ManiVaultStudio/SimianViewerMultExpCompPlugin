@@ -3,7 +3,7 @@
  */
 /**
  * @constructor
-//<Class definition for the ParallelBarsViewerDataQueue>
+//<Class definition for the SimianViewerMultExpCompDataQueue>
  * @param {queueLimit} - required integer to limit the number of
  * dynamic selection events held in the queue. If set a maximum of
  * the latest dynamicLimit events are saved.
@@ -15,7 +15,7 @@
  */
 
 (function (global) {
-function ParallelBarsViewerDataQueue(queueLimit, processingCallback) {
+function SimianViewerMultExpCompDataQueue(queueLimit, processingCallback) {
     this.dataQueue = new CBuffer(queueLimit);
     this.processingCallback = processingCallback;
     this.processingDataQueue = false;
@@ -25,9 +25,9 @@ function ParallelBarsViewerDataQueue(queueLimit, processingCallback) {
     this.processTimedout = true;
 }
 
-ParallelBarsViewerDataQueue.prototype = {
+SimianViewerMultExpCompDataQueue.prototype = {
 
-    constructor: ParallelBarsViewerDataQueue,
+    constructor: SimianViewerMultExpCompDataQueue,
 
     addData: function(data) {
         "use strict";
@@ -100,7 +100,7 @@ ParallelBarsViewerDataQueue.prototype = {
     },
 
     /**
-     * @param data - the ParallelBars_viewer data 
+     * @param data - the SimianViewerMultExpComp_viewer data 
      */
     processData: function(data) {
         "use strict";
@@ -117,8 +117,8 @@ ParallelBarsViewerDataQueue.prototype = {
 
 };
 
-if (typeof module === 'object' && module.exports) module.exports = ParallelBarsViewerDataQueue;
-else global.ParallelBarsViewerDataQueue = ParallelBarsViewerDataQueue;
+if (typeof module === 'object' && module.exports) module.exports = SimianViewerMultExpCompDataQueue;
+else global.SimianViewerMultExpCompDataQueue = SimianViewerMultExpCompDataQueue;
 
 }(this));
 
