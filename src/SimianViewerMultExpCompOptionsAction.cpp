@@ -53,61 +53,46 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&SimianViewerMultExpCompOptionsAction::onDataEvent, this, std::placeholders::_1));
 	_AllcrossSpeciesDatasets.setShowFullPathName(false);
-	_AllcrossSpeciesDatasets.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
-		Datasets clusterDatasets;
-
-		for (auto dataset : datasets)
-			if (dataset->getDataType() == ClusterType)
-			{
-				std::string str1 = dataset->getGuiName().toStdString();
-				std::string str2 = "cross_species_cluster";
-				if (strstr(str1.c_str(), str2.c_str()))
-				{
-					clusterDatasets << dataset;
-				}
-			}
-		return clusterDatasets;
-		});
-	_deStatsDataset1Action.setShowFullPathName(false);
-	_deStatsDataset1Action.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
-		Datasets pointDatasets;
-
-		for (auto dataset : datasets)
+	_AllcrossSpeciesDatasets.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
+		if (dataset->getDataType() == ClusterType)
 		{
-			if (dataset->getDataType() == PointType)
-			{
-				std::string str1 = dataset->getGuiName().toStdString();
-				std::string str2 = "DE_Statistics";
-				if (strstr(str1.c_str(), str2.c_str()))
-				{
-					pointDatasets << dataset;
-				}
-			}
-
+			std::string str1 = dataset->getGuiName().toStdString();
+			std::string str2 = "cross_species_cluster";
+				
+			if (strstr(str1.c_str(), str2.c_str()))
+				return true;
+		}
+		
+		return false;
+	});
+	
+	_deStatsDataset1Action.setShowFullPathName(false);
+	_deStatsDataset1Action.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
+		if (dataset->getDataType() == PointType)
+		{
+			std::string str1 = dataset->getGuiName().toStdString();
+			std::string str2 = "DE_Statistics";
+			
+			if (strstr(str1.c_str(), str2.c_str()))
+				return true;
 		}
 
-		return pointDatasets;
-		});
+		return false;
+	});
+
 	_deStatsDataset2Action.setShowFullPathName(false);
-		_deStatsDataset2Action.setDatasetsFilterFunction([this](const mv::Datasets& datasets) ->mv::Datasets {
-			Datasets pointDatasets;
+		_deStatsDataset2Action.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
+		if (dataset->getDataType() == PointType)
+		{
+			std::string str1 = dataset->getGuiName().toStdString();
+			std::string str2 = "DE_Statistics";
+			
+			if (strstr(str1.c_str(), str2.c_str()))
+				return true;
+		}
 
-			for (auto dataset : datasets)
-			{
-				if (dataset->getDataType() == PointType)
-				{
-					std::string str1 = dataset->getGuiName().toStdString();
-					std::string str2 = "DE_Statistics";
-					if (strstr(str1.c_str(), str2.c_str()))
-					{
-						pointDatasets << dataset;
-					}
-				}
-
-			}
-
-			return pointDatasets;
-			});
+		return false;
+	});
 
 	//_barSettingsAction.setEnabled(false);
 	//_deStatsDataset2SelectionAction.setEnabled(false);
