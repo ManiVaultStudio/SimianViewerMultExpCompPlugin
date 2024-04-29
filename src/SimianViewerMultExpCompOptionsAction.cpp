@@ -52,7 +52,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 	_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
 	//_eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataGuiNameChanged));
 	_eventListener.registerDataEventByType(PointType, std::bind(&SimianViewerMultExpCompOptionsAction::onDataEvent, this, std::placeholders::_1));
-	_AllcrossSpeciesDatasets.setShowFullPathName(false);
+
 	_AllcrossSpeciesDatasets.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
 		if (dataset->getDataType() == ClusterType)
 		{
@@ -66,7 +66,7 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 		return false;
 	});
 	
-	_deStatsDataset1Action.setShowFullPathName(false);
+
 	_deStatsDataset1Action.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
 		if (dataset->getDataType() == PointType)
 		{
@@ -80,7 +80,6 @@ SimianViewerMultExpCompOptionsAction::SimianViewerMultExpCompOptionsAction(Simia
 		return false;
 	});
 
-	_deStatsDataset2Action.setShowFullPathName(false);
 		_deStatsDataset2Action.setFilterFunction([this](const Dataset<DatasetImpl>& dataset) -> bool {
 		if (dataset->getDataType() == PointType)
 		{
