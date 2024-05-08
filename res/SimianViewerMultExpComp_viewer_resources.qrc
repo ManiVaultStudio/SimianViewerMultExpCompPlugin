@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="">
+    <qresource prefix="SimianViewerMultExpComp">
         <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html</file>
         <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.css</file>
         <file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.js</file>
@@ -7,7 +7,7 @@
 		<file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.ui.js</file>
 		<file>SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.keys.js</file>
     </qresource>
-    <qresource prefix="">
+    <qresource prefix="SimianViewerMultExpComp">
         <file>jslibs/d3.v4.js</file>
 		<file>jslibs/d3.v3.js</file>
 		<file>jslibs/d3-tip.min.js</file>
@@ -23,7 +23,7 @@
         <file>jslibs/cbuffer.js</file>
         <file>jslibs/qwebchannel.js</file>
     </qresource>
-    <qresource prefix="">
+    <qresource prefix="SimianViewerMultExpComp">
         <file>jstools/debug_data.js</file>
         <file>jstools/globals.js</file>
         <file>jstools/tools.js</file>
