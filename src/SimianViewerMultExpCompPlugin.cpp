@@ -40,7 +40,7 @@ SimianViewerMultExpCompPlugin::~SimianViewerMultExpCompPlugin()
 void SimianViewerMultExpCompPlugin::init()
 {
 	connect(&_SimianViewerMultExpComp_viewer, &SimianViewerMultExpCompWidget::widgetInitialized, &_SimianViewerMultExpCompOptionsAction, &SimianViewerMultExpCompOptionsAction::initLoader);
-	_SimianViewerMultExpComp_viewer.setPage(":/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html", "qrc:/SimianViewerMultExpComp_viewer/");
+	_SimianViewerMultExpComp_viewer.setPage(":/SimianViewerMultExpComp/SimianViewerMultExpComp_viewer/SimianViewerMultExpComp_viewer.html", "qrc:/SimianViewerMultExpComp/SimianViewerMultExpComp_viewer/");
 	_SimianViewerMultExpComp_viewer.setContentsMargins(0, 0, 0, 0);
 	_SimianViewerMultExpComp_viewer.layout()->setContentsMargins(0, 0, 0, 0);
 	//_SimianViewerMultExpCompOptionsAction = new SimianViewerMultExpCompOptionsAction(*this, _core);
