@@ -19,7 +19,7 @@
 Q_PLUGIN_METADATA(IID "nl.tudelft.SimianViewerMultExpCompPlugin")
 
 using namespace mv;
-
+using namespace mv::util;
 // =============================================================================
 // View
 // =============================================================================
@@ -212,9 +212,9 @@ QVariantMap SimianViewerMultExpCompPlugin::toVariantMap() const
 // =============================================================================
 
 
-QIcon SimianViewerMultExpCompPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+SimianViewerMultExpCompPluginFactory::SimianViewerMultExpCompPluginFactory()
 {
-	return Application::getIconFont("FontAwesome").getIcon("chart-bar", color);
+	setIconByName("chart-bar");
 }
 
 ViewPlugin* SimianViewerMultExpCompPluginFactory::produce()
@@ -242,7 +242,7 @@ mv::gui::PluginTriggerActions SimianViewerMultExpCompPluginFactory::getPluginTri
 	if (PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
 		if (numberOfDatasets >= 1) {
 			if (datasets.first()->getDataType() == PointType) {
-				auto pluginTriggerAction = new PluginTriggerAction(const_cast<SimianViewerMultExpCompPluginFactory*>(this), this, "SimianViewerMultExpComp viewer", "Load dataset in SimianViewerMultExpComp viewer", getIcon(), [this, getInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+				auto pluginTriggerAction = new PluginTriggerAction(const_cast<SimianViewerMultExpCompPluginFactory*>(this), this, "SimianViewerMultExpComp viewer", "Load dataset in SimianViewerMultExpComp viewer", StyledIcon("chart-bar"), [this, getInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
 					for (auto dataset : datasets)
 						getInstance()->loadData(Datasets({ dataset }));
 					});

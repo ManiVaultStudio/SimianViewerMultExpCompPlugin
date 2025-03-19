@@ -937,7 +937,7 @@ inline SimianViewerMultExpCompOptionsAction::deStatsDataset1SelectionAction::deS
 	_SimianViewerMultExpCompOptionsAction(SimianViewerMultExpCompOptionsAction)
 {
 	setText("Options");
-	setIcon(Application::getIconFont("FontAwesome").getIcon("database"));
+	setIcon(mv::util::StyledIcon("database"));
 
 }
 
