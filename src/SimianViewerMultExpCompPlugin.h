@@ -83,7 +83,7 @@ class SimianViewerMultExpCompPluginFactory : public ViewPluginFactory
 			FILE  "SimianViewerMultExpCompPlugin.json")
 
 public:
-	SimianViewerMultExpCompPluginFactory(void) {}
+	SimianViewerMultExpCompPluginFactory(void);
 	~SimianViewerMultExpCompPluginFactory(void) override {}
 
 	ViewPlugin* produce() override;
